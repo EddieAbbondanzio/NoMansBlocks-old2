@@ -1,5 +1,6 @@
 using Newtonsoft.Json.Linq;
 using System;
+using System.IO;
 
 namespace NoMansBlocks.FileSystem {
     /// <summary>
@@ -16,7 +17,7 @@ namespace NoMansBlocks.FileSystem {
         /// The info pertaining to file path, name,
         /// and extension.
         /// </summary>
-        public FileInfo Info { get; set; }
+        public FileInfo Info { get; private set; }
 
         /// <summary>
         /// The content of the file.

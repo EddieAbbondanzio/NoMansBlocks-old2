@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace NoMansBlocks.FileSystem {
@@ -8,7 +9,7 @@ namespace NoMansBlocks.FileSystem {
     /// Handler for loading and saving JSON based files
     /// to and fro the disk.
     /// /// </summary>
-    public class JsonFileHandler : FileHandler {
+    public class JsonFileHandler : FileHandler<JsonFile> {
         #region Properties
         /// <summary>
         /// Indicator of what kind of file it can handle.
@@ -16,9 +17,20 @@ namespace NoMansBlocks.FileSystem {
         public override FileType FileType => FileType.Json;
 
         /// <summary>
-        /// The file extension that this handler supports.
+        /// The encoding that will be used for saving and loading
+        /// text files.
         /// </summary>
-        public override string FileExtension => "json";
+        public Encoding Encoding { get; set; }
+        #endregion
+
+        #region Constructor(s)
+        /// <summary>
+        /// Create a new JSON file handler that uses utf8 encoding
+        /// by default.
+        /// </summary>
+        public JsonFileHandler() {
+            Encoding = Encoding.ASCII;
+        }
         #endregion
 
         #region Helpers
@@ -28,15 +40,12 @@ namespace NoMansBlocks.FileSystem {
         /// <param name="fileInfo">The path of where to load the
         /// file from.</param>
         /// <returns>The loaded JSON file.</returns>
-        protected override async Task<IFile> LoadAsync(FileInfo fileInfo) {
-            return await Task.Run(() => {
-                using (StreamReader streamReader = File.OpenText(fileInfo.Path)) {
-                    using (JsonTextReader reader = new JsonTextReader(streamReader)) {
-                        JObject content = (JObject)JToken.ReadFrom(reader);
-                        return new JsonFile(fileInfo, content);
-                    }
-                }
-            });
+        protected override async Task<JsonFile> LoadAsync(FileInfo fileInfo) {
+            byte[] fileContent = await base.ReadFromFileAsync(fileInfo);
+            string text = Encoding.GetString(fileContent);
+
+            JObject fileJson = (JObject) JToken.Parse(text);
+            return new JsonFile(fileInfo, fileJson);
         }
 
         /// <summary>
@@ -44,18 +53,11 @@ namespace NoMansBlocks.FileSystem {
         /// </summary>
         /// <param name="filePath">The path of where to save the file to.</param>
         /// <param name="file">The JSON based file to save.</param>
-        protected override async Task SaveAsync(IFile file) {
-            await Task.Run(() => {
-                //File exists, wipe it first.
-                if (File.Exists(file.Info.Path)) {
-                    File.Delete(file.Info.Path);
-                }
+        protected override async Task SaveAsync(JsonFile file) {
+            string jsonString = JsonConvert.SerializeObject(file.Content);
+            byte[] fileContent = Encoding.GetBytes(jsonString);
 
-                using (StreamWriter streamWriter = File.CreateText(file.Info.Path)) {
-                    JsonSerializer serializer = new JsonSerializer();
-                    serializer.Serialize(streamWriter, file);
-                }
-            });
+            await base.WriteToFileAsync(file.Info, fileContent);
         }
         #endregion
     }

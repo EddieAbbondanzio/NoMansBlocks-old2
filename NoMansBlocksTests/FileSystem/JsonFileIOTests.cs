@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NoMansBlocks.FileSystem;
+using System.IO;
 
 namespace NoMansBlocks.Tests.FileSystem {
     /// <summary>

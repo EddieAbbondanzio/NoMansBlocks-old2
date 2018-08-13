@@ -48,8 +48,10 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ArrayExtensionsTests.cs" />
     <Compile Include="FileSystem\TextFileIOTests.cs" />
     <Compile Include="FileSystem\JsonFileIOTests.cs" />
+    <Compile Include="FileSystem\BinaryFileIOTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

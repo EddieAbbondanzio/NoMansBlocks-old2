@@ -1,6 +1,7 @@
-
+using NoMansBlocks.Logging;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace NoMansBlocks.FileSystem {
     /// <summary>
@@ -18,12 +19,12 @@ namespace NoMansBlocks.FileSystem {
         /// The path, name, and extension of the file.
         /// </summary>
         /// <value></value>
-        public FileInfo Info { get; set; }
+        public FileInfo Info { get; private set; }
 
         /// <summary>
         /// The log messages stored in this file
         /// </summary>
-        public List<string> LogMessages { get; private set; }
+        public List<LogStatement> Content { get; set; }
         #endregion
 
         #region Constructor(s)
@@ -31,13 +32,12 @@ namespace NoMansBlocks.FileSystem {
         /// Create a new log file with the name
         /// passed in.
         /// </summary>
-        /// <param name="name">The name of the file. Exclude the extension.</param>
-        /// <param name="logMessages">The list of logs to store in it.</param>
-        public LogFile(string name, List<string> logMessages) {
-            // Name = name;
-            LogMessages = logMessages;
+        /// <param name="fileInfo">The path of the file.</param>
+        /// <param name="content">The list of logs to store in it.</param>
+        public LogFile(FileInfo fileInfo, List<LogStatement> content) {
+            Info = fileInfo;
+            Content = content;
         }
         #endregion
-
     }
 }

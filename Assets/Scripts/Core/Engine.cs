@@ -1,4 +1,5 @@
 ﻿using NoMansBlocks.FileSystem;
+using NoMansBlocks.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace NoMansBlocks.Core {
         /// The singleton instance of the engine. There
         /// can only ever be one!
         /// </summary>
-        public static Engine Instance { get; private set; }
+        private static Engine Instance { get; set; }
         #endregion
 
         #region Event Handlers
@@ -24,17 +25,22 @@ namespace NoMansBlocks.Core {
         /// Called before the engine is started. When things
         /// are just getting warmed up
         /// </summary>
-        public EventHandler OnAwake;
+        public static EventHandler OnAwake;
 
         /// <summary>
         /// Called when the engine is first starting up.
         /// </summary>
-        public EventHandler OnStart;
+        public static EventHandler OnStart;
+
+        /// <summary>
+        /// Called whenever the engine makes a tick.
+        /// </summary>
+        public static EventHandler OnUpdate;
 
         /// <summary>
         /// Called when the engine is shutting down.
         /// </summary>
-        public EventHandler OnStop;
+        public static EventHandler OnStop;
         #endregion
 
         #region Mono Events
@@ -42,8 +48,6 @@ namespace NoMansBlocks.Core {
         /// Called right off the bat when Unity first starts.
         /// </summary>
         private void Awake() {
-            Debug.Log(Environment.CurrentDirectory);
-
             if (Instance != null) {
                 throw new Exception("Engine.Awake(): Instance was already set! Two Engine instances?");
             } else {
@@ -56,23 +60,28 @@ namespace NoMansBlocks.Core {
             }
         }
 
-        // Use this for initialization
-        private async void Start() {
-            FileInfo fileInfo = new FileInfo("C:\\Users\\Eddie\\Desktop\\test.json");
-
-            JsonFile testFile = await FileIO.LoadAsync(fileInfo) as JsonFile;
-
-            int cat = 4;
-
+        /// <summary>
+        /// Called after things have initialized and
+        /// we are ready to go!
+        /// </summary>
+        private void Start() {
             //First off the start event.
             if (OnStart != null) {
                 OnStart(this, null);
             }
+
+            Log.Debug("FUCK YOU MAN");
+            Log.Warn("This is a warning");
+            Log.Error("This is an error!");
         }
 
-        // Update is called once per frame
+        /// <summary>
+        /// Called every update tick of Unity.
+        /// </summary>
         private void Update() {
-
+            if(OnUpdate != null) {
+                OnUpdate(this, null);
+            }
         }
 
         /// <summary>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace NoMansBlocks.FileSystem {
     /// <summary>
@@ -20,7 +21,7 @@ namespace NoMansBlocks.FileSystem {
         /// The info pertaining to file path, name,
         /// and extension.
         /// </summary>
-        public FileInfo Info { get; set; }
+        public FileInfo Info { get; private set; }
     
         /// <summary>
         /// The bytes of the file
