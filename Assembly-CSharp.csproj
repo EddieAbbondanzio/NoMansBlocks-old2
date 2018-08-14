@@ -60,21 +60,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Core\BaseModule.cs" />
     <Compile Include="Assets\Scripts\Core\Engine.cs" />
-    <Compile Include="Assets\Scripts\Extensions\ArrayExtensions.cs" />
+    <Compile Include="Assets\Scripts\Logging\Analytics\SystemAnalyzer.cs" />
+    <Compile Include="Assets\Scripts\Logging\Common\LogReport.cs" />
+    <Compile Include="Assets\Scripts\Logging\Common\LogStatement.cs" />
+    <Compile Include="Assets\Scripts\Logging\Common\LogStatementType.cs" />
+    <Compile Include="Assets\Scripts\Logging\File\LogFile.cs" />
+    <Compile Include="Assets\Scripts\Logging\File\LogFileHandler.cs" />
     <Compile Include="Assets\Scripts\Logging\Log.cs" />
-    <Compile Include="Assets\Scripts\Logging\LogStatement.cs" />
-    <Compile Include="Assets\Scripts\Logging\LogStatementType.cs" />
-    <Compile Include="Assets\Scripts\Serialization\File\Common\CompressionType.cs" />
+    <Compile Include="Assets\Scripts\Logging\Logger\ILogger.cs" />
+    <Compile Include="Assets\Scripts\Logging\Logger\UnityLogger.cs" />
+    <Compile Include="Assets\Scripts\Logging\LoggingModule.cs" />
+    <Compile Include="Assets\Scripts\Serialization\File\BaseTypes\BinaryFile.cs" />
+    <Compile Include="Assets\Scripts\Serialization\File\BaseTypes\JsonFile.cs" />
+    <Compile Include="Assets\Scripts\Serialization\File\BaseTypes\TextFile.cs" />
     <Compile Include="Assets\Scripts\Serialization\File\Common\File.cs" />
     <Compile Include="Assets\Scripts\Serialization\File\Common\FIleType.cs" />
     <Compile Include="Assets\Scripts\Serialization\File\Common\IFile.cs" />
+    <Compile Include="Assets\Scripts\Serialization\File\Extensions\ArrayExtensions.cs" />
     <Compile Include="Assets\Scripts\Serialization\File\Extensions\DirectoryInfoExtensions.cs" />
     <Compile Include="Assets\Scripts\Serialization\File\Extensions\FileInfoExtensions.cs" />
     <Compile Include="Assets\Scripts\Serialization\File\FileSystem.cs" />
-    <Compile Include="Assets\Scripts\Serialization\File\Types\BinaryFile.cs" />
-    <Compile Include="Assets\Scripts\Serialization\File\Types\JsonFile.cs" />
-    <Compile Include="Assets\Scripts\Serialization\File\Types\TextFile.cs" />
     <Compile Include="Assets\Scripts\Serialization\Interfaces\IBinarySerializable.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Users/Eddie/Development/NoMansBlocks/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>

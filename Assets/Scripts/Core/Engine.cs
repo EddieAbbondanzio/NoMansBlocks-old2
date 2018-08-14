@@ -1,4 +1,5 @@
 ﻿using NoMansBlocks.Logging;
+using NoMansBlocks.Serialization;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -68,10 +69,6 @@ namespace NoMansBlocks.Core {
             if (OnStart != null) {
                 OnStart(this, null);
             }
-
-            Log.Debug("FUCK YOU MAN");
-            Log.Warn("This is a warning");
-            Log.Error("This is an error!");
         }
 
         /// <summary>

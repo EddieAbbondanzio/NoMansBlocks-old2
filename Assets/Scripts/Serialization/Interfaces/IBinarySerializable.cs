@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 namespace NoMansBlocks.Serialization {
     /// <summary>
     /// Interface to indicate that an object can be
-    /// serialized into a byte[] array.
+    /// serialized into a byte[] array. This interface requires
+    /// derived objects to implement a constructor that
+    /// accepts a single parameter of type byte[]. Failure to do so
+    /// will cause runtime errors.
     /// </summary>
     public interface IBinarySerializable {
         #region Publics

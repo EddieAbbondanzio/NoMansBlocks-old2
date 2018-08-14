@@ -15,80 +15,47 @@ namespace NoMansBlocks.Serialization {
         #region Constants
         /// <summary>
         /// How many bytes to read / write from file at a time.
-        /// This can be overrided in derived classes if desired.
+        /// This can be overrided if desired.
         /// </summary>
         public const int BufferSize = 4096;
         #endregion
 
         #region Publics
         /// <summary>
-        /// Load a binary (.bin) file from the disk.
+        /// Load a file from disk. If the file is not found, a FileNotFoundException
+        /// will be thrown.
         /// </summary>
-        /// <typeparam name="T">The type of content it holds.</typeparam>
-        /// <param name="info">The location of the file.</param>
-        /// <param name="compression">The compression method to use for loading it.</param>
+        /// <typeparam name="T">The type of file to load.</typeparam>
+        /// <param name="path">The file's full path.</param>
         /// <returns>The loaded file.</returns>
-        public static async Task<BinaryFile<T>> LoadBinaryFile<T>(FileInfo info, CompressionType compression = CompressionType.None) where T : IBinarySerializable {
-            byte[] fileContent = await LoadFromFileAsync(info);
-            return new BinaryFile<T>(info, fileContent);
+        /// <exception cref="FileNotFoundException">When the file isn't found.</exception>
+        public static async Task<T> LoadAsync<T>(string path) where T : IFile {
+            return await LoadAsync<T>(new FileInfo(path));
         }
 
         /// <summary>
-        /// Load a text file that uses UTF8 for it's text
-        /// encoding.
+        /// Load a file from disk. If the file is not found, a FileNotFoundException
+        /// will be thrown.
         /// </summary>
-        /// <param name="info">The location of the file.</param>
+        /// <typeparam name="T">The type of file to load.</typeparam>
+        /// <param name="info">The info about the file.</param>
         /// <returns>The loaded file.</returns>
-        public static async Task<TextFile> LoadTextFile(FileInfo info) {
-            return await LoadTextFile(info, Encoding.UTF8);
+        /// <exception cref="FileNotFoundException">When the file isn't found.</exception>
+        public static async Task<T> LoadAsync<T>(FileInfo info) where T : IFile {
+            byte[] rawContent = await LoadFromFileAsync(info);
+
+            T file = (T)Activator.CreateInstance(typeof(T), info, rawContent);
+            return file;
         }
 
         /// <summary>
-        /// Load a text file with a custom text
-        /// encoding.
+        /// Save a file to disk.
         /// </summary>
-        /// <param name="info">The location of the file.</param>
-        /// <param name="encoding">The text encoding to use.</param>
-        /// <returns>The loaded file.</returns>
-        public static async Task<TextFile> LoadTextFile(FileInfo info, Encoding encoding) {
-            byte[] fileContent = await LoadFromFileAsync(info);
-            return new TextFile(info, fileContent, encoding);
-        }
-
-        /// <summary>
-        /// Load a json file with a text encoding of UTF8.
-        /// </summary>
-        /// <typeparam name="T">The type of content it holds.</typeparam>
-        /// <param name="info">The location of the file.</param>
-        /// <returns>The loaded file.</returns>
-        public static async Task<JsonFile<T>> LoadJsonFile<T>(FileInfo info) {
-            return await LoadJsonFile<T>(info, Encoding.UTF8);
-        }
-
-        /// <summary>
-        /// Load a json file with a custom text encoding.
-        /// </summary>
-        /// <typeparam name="T">The type of content it holds.</typeparam>
-        /// <param name="info">The location of the file.</param>
-        /// <param name="encoding">The text encoding to use.</param>
-        /// <returns>The loaded file.</returns>
-        public static async Task<JsonFile<T>> LoadJsonFile<T>(FileInfo info, Encoding encoding) {
-            byte[] fileContent = await LoadFromFileAsync(info);
-            return new JsonFile<T>(info, fileContent, encoding);
-        }
-
-        /// <summary>
-        /// Save a text (.txt) file to the disk.
-        /// </summary>
-        /// <param name="file"><The file to save./param>
-        public static async Task SaveTextFile(TextFile file) {
-            byte[] fileContent = file.Serialize();
-            await SaveToFileAsync(file.Info, fileContent);
-        }
-
-        public static async Task SaveJsonFile<T>(JsonFile<T> file) {
-            byte[] fileContent = file.Serialize();
-            await SaveToFileAsync(file.Info, fileContent);
+        /// <typeparam name="T">The type of file to save.</typeparam>
+        /// <param name="file">The file to save.</param>
+        public static async Task SaveAsync<T>(T file) where T : IFile {
+            byte[] rawContent = file.Serialize();
+            await SaveToFileAsync(file.Info, rawContent);
         }
 
         /// <summary>
@@ -97,7 +64,7 @@ namespace NoMansBlocks.Serialization {
         /// </summary>
         /// <param name="localPath">The local files path.</param>
         /// <returns>The fully resolved file info.</returns>
-        public static FileInfo FileFromLocalPath(string localPath) {
+        public static FileInfo ResolveFilePath(string localPath) {
             string path = Path.Combine(Environment.CurrentDirectory, localPath);
             return new FileInfo(path);
         }
@@ -109,7 +76,7 @@ namespace NoMansBlocks.Serialization {
         /// <param name="localDirectory">The local folder.</param>
         /// <param name="fileName">The file name and extension.</param>
         /// <returns>The fully resolved file info.</returns>
-        public static FileInfo FileFromLocalPath(string localDirectory, string fileName) {
+        public static FileInfo ResolveFilePath(string localDirectory, string fileName) {
             string path = Path.Combine(Environment.CurrentDirectory, localDirectory, fileName);
             return new FileInfo(path);
         }
@@ -120,7 +87,7 @@ namespace NoMansBlocks.Serialization {
         /// </summary>
         /// <param name="localPath">The local path.</param>
         /// <returns>The full resolved directory info.</returns>
-        public static DirectoryInfo DirectoryFromLocalPath(string localPath) {
+        public static DirectoryInfo ResolveDirectoryPath(string localPath) {
             string path = Path.Combine(Environment.CurrentDirectory, localPath);
             return new DirectoryInfo(path);
         }
@@ -153,12 +120,12 @@ namespace NoMansBlocks.Serialization {
         /// </summary>
         /// <param name="fileInfo">The path of the file.</param>
         /// <param name="fileContents">The content to populate the file with.</param>
-        private static async Task SaveToFileAsync(FileInfo fileInfo, byte[] fileContents) {
+        private async static Task SaveToFileAsync(FileInfo fileInfo, byte[] fileContents) {
             using (FileStream fileStream = new FileStream(fileInfo.FullName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None, BufferSize, true)) {
                 byte[][] fileChunks = fileContents.Split(BufferSize);
 
                 for (int i = 0; i < fileChunks.Length; i++) {
-                    await fileStream.WriteAsync(fileChunks[i], i * BufferSize, fileChunks[i].Length);
+                    await fileStream.WriteAsync(fileChunks[i], 0, fileChunks[i].Length);
                 }
             }
         }
@@ -176,7 +143,7 @@ namespace NoMansBlocks.Serialization {
                 int readCount;
 
                 while ((readCount = await fileStream.ReadAsync(byteBuffer, 0, byteBuffer.Length)) != 0) {
-                    content.AddRange(byteBuffer);
+                    content.AddRange(byteBuffer.Take(readCount));
                 }
 
                 return content.ToArray();
