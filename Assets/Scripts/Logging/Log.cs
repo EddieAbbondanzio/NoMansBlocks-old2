@@ -1,11 +1,11 @@
 ﻿using NoMansBlocks.Core;
-using NoMansBlocks.FileSystem;
 using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NoMansBlocks.Serialization;
 
 namespace NoMansBlocks.Logging {
     /// <summary>
@@ -135,7 +135,7 @@ namespace NoMansBlocks.Logging {
                 return;
             }
 
-            DirectoryInfo logDirectory = DirectoryIO.FromLocalPath(LogDirectoryName);
+            DirectoryInfo logDirectory = FileSystem.DirectoryFromLocalPath(LogDirectoryName);
 
             //Make sure it exists.
             if (!logDirectory.Exists) {
@@ -146,16 +146,16 @@ namespace NoMansBlocks.Logging {
             string logFileName = string.Format("{0}.log", DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss"));
 
             //Build the actual file.
-            FileInfo fileInfo = FileIO.FromLocalPath(LogDirectoryName, logFileName);
-            LogFile logFile = new LogFile(fileInfo, History);
+            FileInfo fileInfo = FileSystem.FileFromLocalPath(LogDirectoryName, logFileName);
+            //LogFile logFile = new LogFile(fileInfo, History);
 
             try {
-                await FileIO.SaveAsync(logFile);
+                //await FileIO.SaveAsync(logFile);
 
-                //See if we need to trim the directory at all
-                if (logDirectory.FileCount() > LogDirectoryCapacity) {
-                    DirectoryIO.Shrink(logDirectory, LogDirectoryCapacity);
-                }
+                ////See if we need to trim the directory at all
+                //if (logDirectory.FileCount() > LogDirectoryCapacity) {
+                //    DirectoryIO.Shrink(logDirectory, LogDirectoryCapacity);
+                //}
             }
             catch(Exception exception) {
                 //Not really sure what to do when saving the log file fails...

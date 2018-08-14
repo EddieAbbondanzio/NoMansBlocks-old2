@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NoMansBlocks.FileSystem;
+using NoMansBlocks.Serialization;
 using System.IO;
 
-namespace NoMansBlocks.Tests.FileSystem {
+namespace NoMansBlocks.Tests.Serialization {
     /// <summary>
     /// Unit Tests related to .json files and their FileHandler
     /// </summary>
