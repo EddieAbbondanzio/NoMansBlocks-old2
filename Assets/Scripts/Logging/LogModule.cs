@@ -11,7 +11,7 @@ namespace NoMansBlocks.Logging {
     /// take a snap shot of the system, along with managing log files
     /// and more.
     /// </summary>
-    public class LogModule : BaseModule {
+    public class LogModule : Module {
         #region Properties
         /// <summary>
         /// The logger being used in the Log.cs class.
@@ -26,6 +26,8 @@ namespace NoMansBlocks.Logging {
         public override void OnInit() {
             Logger = new UnityLogger();
             Log.SetLogger(Logger);
+
+            Log.Debug("Log Module Initialized. It's execution index is: {0}", ExecutionIndex);
         }
 
         /// <summary>
@@ -33,7 +35,7 @@ namespace NoMansBlocks.Logging {
         /// log report off to be saved to file.
         /// </summary>
         public override void OnEnd() {
-
+            Log.Debug("Log Module Shutting down. Saving log file...");
         }
         #endregion
     }

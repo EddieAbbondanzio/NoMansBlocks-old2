@@ -60,15 +60,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Core\Common\BaseContainer.cs" />
-    <Compile Include="Assets\Scripts\Core\Common\IEngineCycleListener.cs" />
-    <Compile Include="Assets\Scripts\Core\Component\BaseComponent.cs" />
-    <Compile Include="Assets\Scripts\Core\Engine\ClientEngine.cs" />
-    <Compile Include="Assets\Scripts\Core\Engine\Engine.cs" />
+    <Compile Include="Assets\Scripts\Core\Engine\Base\Engine.cs" />
+    <Compile Include="Assets\Scripts\Core\Engine\Base\EngineType.cs" />
+    <Compile Include="Assets\Scripts\Core\Engine\Base\IEngineCycleListener.cs" />
+    <Compile Include="Assets\Scripts\Core\Engine\Client\ClientEngine.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\EngineBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Core\Engine\EngineType.cs" />
-    <Compile Include="Assets\Scripts\Core\Engine\ServerEngine.cs" />
-    <Compile Include="Assets\Scripts\Core\Module\BaseModule.cs" />
+    <Compile Include="Assets\Scripts\Core\Engine\Server\ServerEngine.cs" />
+    <Compile Include="Assets\Scripts\Core\Module\Module.cs" />
+    <Compile Include="Assets\Scripts\Core\Module\ModuleContainer.cs" />
+    <Compile Include="Assets\Scripts\Core\Module\ModuleExecutionAttribute.cs" />
     <Compile Include="Assets\Scripts\Logging\Analytics\SystemAnalyzer.cs" />
     <Compile Include="Assets\Scripts\Logging\Common\LogReport.cs" />
     <Compile Include="Assets\Scripts\Logging\Common\LogStatement.cs" />
