@@ -60,8 +60,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Core\BaseModule.cs" />
-    <Compile Include="Assets\Scripts\Core\Engine.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\BaseContainer.cs" />
+    <Compile Include="Assets\Scripts\Core\Common\IEngineCycleListener.cs" />
+    <Compile Include="Assets\Scripts\Core\Component\BaseComponent.cs" />
+    <Compile Include="Assets\Scripts\Core\Engine\ClientEngine.cs" />
+    <Compile Include="Assets\Scripts\Core\Engine\Engine.cs" />
+    <Compile Include="Assets\Scripts\Core\Engine\EngineBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Core\Engine\EngineType.cs" />
+    <Compile Include="Assets\Scripts\Core\Engine\ServerEngine.cs" />
+    <Compile Include="Assets\Scripts\Core\Module\BaseModule.cs" />
     <Compile Include="Assets\Scripts\Logging\Analytics\SystemAnalyzer.cs" />
     <Compile Include="Assets\Scripts\Logging\Common\LogReport.cs" />
     <Compile Include="Assets\Scripts\Logging\Common\LogStatement.cs" />
@@ -71,7 +78,7 @@
     <Compile Include="Assets\Scripts\Logging\Log.cs" />
     <Compile Include="Assets\Scripts\Logging\Logger\ILogger.cs" />
     <Compile Include="Assets\Scripts\Logging\Logger\UnityLogger.cs" />
-    <Compile Include="Assets\Scripts\Logging\LoggingModule.cs" />
+    <Compile Include="Assets\Scripts\Logging\LogModule.cs" />
     <Compile Include="Assets\Scripts\Serialization\File\BaseTypes\BinaryFile.cs" />
     <Compile Include="Assets\Scripts\Serialization\File\BaseTypes\JsonFile.cs" />
     <Compile Include="Assets\Scripts\Serialization\File\BaseTypes\TextFile.cs" />
