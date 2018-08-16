@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NoMansBlocks.UserSystem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace NoMansBlocks.Core {
     /// A client instance of the No Mans Block
     /// game engine.
     /// </summary>
-    public class ClientEngine : Engine {
+    public class ClientEngine : GameEngine {
         #region Properties
         /// <summary>
         /// Flag indicating what kind of engine it is.

@@ -9,7 +9,8 @@ namespace NoMansBlocks.Logging {
     /// <summary>
     /// Module to perform all logging related functions. Ensures we
     /// take a snap shot of the system, along with managing log files
-    /// and more.
+    /// and more. This module can be accessed at any time by using
+    /// the static Log interface.
     /// </summary>
     public class LogModule : Module {
         #region Properties
@@ -17,6 +18,27 @@ namespace NoMansBlocks.Logging {
         /// The logger being used in the Log.cs class.
         /// </summary>
         public ILogger Logger { get; private set; }
+
+        /// <summary>
+        /// Analyzes the system and collects some meta info.
+        /// </summary>
+        public SystemAnalyzer SystemAnalyzer { get; private set; }
+
+        /// <summary>
+        /// Handles loading and saving logs to file.
+        /// </summary>
+        public LogFileHandler LogFileHandler { get; private set; }
+        #endregion
+
+        #region Constructor(s)
+        /// <summary>
+        /// Initialize a new log module for use.
+        /// </summary>
+        public LogModule() {
+            Logger         = new UnityLogger();
+            SystemAnalyzer = new SystemAnalyzer();
+            LogFileHandler = new LogFileHandler();
+        }
         #endregion
 
         #region Publics
@@ -24,10 +46,7 @@ namespace NoMansBlocks.Logging {
         /// Initialize the logger for use.
         /// </summary>
         public override void OnInit() {
-            Logger = new UnityLogger();
             Log.SetLogger(Logger);
-
-            Log.Debug("Log Module Initialized. It's execution index is: {0}", ExecutionIndex);
         }
 
         /// <summary>
@@ -35,7 +54,8 @@ namespace NoMansBlocks.Logging {
         /// log report off to be saved to file.
         /// </summary>
         public override void OnEnd() {
-            Log.Debug("Log Module Shutting down. Saving log file...");
+            LogReport logReport = new LogReport(SystemAnalyzer.GetSystemInfo(), Logger.History);
+            Task.Run(async () => { await LogFileHandler.SaveLog(logReport); });
         }
         #endregion
     }

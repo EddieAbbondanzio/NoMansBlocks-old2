@@ -12,10 +12,25 @@ namespace NoMansBlocks.Core {
     public abstract class Module : IEngineCycleListener {
         #region Properties
         /// <summary>
+        /// The container that owns this module.
+        /// </summary>
+        public ModuleContainer Container { get; set; }
+
+        /// <summary>
         /// What position in the module array this is. This
         /// is set using the ModuleExecutionAttribute.
         /// </summary>
         public byte ExecutionIndex { get; set; }
+
+        /// <summary>
+        /// If the Update() method of the module should be called.
+        /// </summary>
+        public bool DisableUpdate { get; set; }
+
+        /// <summary>
+        /// If the module is enabled, and running.
+        /// </summary>
+        public bool Enabled { get; set; }
         #endregion
 
         #region Constructor(s)
@@ -24,10 +39,22 @@ namespace NoMansBlocks.Core {
         /// </summary>
         protected Module() {
             ExecutionIndex = byte.MaxValue;
+            DisableUpdate  = false;
+            Enabled        = true;
         }
         #endregion
 
         #region Publics
+        /// <summary>
+        /// Search for another module that is associated with this module's
+        /// parent via it's type.
+        /// </summary>
+        /// <typeparam name="T">The type of module to return.</typeparam>
+        /// <returns>The module found (if any).</returns>
+        public T GetModule<T>() where T : Module {
+            return Container?.GetModule<T>() ?? null;
+        }
+
         /// <summary>
         /// Called when the engine is first starting up. Use this
         /// to prepare local stuff but don't access other modules yet.

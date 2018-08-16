@@ -8,7 +8,7 @@ namespace NoMansBlocks.Core {
     /// <summary>
     /// A server instance of the no mans block game engine.
     /// </summary>
-    public class ServerEngine : Engine {
+    public class ServerEngine : GameEngine {
         #region Properties
         /// <summary>
         /// Flag indicating what kind of engine it is.

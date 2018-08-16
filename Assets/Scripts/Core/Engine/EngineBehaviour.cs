@@ -12,7 +12,7 @@ public class EngineBehaviour : MonoBehaviour {
     /// <summary>
     /// The engine instance.
     /// </summary>
-    public Engine Engine { get; private set; }
+    public GameEngine Engine { get; private set; }
     #endregion
 
     #region Mono Events

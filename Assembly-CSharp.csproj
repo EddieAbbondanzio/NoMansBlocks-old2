@@ -60,8 +60,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Core\Engine\Base\Engine.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Base\EngineType.cs" />
+    <Compile Include="Assets\Scripts\Core\Engine\Base\GameEngine.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Base\IEngineCycleListener.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Client\ClientEngine.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\EngineBehaviour.cs" />
@@ -69,16 +69,21 @@
     <Compile Include="Assets\Scripts\Core\Module\Module.cs" />
     <Compile Include="Assets\Scripts\Core\Module\ModuleContainer.cs" />
     <Compile Include="Assets\Scripts\Core\Module\ModuleExecutionAttribute.cs" />
-    <Compile Include="Assets\Scripts\Logging\Analytics\SystemAnalyzer.cs" />
-    <Compile Include="Assets\Scripts\Logging\Common\LogReport.cs" />
-    <Compile Include="Assets\Scripts\Logging\Common\LogStatement.cs" />
-    <Compile Include="Assets\Scripts\Logging\Common\LogStatementType.cs" />
-    <Compile Include="Assets\Scripts\Logging\File\LogFile.cs" />
-    <Compile Include="Assets\Scripts\Logging\File\LogFileHandler.cs" />
+    <Compile Include="Assets\Scripts\Logging\Analyzer\CpuInfo.cs" />
+    <Compile Include="Assets\Scripts\Logging\Analyzer\GpuInfo.cs" />
+    <Compile Include="Assets\Scripts\Logging\Analyzer\SystemAnalyzer.cs" />
+    <Compile Include="Assets\Scripts\Logging\Analyzer\SystemInfo.cs" />
     <Compile Include="Assets\Scripts\Logging\Log.cs" />
+    <Compile Include="Assets\Scripts\Logging\Log\File\LogFile.cs" />
+    <Compile Include="Assets\Scripts\Logging\Log\File\LogFileHandler.cs" />
+    <Compile Include="Assets\Scripts\Logging\Log\Report\LogReport.cs" />
+    <Compile Include="Assets\Scripts\Logging\Log\Statement\LogStatement.cs" />
+    <Compile Include="Assets\Scripts\Logging\Log\Statement\LogStatementType.cs" />
     <Compile Include="Assets\Scripts\Logging\Logger\ILogger.cs" />
     <Compile Include="Assets\Scripts\Logging\Logger\UnityLogger.cs" />
     <Compile Include="Assets\Scripts\Logging\LogModule.cs" />
+    <Compile Include="Assets\Scripts\Network\Client\NetClient.cs" />
+    <Compile Include="Assets\Scripts\Network\NetModule.cs" />
     <Compile Include="Assets\Scripts\Serialization\File\BaseTypes\BinaryFile.cs" />
     <Compile Include="Assets\Scripts\Serialization\File\BaseTypes\JsonFile.cs" />
     <Compile Include="Assets\Scripts\Serialization\File\BaseTypes\TextFile.cs" />
@@ -90,6 +95,8 @@
     <Compile Include="Assets\Scripts\Serialization\File\Extensions\FileInfoExtensions.cs" />
     <Compile Include="Assets\Scripts\Serialization\File\FileSystem.cs" />
     <Compile Include="Assets\Scripts\Serialization\Interfaces\IBinarySerializable.cs" />
+    <Compile Include="Assets\Scripts\UserSystem\User.cs" />
+    <Compile Include="Assets\Scripts\UserSystem\UserService.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Users/Eddie/Development/NoMansBlocks/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
