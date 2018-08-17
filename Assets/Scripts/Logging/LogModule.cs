@@ -12,7 +12,7 @@ namespace NoMansBlocks.Logging {
     /// and more. This module can be accessed at any time by using
     /// the static Log interface.
     /// </summary>
-    public class LogModule : Module {
+    public sealed class LogModule : Module {
         #region Properties
         /// <summary>
         /// The logger being used in the Log.cs class.

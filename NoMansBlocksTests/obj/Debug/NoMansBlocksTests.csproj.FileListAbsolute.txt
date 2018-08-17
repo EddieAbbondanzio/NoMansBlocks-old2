@@ -116,3 +116,5 @@ C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\UnityEngine.
 C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\UnityEngine.VideoModule.xml
 C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\UnityEngine.WindModule.xml
 C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\UnityEngine.XRModule.xml
+C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\Assembly-CSharp-firstpass.dll
+C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\Assembly-CSharp-firstpass.pdb

@@ -1,5 +1,6 @@
 ﻿using NoMansBlocks.Logging;
 using NoMansBlocks.Network;
+using NoMansBlocks.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,10 +27,15 @@ namespace NoMansBlocks.Core {
         public LogModule LogModule { get; private set; }
 
         /// <summary>
+        /// Services for getting info from the master server.
+        /// </summary>
+        [ModuleExecution(ExecutionIndex = 1, DisableUpdate = true)]
+        public ServiceModule ServiceModule { get; private set; }
+
+        /// <summary>
         /// The module used to interface with the network.
         /// </summary>
-        [ModuleExecution(ExecutionIndex = 1)]
-        public NetModule NetModule { get; private set; }
+        public abstract NetModule NetModule { get; protected set; }
         #endregion
 
         #region Constructor(s)
@@ -38,8 +44,8 @@ namespace NoMansBlocks.Core {
         /// game engine.
         /// </summary>
         protected GameEngine() {
-            LogModule = new LogModule();
-            NetModule = new NetModule();
+            LogModule     = new LogModule();
+            ServiceModule = new ServiceModule();
         }
         #endregion
 

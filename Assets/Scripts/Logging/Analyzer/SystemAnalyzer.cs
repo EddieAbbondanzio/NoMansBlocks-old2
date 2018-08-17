@@ -39,7 +39,8 @@ namespace NoMansBlocks.Logging {
                 Cpu          = cpuInfo,
                 Gpu          = gpuInfo,
                 ComputerName = UnityEngine.SystemInfo.deviceName,
-                Model        = UnityEngine.SystemInfo.deviceModel
+                Model        = UnityEngine.SystemInfo.deviceModel,
+                OperatingSystem = UnityEngine.SystemInfo.operatingSystem
             };
         }
         #endregion
