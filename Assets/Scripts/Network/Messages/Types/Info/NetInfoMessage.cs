@@ -10,7 +10,7 @@ namespace NoMansBlocks.Network.Messages {
     /// A net info message contains info about things
     /// over the network.
     /// </summary>
-    public class NetInfoMessage : NetMessage {
+    public class NetInfoMessage : NetUnconnectedMessage {
         #region Properties
         /// <summary>
         /// The general purpose of the message.

@@ -16,11 +16,6 @@ namespace NoMansBlocks.Network{
         /// The local id used to distingush the id.
         /// </summary>
         byte ConnectionId { get; }
-
-        /// <summary>
-        /// The latency of the connection.
-        /// </summary>
-        int Latency { get; }
         #endregion
     }
 }

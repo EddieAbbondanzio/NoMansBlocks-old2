@@ -9,7 +9,7 @@ namespace NoMansBlocks.Network.Messages {
     /// Arguments that can pass around a net info
     /// message through events.
     /// </summary>
-    public sealed class NetInfoMessageArgs {
+    public sealed class NetInfoMessageArgs : EventArgs {
         #region Properties
         /// <summary>
         /// The message being sent around.

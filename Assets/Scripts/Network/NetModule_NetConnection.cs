@@ -23,14 +23,9 @@ namespace NoMansBlocks.Network {
             public byte ConnectionId { get; set; }
 
             /// <summary>
-            /// The ip address of the connection.
+            /// The sender associated with this connection.
             /// </summary>
-            public NetEndPoint EndPoint { get; set; }
-
-            /// <summary>
-            /// The latency of the connection.
-            /// </summary>
-            public int Latency { get; set; }
+            public NetPeer Peer { get; set; }
             #endregion
         }
     }

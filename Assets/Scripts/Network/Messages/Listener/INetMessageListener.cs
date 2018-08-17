@@ -17,6 +17,7 @@ namespace NoMansBlocks.Network {
         /// Fired when ever an info message is recieved from
         /// over the network.
         /// </summary>
+        /// <returns>The incoming info message.</returns>
         event EventHandler<NetInfoMessageArgs> OnInfoMessage;
 
         /// <summary>
@@ -25,6 +26,12 @@ namespace NoMansBlocks.Network {
         /// </summary>
         /// <returns>The incoming error message.</returns>
         event EventHandler<NetErrorMessageArgs> OnErrorMessage;
+
+        /// <summary>
+        /// Fired whenever a connection related message comes in.
+        /// </summary>
+        /// <returns>The incoming connection message.</returns>
+        event EventHandler<NetConnectionMessageArgs> OnConnectionMessage;
         #endregion
     }
 }

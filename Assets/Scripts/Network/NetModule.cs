@@ -119,7 +119,7 @@ namespace NoMansBlocks.Network {
         /// </summary>
         /// <param name="message">The message to send to everyone.</param>
         /// <param name="options">How to send the message.</param>
-        public void SendMessage(NetMessage message, SendOptions options) {
+        public void SendMessage(NetUnconnectedMessage message, SendOptions options) {
             byte[] payLoad = message.Serialize();
             netManager.SendToAll(payLoad, options);
         }
@@ -130,7 +130,7 @@ namespace NoMansBlocks.Network {
         /// <param name="message">The message to send.</param>
         /// <param name="connection">The receiever.</param>
         /// <param name="options">How to send the message.</param>
-        public void SendMessage(NetMessage message, INetConnection connection, SendOptions options) {
+        public void SendMessage(NetUnconnectedMessage message, INetConnection connection, SendOptions options) {
 
         }
         #endregion

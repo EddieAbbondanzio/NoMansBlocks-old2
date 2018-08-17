@@ -10,9 +10,10 @@ namespace NoMansBlocks.Network.Messages {
     /// <summary>
     /// Base class for all messages to derive from.
     /// This provides some common functionality across
-    /// all of them.
+    /// all of them. These messages are ones that come from
+    /// unconnected users.
     /// </summary>
-    public abstract class NetMessage : IBinarySerializable {
+    public abstract class NetUnconnectedMessage : INetMessage {
         #region Properties
         /// <summary>
         /// What category the message falls under.
@@ -31,12 +32,17 @@ namespace NoMansBlocks.Network.Messages {
         /// if they are incoming.
         /// </summary>
         /// <param name="senderAddress">The sender's ip.</param>
-        protected NetMessage(NetEndPoint senderAddress) {
+        protected NetUnconnectedMessage(NetEndPoint senderAddress) {
             SenderAddress = senderAddress;
         }
         #endregion
 
         #region Publics
+        /// <summary>
+        /// Serialize the message into a byte array that can cross
+        /// the network.
+        /// </summary>
+        /// <returns>The message as a byte array.</returns>
         public virtual byte[] Serialize() {
             throw new NotImplementedException();
         }

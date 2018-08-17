@@ -25,11 +25,17 @@ namespace NoMansBlocks.Network {
         /// Fired whenever an error message comes in from the network.
         /// </summary>
         public event EventHandler<NetErrorMessageArgs> OnErrorMessage;
+
+        /// <summary>
+        /// Fired whenever a connection related message comes in.
+        /// </summary>
+        public event EventHandler<NetConnectionMessageArgs> OnConnectionMessage;
         #endregion
 
         #region Publics
         /// <summary>
-        /// Don't really give a turd about these things.
+        /// Latency updates from peers? Not to useful but we'll
+        /// leave them in case the need arises later on.
         /// </summary>
         /// <param name="peer">The sender of the message.</param>
         /// <param name="latency">Their latency</param>
@@ -51,24 +57,44 @@ namespace NoMansBlocks.Network {
             NetErrorMessage errorMsg = new NetErrorMessage(endPoint, socketErrorCode);
 
             //Fire off the event.
-            if(OnErrorMessage != null) {
+            if (OnErrorMessage != null) {
                 OnErrorMessage(this, new NetErrorMessageArgs(errorMsg));
             }
         }
 
-
+        /// <summary>
+        /// Client wishses to connect. Create a connection request
+        /// message and send it off via the event.
+        /// </summary>
+        /// <param name="peer">The client who wishses to connect.</param>
         public void OnPeerConnected(NetPeer peer) {
-            //When on server
-            //go ahead and create their connection request message
-            //this should be processed to add them or reject them
+            NetConnectionRequestMessage requestMsg = new NetConnectionRequestMessage(peer);
 
-            throw new NotImplementedException();
+            //Fire off the event
+            if(OnConnectionMessage != null) {
+                OnConnectionMessage(this, new NetConnectionMessageArgs(requestMsg));
+            }
         }
 
+        /// <summary>
+        /// Client has disconnected. Create an alert for the server.
+        /// </summary>
+        /// <param name="peer">The peer who disconnected.</param>
+        /// <param name="disconnectInfo">Why they disconnected</param>
         public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo) {
-            throw new NotImplementedException();
+            NetDisconnectedMessage disconnectMsg = new NetDisconnectedMessage(peer, disconnectInfo);
+
+            //Fire off the event
+            if (OnConnectionMessage != null) {
+                OnConnectionMessage(this, new NetConnectionMessageArgs(disconnectMsg));
+            }
         }
 
+        /// <summary>
+        /// Data messsage recieved. These will need to be filtered accordingly.
+        /// </summary>
+        /// <param name="peer"></param>
+        /// <param name="reader"></param>
         public void OnNetworkReceive(NetPeer peer, NetDataReader reader) {
             throw new NotImplementedException();
         }

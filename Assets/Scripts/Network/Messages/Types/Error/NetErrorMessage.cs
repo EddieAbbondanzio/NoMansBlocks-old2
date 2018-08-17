@@ -10,7 +10,7 @@ namespace NoMansBlocks.Network.Messages {
     /// An error message indicates that well,
     /// an error occured.
     /// </summary>
-    public sealed class NetErrorMessage : NetMessage {
+    public sealed class NetErrorMessage : NetUnconnectedMessage {
         #region Properties
         /// <summary>
         /// Indicator of the messages general purpose.
