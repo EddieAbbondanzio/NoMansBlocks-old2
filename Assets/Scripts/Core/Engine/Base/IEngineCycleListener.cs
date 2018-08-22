@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NoMansBlocks.Core {
+namespace NoMansBlocks.Core.Engine {
     /// <summary>
     /// Interface to represent an object that listens in on the 
     /// engine life cycle events.

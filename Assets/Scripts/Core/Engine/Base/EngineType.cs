@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NoMansBlocks.Core {
+namespace NoMansBlocks.Core.Engine {
     /// <summary>
     /// Flag to indicate if we are running a client or 
     /// server instance of the engine.

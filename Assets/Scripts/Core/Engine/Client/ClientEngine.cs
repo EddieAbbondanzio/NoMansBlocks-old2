@@ -1,12 +1,13 @@
-﻿using NoMansBlocks.Network;
-using NoMansBlocks.UserSystem;
+﻿using NoMansBlocks.Core.Engine;
+using NoMansBlocks.Core.UserSystem;
+using NoMansBlocks.Modules.Network;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NoMansBlocks.Core {
+namespace NoMansBlocks.Core.Engine {
     /// <summary>
     /// A client instance of the No Mans Block
     /// game engine.
@@ -17,21 +18,26 @@ namespace NoMansBlocks.Core {
         /// Flag indicating what kind of engine it is.
         /// </summary>
         public override EngineType Type => EngineType.Client;
-
-        /// <summary>
-        /// The network interface for working with others
-        /// over the network.
-        /// </summary>
-        [ModuleExecution(ExecutionIndex = 2)]
-        public override NetModule NetModule { get; protected set; }
         #endregion
 
         #region Constructor(s)
         /// <summary>
-        /// Create a new instance of the client game engine.
+        /// Create a new instance of the game engine for a user
+        /// that wants to play the game.
         /// </summary>
-        public ClientEngine() {
-            NetModule = new NetModule(false);
+        /// <param name="user">The user playing.</param>
+        public ClientEngine(User user) : base(user) {
+        }
+        #endregion
+
+        #region Engine Events
+        /// <summary>
+        /// Called when the engine is first starting up. This gets the
+        /// modules ready, then pulls them all in.
+        /// </summary>
+        public override void Init() {
+            NetModule = new NetModule(1, 0);
+            base.Init();
         }
         #endregion
     }

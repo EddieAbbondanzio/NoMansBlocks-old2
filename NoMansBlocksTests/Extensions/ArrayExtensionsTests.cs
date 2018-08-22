@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NoMansBlocks.Serialization;
+using NoMansBlocks.Core.Serialization;
 
 namespace NoMansBlocks.Tests.Extensions {
     /// <summary>
