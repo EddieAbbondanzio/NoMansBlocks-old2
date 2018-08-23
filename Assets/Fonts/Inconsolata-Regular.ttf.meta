@@ -3,17 +3,18 @@ guid: aa53520c758d8484698e27dadde64b64
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
-  fontSize: 16
-  forceTextureCase: -2
+  fontSize: 300
+  forceTextureCase: -1
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
   fontName: Inconsolata
   fontNames:
   - Inconsolata
-  fallbackFontReferences: []
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: aaa83b0abdc9f7140b2e20ee48933a5a, type: 3}
   customCharacters: 
-  fontRenderingMode: 0
+  fontRenderingMode: 3
   ascentCalculationMode: 1
   useLegacyBoundsCalculation: 0
   shouldRoundAdvanceValue: 1

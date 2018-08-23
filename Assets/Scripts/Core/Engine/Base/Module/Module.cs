@@ -66,13 +66,7 @@ namespace NoMansBlocks.Core.Engine {
         /// </summary>
         public virtual void OnInit() {
         }
-
-        /// <summary>
-        /// Initialize the module first before initializing
-        /// </summary>
-        public virtual void Init() {
-        }
-
+       
         /// <summary>
         /// Called after everything has been initialized. Now it's
         /// safe to access other modules.

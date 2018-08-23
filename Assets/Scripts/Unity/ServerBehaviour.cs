@@ -33,6 +33,8 @@ namespace NoMansBlocks.Unity {
         /// Prepares the engine for use.
         /// </summary>
         private void Awake() {
+            DontDestroyOnLoad(this.gameObject);
+
             Engine = new ServerEngine(Capacity, Port);
             Engine.Init();
         }

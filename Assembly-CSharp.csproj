@@ -126,6 +126,9 @@
     <Compile Include="Assets\Scripts\Modules\Network\Messages\Types\Meta\Types\NetLatencyMessage.cs" />
     <Compile Include="Assets\Scripts\Modules\Network\NetModule.cs" />
     <Compile Include="Assets\Scripts\Modules\Network\NetModule_NetMessageListener.cs" />
+    <Compile Include="Assets\Scripts\Modules\View\Common\GameView.cs" />
+    <Compile Include="Assets\Scripts\Modules\View\ViewModule.cs" />
+    <Compile Include="Assets\Scripts\Modules\View\Views\LoginView.cs" />
     <Compile Include="Assets\Scripts\Unity\ClientBehaviour.cs" />
     <Compile Include="Assets\Scripts\Unity\ServerBehaviour.cs" />
     <Compile Include="Assets\Scripts\Unity\UnityLogger.cs" />

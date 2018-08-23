@@ -34,6 +34,8 @@ namespace NoMansBlocks.Unity {
         /// Prepares the engine for use.
         /// </summary>
         private void Awake() {
+            DontDestroyOnLoad(this.gameObject);
+
             User user = new User(Username);
 
             Engine = new ClientEngine(user);

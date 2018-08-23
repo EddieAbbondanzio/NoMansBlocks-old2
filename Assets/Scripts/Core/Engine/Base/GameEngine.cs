@@ -9,6 +9,7 @@ using NoMansBlocks.Modules.CommandConsole;
 using NoMansBlocks.Modules.Network;
 using NoMansBlocks.Core.UserSystem;
 using System.Reflection;
+using NoMansBlocks.Modules.View;
 
 namespace NoMansBlocks.Core.Engine {
     /// <summary>
@@ -41,9 +42,15 @@ namespace NoMansBlocks.Core.Engine {
         public CommandConsoleModule CommandModule { get; private set; }
 
         /// <summary>
+        /// The module that handles loading scenes.
+        /// </summary>
+        [ModuleExecution(ExecutionIndex = 2, DisableUpdate = true)]
+        public ViewModule ViewModule { get; private set; }
+
+        /// <summary>
         /// The module used to interface with the network.
         /// </summary>
-        [ModuleExecution(ExecutionIndex = 2)]
+        [ModuleExecution(ExecutionIndex = 3)]
         public NetModule NetModule { get; protected set; }
         #endregion
 
@@ -66,6 +73,7 @@ namespace NoMansBlocks.Core.Engine {
 
             LogModule     = new LogModule();
             CommandModule = new CommandConsoleModule();
+            ViewModule    = new ViewModule();
         }
         #endregion
 
