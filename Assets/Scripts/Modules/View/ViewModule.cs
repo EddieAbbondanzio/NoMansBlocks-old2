@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace NoMansBlocks.Modules.View {
@@ -12,7 +13,7 @@ namespace NoMansBlocks.Modules.View {
     /// Module responsible for loading and handling the
     /// various views of the engine.
     /// </summary>
-    public class ViewModule : NoMansBlocks.Core.Engine.Module {
+    public class ViewModule : Core.Engine.Module {
         #region Properties
         /// <summary>
         /// The view currently loaded.
@@ -36,12 +37,27 @@ namespace NoMansBlocks.Modules.View {
             views = new List<GameView>();
 
             //Find the possible view types.
-            List<Type> viewTypes = FindDerivedTypes(typeof(GameView));
+            List<Type> viewTypes = Assembly.GetAssembly(typeof(GameView)).GetTypes().Where(t => t.IsSubclassOf(typeof(GameView))).ToList();
 
             //Now make an instance of each one
             foreach(Type viewType in viewTypes) {
-                views.Add(Activator.CreateInstance(viewType) as GameView);
+                GameView view = Activator.CreateInstance(viewType) as GameView;
+
+                //Only add the view if it supports this engine type
+                if(view.Type == Engine.Type) {
+                    views.Add(view);
+                }
             }
+
+            //Figure out what scene is active
+            Current = views.Find(v => v.Name == SceneManager.GetActiveScene().name);
+
+            if(Current == null) {
+                throw new Exception("Unknown view loaded.");
+            }
+
+            //Trigger it's load method
+            Current.Load();
         }
         #endregion
 
@@ -52,35 +68,12 @@ namespace NoMansBlocks.Modules.View {
         /// </summary>
         /// <param name="name">The name of the view to load.</param>
         public void LoadView(string name) {
-            //Stop, scene is already loaded.
-            if(Current.Name == name) {
-                return;
-            }
+            //Remove the old one first
+            Current.Destroy();
 
-            //Alert the current scene it's being destroyed
-            Current.OnDestroy();
-
-            //Now load the new scene
+            //Now we load up the new one.
             Current = views.Find(v => v.Name == name);
-            if(Current == null) {
-                throw new Exception(string.Format("Could not find view: {0}", name));
-            }
-            else {
-                SceneManager.LoadScene(name);
-                Current.OnLoad();
-            }
-        }
-        #endregion
-
-        #region Helpers
-        /// <summary>
-        /// Generate a list of every type that implements the 
-        /// base type provided.
-        /// </summary>
-        /// <param name="baseType">The base type to hunt for.</param>
-        /// <returns>The lsit of derived types.</returns>
-        private List<Type> FindDerivedTypes(Type baseType) {
-            return Assembly.GetAssembly(baseType).GetTypes().Where(t => t.IsSubclassOf(baseType)).ToList();
+            Current.Load();
         }
         #endregion
     }

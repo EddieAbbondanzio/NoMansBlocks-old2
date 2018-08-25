@@ -118,3 +118,16 @@ C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\UnityEngine.
 C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\UnityEngine.XRModule.xml
 C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\Assembly-CSharp-firstpass.dll
 C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\Assembly-CSharp-firstpass.pdb
+C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\UnityEngine.UI.dll
+C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\UnityEditor.dll
+C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\Unity.Cecil.dll
+C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\Unity.SerializationLogic.dll
+C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\Unity.DataContract.dll
+C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\ExCSS.Unity.dll
+C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\Unity.Legacy.NRefactory.dll
+C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\Boo.Lang.Parser.dll
+C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\Boo.Lang.Compiler.dll
+C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\Unity.CecilTools.dll
+C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\Boo.Lang.dll
+C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\UnityEngine.UI.xml
+C:\Users\Eddie\Development\NoMansBlocks\NoMansBlocksTests\bin\Debug\UnityEditor.xml
