@@ -1,0 +1,37 @@
+﻿using NoMansBlocks.Core.Engine;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace NoMansBlocks.Modules.View {
+    /// <summary>
+    /// The main menu 'scene'. This allows the player to connect to 
+    /// lobbys or adjust settings.
+    /// </summary>
+    public class MainView : GameView {
+        #region Properties
+        /// <summary>
+        /// The unique name of the view. This should match up
+        /// with the name of the Unity scene to use.
+        /// </summary>
+        public override string Name => "MainView";
+
+        /// <summary>
+        /// Only the client can open the login view.
+        /// </summary>
+        public override EngineType Type => EngineType.Client;
+        #endregion
+
+        #region Constructor(s)
+        /// <summary>
+        /// Create a new main menu view. This is a wrapper
+        /// for working with Scenes.
+        /// </summary>
+        public MainView() : base() {
+
+        }
+        #endregion
+    }
+}

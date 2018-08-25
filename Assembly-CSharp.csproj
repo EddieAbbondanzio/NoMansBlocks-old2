@@ -87,9 +87,9 @@
     <Compile Include="Assets\Scripts\Core\Serialization\File\FileTypes\JsonFile.cs" />
     <Compile Include="Assets\Scripts\Core\Serialization\File\FileTypes\TextFile.cs" />
     <Compile Include="Assets\Scripts\Core\Serialization\Interfaces\IBinarySerializable.cs" />
-    <Compile Include="Assets\Scripts\Core\UserSystem\IUser.cs" />
     <Compile Include="Assets\Scripts\Core\UserSystem\PermissionLevel.cs" />
     <Compile Include="Assets\Scripts\Core\UserSystem\User.cs" />
+    <Compile Include="Assets\Scripts\Core\UserSystem\UserService.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\CommandConsoleModule.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\CommandParser.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Common\Command.cs" />
@@ -129,13 +129,15 @@
     <Compile Include="Assets\Scripts\Modules\Network\Messages\Types\Meta\Types\NetLatencyMessage.cs" />
     <Compile Include="Assets\Scripts\Modules\Network\NetModule.cs" />
     <Compile Include="Assets\Scripts\Modules\Network\NetModule_NetMessageListener.cs" />
-    <Compile Include="Assets\Scripts\Modules\View\Menu\Base\Menu.cs" />
-    <Compile Include="Assets\Scripts\Modules\View\Menu\Base\MenuState.cs" />
-    <Compile Include="Assets\Scripts\Modules\View\Menu\Menus\LoginMenu.cs" />
-    <Compile Include="Assets\Scripts\Modules\View\View\Base\GameView.cs" />
-    <Compile Include="Assets\Scripts\Modules\View\View\Base\ViewLoadedArgs.cs" />
-    <Compile Include="Assets\Scripts\Modules\View\View\Views\LoginView.cs" />
+    <Compile Include="Assets\Scripts\Modules\View\Common\GameMenu.cs" />
+    <Compile Include="Assets\Scripts\Modules\View\Common\GameView.cs" />
+    <Compile Include="Assets\Scripts\Modules\View\Common\MenuState.cs" />
+    <Compile Include="Assets\Scripts\Modules\View\Common\ViewLoadedArgs.cs" />
     <Compile Include="Assets\Scripts\Modules\View\ViewModule.cs" />
+    <Compile Include="Assets\Scripts\Modules\View\Views\Login\LoginArgs.cs" />
+    <Compile Include="Assets\Scripts\Modules\View\Views\Login\LoginView.cs" />
+    <Compile Include="Assets\Scripts\Modules\View\Views\Login\Menus\LoginMenu.cs" />
+    <Compile Include="Assets\Scripts\Modules\View\Views\Main\MainView.cs" />
     <Compile Include="Assets\Scripts\Utils\NetUtils.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Users/Eddie/Development/NoMansBlocks/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
@@ -704,9 +706,6 @@
       <Project>{FC75655B-56D8-2C3F-0B13-60CCB094320A}</Project>
       <Name>Assembly-CSharp-firstpass</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\Scripts\Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

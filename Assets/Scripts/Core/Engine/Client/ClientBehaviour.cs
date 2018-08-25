@@ -17,28 +17,18 @@ namespace NoMansBlocks.Core.Engine {
         public ClientEngine Engine { get; private set; }
         #endregion
 
-        #region Members
-        /// <summary>
-        /// The username to play as.
-        /// </summary>
-        public string Username;
-
-        /// <summary>
-        /// The password to authenticate with.
-        /// </summary>
-        public string Password;
-        #endregion
-
         #region Mono Events
         /// <summary>
         /// Prepares the engine for use.
         /// </summary>
         private void Awake() {
+            if(GameObject.FindGameObjectsWithTag("ScriptsObject")?.Length > 1) {
+                throw new System.Exception("More than one instance of the game engine has been found!");
+            }
+
             DontDestroyOnLoad(this.gameObject);
 
-            User user = new User(Username);
-
-            Engine = new ClientEngine(user);
+            Engine = new ClientEngine();
             Engine.Init();
         }
 

@@ -25,8 +25,7 @@ namespace NoMansBlocks.Core.Engine {
         /// Create a new instance of the game engine for a user
         /// that wants to play the game.
         /// </summary>
-        /// <param name="user">The user playing.</param>
-        public ClientEngine(User user) : base(user) {
+        public ClientEngine() : base() {
         }
         #endregion
 

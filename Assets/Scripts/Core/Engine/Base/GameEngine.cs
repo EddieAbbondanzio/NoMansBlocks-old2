@@ -19,6 +19,11 @@ namespace NoMansBlocks.Core.Engine {
     public abstract class GameEngine {
         #region Properties
         /// <summary>
+        /// The singleton instance of the game engine.
+        /// </summary>
+        public static GameEngine Instance { get; private set; }
+
+        /// <summary>
         /// If the engine is a client or server instance.
         /// </summary>
         public abstract EngineType Type { get; }
@@ -26,7 +31,7 @@ namespace NoMansBlocks.Core.Engine {
         /// <summary>
         /// The user running the engine.
         /// </summary>
-        public IUser User { get; }
+        public User User { get; set; }
 
         /// <summary>
         /// The module used to handle logging to console and
@@ -68,12 +73,17 @@ namespace NoMansBlocks.Core.Engine {
         /// is required to know how to run the engine.
         /// </summary>
         /// <param name="user">The user running the game.</param>
-        protected GameEngine(IUser user) {
-            User = user;
-
+        protected GameEngine() {
             LogModule     = new LogModule();
             CommandModule = new CommandConsoleModule();
             ViewModule    = new ViewModule();
+
+            if(Instance != null) {
+                throw new Exception("Cannot instantiate an instance of the game engine. One is already in use!");
+            }
+            else {
+                Instance = this;
+            }
         }
         #endregion
 

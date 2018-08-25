@@ -9,7 +9,7 @@ namespace NoMansBlocks.Core.UserSystem {
     /// Player Account for a user. This stores some info such
     /// as their username, real name, etc..
     /// </summary>
-    public class User : IUser {
+    public class User {
         #region Properties
         /// <summary>
         /// The unique id of the user.
@@ -44,6 +44,18 @@ namespace NoMansBlocks.Core.UserSystem {
         /// <param name="username"></param>
         public User(string username) {
             Username = username;
+        }
+        #endregion
+
+        #region Statics
+        /// <summary>
+        /// Attempt to log in a user using the passed in credentials.
+        /// </summary>
+        /// <param name="username">The username to log in under.</param>
+        /// <param name="password">The password to authenticate.</param>
+        /// <returns>The user found (if any).</returns>
+        public static User Login(string username, string password) {
+            return UserService.LoginUser(username, password);
         }
         #endregion
     }

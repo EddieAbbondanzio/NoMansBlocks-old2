@@ -30,7 +30,7 @@ namespace NoMansBlocks.Core.Engine {
         /// <summary>
         /// Create a new instance of the server game engine.
         /// </summary>
-        public ServerEngine(int capacity, int port) : base(new User("bert")) {
+        public ServerEngine(int capacity, int port) : base() {
         }
         #endregion
 

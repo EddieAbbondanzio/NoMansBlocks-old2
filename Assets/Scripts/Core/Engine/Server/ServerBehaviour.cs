@@ -33,6 +33,10 @@ namespace NoMansBlocks.Core.Engine {
         /// Prepares the engine for use.
         /// </summary>
         private void Awake() {
+            if (GameObject.FindGameObjectsWithTag("ScriptsObject")?.Length > 1) {
+                throw new System.Exception("More than one instance of the game engine has been found!");
+            }
+
             DontDestroyOnLoad(this.gameObject);
 
             Engine = new ServerEngine(Capacity, Port);
