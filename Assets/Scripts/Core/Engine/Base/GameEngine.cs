@@ -19,19 +19,9 @@ namespace NoMansBlocks.Core.Engine {
     public abstract class GameEngine {
         #region Properties
         /// <summary>
-        /// The singleton instance of the game engine.
-        /// </summary>
-        public static GameEngine Instance { get; private set; }
-
-        /// <summary>
         /// If the engine is a client or server instance.
         /// </summary>
         public abstract EngineType Type { get; }
-
-        /// <summary>
-        /// The user running the engine.
-        /// </summary>
-        public User User { get; set; }
 
         /// <summary>
         /// The module used to handle logging to console and
@@ -74,16 +64,39 @@ namespace NoMansBlocks.Core.Engine {
         /// </summary>
         /// <param name="user">The user running the game.</param>
         protected GameEngine() {
-            LogModule     = new LogModule();
-            CommandModule = new CommandConsoleModule();
-            ViewModule    = new ViewModule();
+            LogModule     = new LogModule(this);
+            CommandModule = new CommandConsoleModule(this);
+            ViewModule    = new ViewModule(this);
+        }
+        #endregion
 
-            if(Instance != null) {
-                throw new Exception("Cannot instantiate an instance of the game engine. One is already in use!");
-            }
-            else {
-                Instance = this;
-            }
+        #region Lifecycle Events
+        /// <summary>
+        /// Override this to do any work needed for the engine when
+        /// things are just getting ready.
+        /// </summary>
+        protected virtual void OnInit() {
+        }
+
+        /// <summary>
+        /// Override this to do any work needed that may rely on
+        /// something else.
+        /// </summary>
+        protected virtual void OnStart() {
+        }
+
+        /// <summary>
+        /// Override this to perform work every single update tick
+        /// of the game engine.
+        /// </summary>
+        protected virtual void OnUpdate() {
+        }
+
+        /// <summary>
+        /// Override this to do any cleaning up needed when the
+        /// engine is shutting down.
+        /// </summary>
+        protected virtual void OnEnd() {
         }
         #endregion
 
@@ -92,14 +105,13 @@ namespace NoMansBlocks.Core.Engine {
         /// Fires off the init event for every single module
         /// associated with the engine.
         /// </summary>
-        public virtual void Init() {
+        public void Init() {
             //Find the modules
             PropertyInfo[] memberProperties = this.GetType().GetProperties().Where(p => p.PropertyType.IsSubclassOf(typeof(Module)) || p.PropertyType == typeof(Module)).ToArray();
             modules = new Module[memberProperties.Length];
 
             for (int i = 0; i < memberProperties.Length; i++) {
                 modules[i] = memberProperties[i].GetValue(this) as Module;
-                modules[i].Engine = this;
 
                 //If a module has a custom execution index, pull it in.
                 ModuleExecutionAttribute executionAttribute = memberProperties[i].GetCustomAttribute<ModuleExecutionAttribute>();
@@ -127,7 +139,7 @@ namespace NoMansBlocks.Core.Engine {
         /// <summary>
         /// Called when the engine has initialized. Alert the modules.
         /// </summary>
-        public virtual void Start() {
+        public void Start() {
             if (modules != null) {
                 for (int i = 0; i < modules.Length; i++) {
                     if (modules[i].Enabled) {
@@ -140,7 +152,7 @@ namespace NoMansBlocks.Core.Engine {
         /// <summary>
         /// Called every tick of the engine. Update every single module
         /// </summary>
-        public virtual void Update() {
+        public void Update() {
             if (modules != null) {
                 for (int i = 0; i < modules.Length; i++) {
                     if (modules[i].Enabled && !modules[i].DisableUpdate) {
@@ -153,7 +165,7 @@ namespace NoMansBlocks.Core.Engine {
         /// <summary>
         /// Called when the engine is stopping. Alert every module.
         /// </summary>
-        public virtual void End() {
+        public void End() {
             if (modules != null) {
                 for (int i = 0; i < modules.Length; i++) {
                     if (modules[i].Enabled) {

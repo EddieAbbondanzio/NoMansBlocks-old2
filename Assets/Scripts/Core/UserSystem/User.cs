@@ -10,6 +10,27 @@ namespace NoMansBlocks.Core.UserSystem {
     /// as their username, real name, etc..
     /// </summary>
     public class User {
+        #region Statics
+        /// <summary>
+        /// The user running the game.
+        /// </summary>
+        public static User Current {
+            get { return current; }
+            set {
+                if(current != null) {
+                    throw new Exception("The current user has already been set!");
+                }
+
+                current = value;
+            }
+        }
+
+        /// <summary>
+        /// Don't modify this directly.
+        /// </summary>
+        private static User current;
+        #endregion
+
         #region Properties
         /// <summary>
         /// The unique id of the user.

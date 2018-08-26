@@ -11,47 +11,55 @@ namespace NoMansBlocks.Modules.View {
     /// <summary>
     /// The login menu of the game. This is the first thing loaded.
     /// </summary>
-    public class LoginView : GameView {
+    public sealed class LoginView : GameView {
         #region Properties
-        /// <summary>
-        /// The unique name of the view. This should match up
-        /// with the name of the Unity scene to use.
-        /// </summary>
-        public override string Name => "LoginView";
-
         /// <summary>
         /// Only the client can open the login view.
         /// </summary>
         public override EngineType Type => EngineType.Client;
-        #endregion
 
-        #region Members
         /// <summary>
-        /// Reference to the login menu.
+        /// The unique name of the view. This should match up
+        /// with the name of the Unity scene to use.
         /// </summary>
-        private LoginMenu loginMenu;
+        protected override string Name => "LoginView";
+
+        /// <summary>
+        /// The menu used to get username + password
+        /// from the user.
+        /// </summary>
+        private LoginMenu LoginMenu { get; set; }
         #endregion
 
         #region Constructor(s)
         /// <summary>
         /// Create a new login view scene.
+        /// <paramref name="viewModule">The module that owns this view<paramref name="viewModule"/>
         /// </summary>
-        public LoginView() : base() {
-            loginMenu = new LoginMenu(this);
-            Menus.Add(loginMenu);
-
-            loginMenu.OnLoginSubmit += OnLoginSubmitted;
+        public LoginView(ViewModule viewModule) : base(viewModule) {
+            LoginMenu = new LoginMenu(this);
+            LoginMenu.OnLoginSubmit += OnLoginSubmitted;
         }
 
         /// <summary>
         /// Prevent memory leaks.
         /// </summary>
         ~LoginView() {
-            loginMenu.OnLoginSubmit -= OnLoginSubmitted;
+            LoginMenu.OnLoginSubmit -= OnLoginSubmitted;
         }
         #endregion
 
-        #region Menu Events
+        #region Life Cycle Events
+        /// <summary>
+        /// Whenever the view is first loaded, set up
+        /// the login menu to be visible.
+        /// </summary>
+        protected override void OnLoad() {
+            LoginMenu.SetVisible();
+        }
+        #endregion
+
+        #region Input Events
         /// <summary>
         /// Fired everytime the user attempts to log in.
         /// </summary>
@@ -63,23 +71,13 @@ namespace NoMansBlocks.Modules.View {
 
             //If the user was good, load the main menu.
             if(user != null) {
-                GameEngine.Instance.User = user;
-                GameEngine.Instance.ViewModule.LoadView("MainView");
+                User.Current = user;
+                LoadView<MainView>();
             }
             //Failed, show error.
             else {
-                loginMenu.ShowErrorMessage();
+                LoginMenu.ShowErrorMessage();
             }
-        }
-        #endregion
-
-        #region Helpers
-        /// <summary>
-        /// Whenever the view is first loaded, set up
-        /// the login menu to be visible.
-        /// </summary>
-        protected override void OnLoad() {
-            Menus[0].SetVisible();
         }
         #endregion
     }

@@ -26,17 +26,7 @@ namespace NoMansBlocks.Core.Engine {
         /// that wants to play the game.
         /// </summary>
         public ClientEngine() : base() {
-        }
-        #endregion
-
-        #region Engine Events
-        /// <summary>
-        /// Called when the engine is first starting up. This gets the
-        /// modules ready, then pulls them all in.
-        /// </summary>
-        public override void Init() {
-            NetModule = new NetModule(1, 0);
-            base.Init();
+            NetModule = new NetModule(this, 1, 0);
         }
         #endregion
     }

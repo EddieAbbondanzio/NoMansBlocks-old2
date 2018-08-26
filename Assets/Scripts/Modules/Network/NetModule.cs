@@ -62,9 +62,10 @@ namespace NoMansBlocks.Modules.Network {
         /// Create a new instance of the net module. The module
         /// needs to know whether to run in client, or host mode.
         /// </summary>
+        /// <paramref name="engine">The engine that owns the module.</paramref>
         /// <param name="maxConnections">The maximum number of connections permitted.</param>
         /// <param name="port">The port number to use.</param>
-        public NetModule(int maxConnections, int port = 0) {
+        public NetModule(GameEngine engine, int maxConnections, int port = 0) : base(engine) {
             this.port = port;
 
             messageListener = new NetMessageListener();

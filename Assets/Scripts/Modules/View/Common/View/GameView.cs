@@ -23,17 +23,12 @@ namespace NoMansBlocks.Modules.View {
 
         #region Properties
         /// <summary>
-        /// The name of the view, and scene in Unity.
-        /// </summary>
-        public abstract string Name { get; }
-
-        /// <summary>
         /// The engine instance that can run this scene.
         /// </summary>
         public abstract EngineType Type { get; }
 
         /// <summary>
-        /// The menus available in this scene.
+        /// The menus of the scene.
         /// </summary>
         public List<GameMenu> Menus { get; private set; }
 
@@ -42,19 +37,16 @@ namespace NoMansBlocks.Modules.View {
         /// the scene. (if any).
         /// </summary>
         public GameMenu VisibleMenu { get; private set; }
-        #endregion
-
-        #region Members
-        /// <summary>
-        /// The Unity scene that this view represents.
-        /// </summary>
-        private readonly Scene scene;
 
         /// <summary>
-        /// The gameobject that holds all of the menu prefabs
-        /// for each menu in the view.
+        /// The name of the view, and scene in Unity.
         /// </summary>
-        private readonly Transform menuContainer;
+        protected abstract string Name { get; }
+
+        /// <summary>
+        /// The module that owns the view.
+        /// </summary>
+        private ViewModule ViewModule { get; }
         #endregion
 
         #region Events
@@ -73,18 +65,15 @@ namespace NoMansBlocks.Modules.View {
         /// <summary>
         /// Create a new gameview. This goes out and attempts to
         /// find the scene for the view.
+        /// <paramref name="viewModule">The view module that owns the view.</paramref>
         /// </summary>
-        protected GameView() {
-            Menus = new List<GameMenu>();
-            scene = SceneManager.GetSceneByName(Name);
-            menuContainer = FindMenuContainer(scene);
+        protected GameView(ViewModule viewModule) {
+            ViewModule = viewModule;
+
+            Scene scene = SceneManager.GetSceneByName(Name);
 
             if (scene == null) {
                 throw new Exception(string.Format("Scene not found for view {0}", Name));
-            }
-
-            if(menuContainer == null) {
-                throw new Exception("No menu container found!");
             }
         }
         #endregion
@@ -97,7 +86,22 @@ namespace NoMansBlocks.Modules.View {
         public void Load() {
             //Check that this scene isn't already loaded to prevent an infinite loop...
             if(SceneManager.GetActiveScene().name != Name) {
-                SceneManager.LoadScene(scene.buildIndex);
+                SceneManager.LoadScene(Name);
+            }
+
+            Transform menuContainer = FindMenuContainer(SceneManager.GetSceneByName(Name));
+
+            if (menuContainer == null) {
+                throw new Exception("No menu container found!");
+            }
+
+            //Hunt down the menus
+            PropertyInfo[] menuProperties = this.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).Where(p => p.PropertyType.IsSubclassOf(typeof(GameMenu))).ToArray();
+            Menus = new List<GameMenu>();
+
+            //Add them to the list of menus available.
+            for (int i = 0; i < menuProperties.Length; i++) {
+                Menus.Add(menuProperties[i].GetValue(this) as GameMenu);
             }
 
             //Then we fire off the on load event
@@ -121,28 +125,43 @@ namespace NoMansBlocks.Modules.View {
         }
 
         /// <summary>
-        /// Load a menu of the view via it's unique
-        /// identifier.
+        /// Get a menu using it's type.
         /// </summary>
-        /// <param name="menuName">The name of the menu to load.</param>
-        public void SetMenuVisible(string menuName) {
-            //Hide the previous menu
-            VisibleMenu?.SetHidden();
-
-            //Find the new one, and set it visible.
-            VisibleMenu = Menus.Find(m => m.Name == menuName);
-            VisibleMenu.SetVisible();
+        /// <typeparam name="T">The type of menu to hunt for.</typeparam>
+        /// <returns>The menu found (if any).</returns>
+        public GameMenu GetMenu<T>() where T : GameMenu {
+            return Menus.Find(m => m.GetType() == typeof(T));
         }
 
         /// <summary>
-        /// Hide all menus that are current active.
+        /// Checks if the view is currently active or not.
         /// </summary>
-        public void HideMenus() {
-            VisibleMenu?.SetHidden();
+        /// <returns>True if this scene is in use.</returns>
+        public bool IsActive() {
+            return SceneManager.GetActiveScene().name == this.Name;
         }
         #endregion
 
         #region Helpers
+        /// <summary>
+        /// Search for a view using the type of the view
+        /// as the search parameter.
+        /// </summary>
+        /// <typeparam name="T">The type of view to search for</typeparam>
+        /// <returns>The found view (if any).</returns>
+        protected T GetView<T>() where T : GameView {
+            return ViewModule.GetView<T>();
+        }
+
+        /// <summary>
+        /// Load a view into use. This calls Destroy() on the current one,
+        /// if there is one.
+        /// </summary>
+        /// <typeparam name="T">The type of view to load.</typeparam>
+        protected void LoadView<T>() where T : GameView {
+            ViewModule.LoadView<T>();
+        }
+
         /// <summary>
         /// Called after the view has been loaded into the game.
         /// This allows the view to do any custom work, such as 

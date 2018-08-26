@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace NoMansBlocks.Modules.View {
     /// <summary>
@@ -13,19 +15,12 @@ namespace NoMansBlocks.Modules.View {
     /// prefab that can quickly be loaded into use.
     /// </summary>
     public abstract class GameMenu {
-        #region Constants
-        /// <summary>
-        /// The directory where menu prefabs are stored.
-        /// </summary>
-        public const string MenuDirectory = "Menus";
-        #endregion
-
         #region Properties
         /// <summary>
         /// The name of the menu. Used as a unique identifier.
         /// This should match up with the name of the prefab.
         /// </summary>
-        public abstract string Name { get; }
+        protected abstract string PrefabPath { get; }
 
         /// <summary>
         /// The parent view that owns this menu.
@@ -40,11 +35,6 @@ namespace NoMansBlocks.Modules.View {
         #endregion
 
         #region Members
-        /// <summary>
-        /// The prefab of the menu
-        /// </summary>
-        private GameObject prefab;
-
         /// <summary>
         /// The active instance of the menu
         /// gameobject.
@@ -81,7 +71,7 @@ namespace NoMansBlocks.Modules.View {
         /// seen by the player.
         /// </summary>
         public void SetVisible() {
-            prefab.SetActive(true);
+            instance.SetActive(true);
             State = MenuState.Visible;
 
             OnVisible();
@@ -94,7 +84,7 @@ namespace NoMansBlocks.Modules.View {
         public void SetHidden() {
             OnHidden();
 
-            prefab.SetActive(false);
+            instance.SetActive(false);
             State = MenuState.Hidden;
         }
 
@@ -152,25 +142,7 @@ namespace NoMansBlocks.Modules.View {
         /// <param name="sender">The parent view.</param>
         /// <param name="e">Always null.</param>
         private void OnViewLoaded(object sender, ViewLoadedArgs e) {
-            //See if the object already exists first.
-            prefab = e.MenuContainer.Find(Name)?.gameObject;
-
-            //Wasn't found, we need to load it.
-            if(prefab == null) {
-                string prefabPath = string.Format("{0}/{1}", MenuDirectory, Name);
-
-                prefab = Resources.Load<GameObject>(prefabPath);
-
-                instance = GameObject.Instantiate(prefab);
-                instance.transform.SetParent(e.MenuContainer);
-
-                //Reset the rect transform
-                RectTransform menuTransform = instance.GetComponent<RectTransform>();
-                menuTransform.localScale = new Vector3(1, 1, 1);
-                menuTransform.offsetMin  = new Vector2(0, 0);
-                menuTransform.offsetMax  = new Vector2(0, 0);
-            }
-
+            instance = FindOrInstantiateMenu(e.MenuContainer);
             OnLoad();
         }
 
@@ -183,6 +155,33 @@ namespace NoMansBlocks.Modules.View {
             OnDestroy();
             GameObject.Destroy(instance);
             instance = null;
+        }
+
+        /// <summary>
+        /// Search for the menu in the menucontainer, or load
+        /// an new instance of it.
+        /// </summary>
+        /// <param name="menuContainer">The container holding all of the menus.</param>
+        /// <returns>The newly created or found instance of the menu object.</returns>
+        private GameObject FindOrInstantiateMenu(Transform menuContainer) {
+            //See if the object already exists first.
+            GameObject instance = menuContainer.Find(PrefabPath)?.gameObject;
+
+            //Wasn't found, we need to load it.
+            if (instance == null) {
+                GameObject prefab = Resources.Load<GameObject>(PrefabPath);
+
+                instance = GameObject.Instantiate(prefab);
+                instance.transform.SetParent(menuContainer);
+
+                //Reset the rect transform
+                RectTransform menuTransform = instance.GetComponent<RectTransform>();
+                menuTransform.localScale = new Vector3(1, 1, 1);
+                menuTransform.offsetMin = new Vector2(0, 0);
+                menuTransform.offsetMax = new Vector2(0, 0);
+            }
+
+            return instance;
         }
         #endregion
     }

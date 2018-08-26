@@ -39,10 +39,10 @@ namespace NoMansBlocks.Core.Engine {
         /// Called when the engine is first starting up. This goes out 
         /// and attempts to load the configuration file.
         /// </summary>
-        public async override void Init() {
+        protected async override void OnInit() {
             Config = await LoadConfig();
 
-            NetModule = new NetModule(Config.Capacity, Config.Port);
+            NetModule = new NetModule(this, Config.Capacity, Config.Port);
             base.Init();
         }
         #endregion

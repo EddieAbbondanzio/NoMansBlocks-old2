@@ -12,9 +12,10 @@ namespace NoMansBlocks.Core.Engine {
     public abstract class Module : IEngineCycleListener {
         #region Properties
         /// <summary>
-        /// The container that owns this module.
+        /// The instance of the engine that is running
+        /// this module.
         /// </summary>
-        public GameEngine Engine { get; set; }
+        protected GameEngine Engine { get; private set; }
 
         /// <summary>
         /// What position in the module array this is. This
@@ -40,33 +41,28 @@ namespace NoMansBlocks.Core.Engine {
 
         #region Constructor(s)
         /// <summary>
-        /// Create a new module for the engine.
+        /// Create a new instance of a module. The Game engine that
+        /// owns the module is an expected dependency to take advantage
+        /// of communicating with other modules.
         /// </summary>
-        protected Module() {
+        /// <param name="engine">The engine running the module.</param>
+        protected Module(GameEngine engine) {
+            Engine = engine;
+
             ExecutionIndex = byte.MaxValue;
             DisableUpdate  = false;
             Enabled        = true;
         }
         #endregion
 
-        #region Publics
-        /// <summary>
-        /// Search for another module that is associated with this module's
-        /// parent via it's type.
-        /// </summary>
-        /// <typeparam name="T">The type of module to return.</typeparam>
-        /// <returns>The module found (if any).</returns>
-        public T GetModule<T>() where T : Module {
-            return Engine?.GetModule<T>() ?? null;
-        }
-
+        #region Lifecycle Events
         /// <summary>
         /// Called when the engine is first starting up. Use this
         /// to prepare local stuff but don't access other modules yet.
         /// </summary>
         public virtual void OnInit() {
         }
-       
+
         /// <summary>
         /// Called after everything has been initialized. Now it's
         /// safe to access other modules.
@@ -86,6 +82,18 @@ namespace NoMansBlocks.Core.Engine {
         /// state, etc...
         /// </summary>
         public virtual void OnEnd() {
+        }
+        #endregion
+
+        #region Publics
+        /// <summary>
+        /// Search for another module that is associated with this module's
+        /// parent via it's type.
+        /// </summary>
+        /// <typeparam name="T">The type of module to return.</typeparam>
+        /// <returns>The module found (if any).</returns>
+        protected T GetModule<T>() where T : Module {
+            return Engine.GetModule<T>();
         }
         #endregion
     }

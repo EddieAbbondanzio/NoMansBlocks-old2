@@ -28,6 +28,16 @@ namespace NoMansBlocks.Modules.View {
         private List<GameView> views;
         #endregion
 
+        #region Constructor(s)
+        /// <summary>
+        /// Create a new instance of the view module. This is
+        /// responsible for everything UI related.
+        /// </summary>
+        /// <param name="engine">The engine that owns the module.</param>
+        public ViewModule(GameEngine engine) : base(engine) {
+        }
+        #endregion
+
         #region Module Events
         /// <summary>
         /// Init the module by going out and finding all
@@ -41,7 +51,7 @@ namespace NoMansBlocks.Modules.View {
 
             //Now make an instance of each one
             foreach(Type viewType in viewTypes) {
-                GameView view = Activator.CreateInstance(viewType) as GameView;
+                GameView view = Activator.CreateInstance(viewType, this) as GameView;
 
                 //Only add the view if it supports this engine type
                 if(view.Type == Engine.Type) {
@@ -50,7 +60,7 @@ namespace NoMansBlocks.Modules.View {
             }
 
             //Figure out what scene is active
-            Current = views.Find(v => v.Name == SceneManager.GetActiveScene().name);
+            Current = views.Find(v => v.IsActive());
 
             if(Current == null) {
                 throw new Exception("Unknown view loaded.");
@@ -63,16 +73,24 @@ namespace NoMansBlocks.Modules.View {
 
         #region Publics
         /// <summary>
-        /// Load a view into use. This only loads the view, if it
-        /// isn't the currently loaded scene.
+        /// Search for a view using it's type as the search
+        /// parameter.
         /// </summary>
-        /// <param name="name">The name of the view to load.</param>
-        public void LoadView(string name) {
-            //Remove the old one first
+        /// <typeparam name="T">The type of view to search for.</typeparam>
+        /// <returns>The view found.</returns>
+        public T GetView<T>() where T : GameView {
+            return views.Find(v => v.GetType() == typeof(T)) as T;
+        }
+
+        /// <summary>
+        /// Load a view into use. This calls Destroy() on the current one,
+        /// if there is one.
+        /// </summary>
+        /// <typeparam name="T">The type of view to load.</typeparam>
+        public void LoadView<T>() where T : GameView {
             Current.Destroy();
 
-            //Now we load up the new one.
-            Current = views.Find(v => v.Name == name);
+            Current = views.Find(v => v.GetType() == typeof(T));
             Current.Load();
         }
         #endregion

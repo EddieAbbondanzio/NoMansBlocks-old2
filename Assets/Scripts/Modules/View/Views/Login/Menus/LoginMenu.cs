@@ -12,13 +12,13 @@ namespace NoMansBlocks.Modules.View {
     /// finding their user accounts from the master
     /// server.
     /// </summary>
-    public class LoginMenu : GameMenu {
+    public sealed class LoginMenu : GameMenu {
         #region Properties
         /// <summary>
         /// The prefab name of the prefab to 
         /// load for this menu.
         /// </summary>
-        public override string Name => "LoginMenu";
+        protected override string PrefabPath => "Menus/LoginView/LoginMenu";
         #endregion
 
         #region Members
@@ -72,7 +72,7 @@ namespace NoMansBlocks.Modules.View {
         }
         #endregion
 
-        #region Helpers
+        #region Life Cycle Events
         /// <summary>
         /// Attempt to find all the important controls in the
         /// menu.
@@ -93,7 +93,9 @@ namespace NoMansBlocks.Modules.View {
         protected override void OnDestroy() {
             loginButton.onClick.RemoveListener(OnLoginClicked);
         }
+        #endregion
 
+        #region Helpers
         /// <summary>
         /// Fired everytime the login button is pressed. Attempt
         /// to login the credentials passed in.

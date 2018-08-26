@@ -1,5 +1,6 @@
 ﻿using NoMansBlocks.Core;
 using NoMansBlocks.Core.Engine;
+using NoMansBlocks.Core.UserSystem;
 using NoMansBlocks.Modules.CommandConsole.Commands;
 using System;
 using System.Collections;
@@ -35,8 +36,9 @@ namespace NoMansBlocks.Modules.CommandConsole {
         /// <summary>
         /// Create a new instance of the command
         /// console module.
+        /// <paramref name="engine">The engine that owns the module.</paramref>
         /// </summary>
-        public CommandConsoleModule() {
+        public CommandConsoleModule(GameEngine engine) : base(engine) {
             CommandParser = new CommandParser();
         }
         #endregion
@@ -83,7 +85,7 @@ namespace NoMansBlocks.Modules.CommandConsole {
             Log.Debug(command.Summarize());
 
             //Check we can execute it, and if we can. Do so.
-            if((Engine.User.PermissionLevel & command.RequiredPermissions) != 0) {
+            if((User.Current.PermissionLevel & command.RequiredPermissions) != 0) {
                 command.Execute(Engine);
             }
         }
