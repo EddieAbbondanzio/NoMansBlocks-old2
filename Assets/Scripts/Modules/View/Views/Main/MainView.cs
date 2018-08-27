@@ -7,25 +7,28 @@ using System.Threading.Tasks;
 
 namespace NoMansBlocks.Modules.View {
     /// <summary>
-    /// The main menu 'scene'. This allows the player to connect to 
-    /// lobbys or adjust settings.
+    /// The Main Menu of the game. This gives the players options such
+    /// as to connect to a lobby, or enter settings, or quit.
     /// </summary>
     public class MainView : GameView {
         #region Properties
         /// <summary>
-        /// Only the client can open the login view.
+        /// The type of game engine that the main view
+        /// can be loaded on. A server has no need for the
+        /// main menu.
         /// </summary>
-        public override EngineType Type => EngineType.Client;
+        public override GameEngineType Type => GameEngineType.Client;
 
         /// <summary>
         /// The unique name of the view. This should match up
         /// with the name of the Unity scene to use.
         /// </summary>
-        protected override string Name => "MainView";
+        public override string Name => "MainView";
 
         /// <summary>
         /// The main menu of the main view.
         /// </summary>
+        [DefaultMenu]
         private MainMenu MainMenu { get; set; }
         #endregion
 
@@ -37,16 +40,6 @@ namespace NoMansBlocks.Modules.View {
         /// </summary>
         public MainView(ViewModule viewModule) : base(viewModule) {
             MainMenu = new MainMenu(this);
-        }
-        #endregion
-
-        #region Life Cycle Events
-        /// <summary>
-        /// When the view is loaded up, load up the main
-        /// menu by default.
-        /// </summary>
-        protected override void OnLoad() {
-            MainMenu.SetVisible();
         }
         #endregion
     }

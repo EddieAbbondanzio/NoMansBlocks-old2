@@ -60,15 +60,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Core\Engine\Base\EngineType.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Base\GameEngine.cs" />
-    <Compile Include="Assets\Scripts\Core\Engine\Base\IEngineCycleListener.cs" />
+    <Compile Include="Assets\Scripts\Core\Engine\Base\GameEngineType.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Base\Module\Interfaces\IStatementProducer\IStatement.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Base\Module\Interfaces\IStatementProducer\IStatementProducer.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Base\Module\Interfaces\IStatementProducer\StatementArgs.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Base\Module\Interfaces\IStatementProducer\StatementType.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Base\Module\Module.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Base\Module\ModuleExecutionAttribute.cs" />
+    <Compile Include="Assets\Scripts\Core\Engine\Base\Ticker\IGameEngineTicker.cs" />
+    <Compile Include="Assets\Scripts\Core\Engine\Base\Ticker\UnityEngineTicker.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Client\ClientBehaviour.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Client\ClientEngine.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Server\Config\ConfigFile.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="Assets\Scripts\Modules\Network\Messages\Types\Meta\Types\NetLatencyMessage.cs" />
     <Compile Include="Assets\Scripts\Modules\Network\NetModule.cs" />
     <Compile Include="Assets\Scripts\Modules\Network\NetModule_NetMessageListener.cs" />
+    <Compile Include="Assets\Scripts\Modules\View\Common\Menu\DefaultMenuAttribute.cs" />
     <Compile Include="Assets\Scripts\Modules\View\Common\Menu\GameMenu.cs" />
     <Compile Include="Assets\Scripts\Modules\View\Common\Menu\MenuState.cs" />
     <Compile Include="Assets\Scripts\Modules\View\Common\View\GameView.cs" />

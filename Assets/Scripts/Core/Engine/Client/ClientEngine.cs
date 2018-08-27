@@ -17,7 +17,7 @@ namespace NoMansBlocks.Core.Engine {
         /// <summary>
         /// Flag indicating what kind of engine it is.
         /// </summary>
-        public override EngineType Type => EngineType.Client;
+        public override GameEngineType Type => GameEngineType.Client;
         #endregion
 
         #region Constructor(s)
@@ -25,7 +25,7 @@ namespace NoMansBlocks.Core.Engine {
         /// Create a new instance of the game engine for a user
         /// that wants to play the game.
         /// </summary>
-        public ClientEngine() : base() {
+        public ClientEngine(IGameEngineTicker engineTicker) : base(engineTicker) {
             NetModule = new NetModule(this, 1, 0);
         }
         #endregion

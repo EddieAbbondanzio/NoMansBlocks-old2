@@ -73,8 +73,6 @@ namespace NoMansBlocks.Modules.View {
         public void SetVisible() {
             instance.SetActive(true);
             State = MenuState.Visible;
-
-            OnVisible();
         }
 
         /// <summary>
@@ -82,8 +80,6 @@ namespace NoMansBlocks.Modules.View {
         /// can be visible.
         /// </summary>
         public void SetHidden() {
-            OnHidden();
-
             instance.SetActive(false);
             State = MenuState.Hidden;
         }
@@ -108,20 +104,6 @@ namespace NoMansBlocks.Modules.View {
         #endregion
 
         #region Helpers
-        /// <summary>
-        /// Override this to do any extra work
-        /// when the menu is being set to visible.
-        /// </summary>
-        protected virtual void OnVisible() {
-        }
-
-        /// <summary>
-        /// Override this to do any extra work
-        /// when the menu is being set to hidden.
-        /// </summary>
-        protected virtual void OnHidden() {
-        }
-
         /// <summary>
         /// Override this to do any extra work
         /// needed when the menu is being loaded.

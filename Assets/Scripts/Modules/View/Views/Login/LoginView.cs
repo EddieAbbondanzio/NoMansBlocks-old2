@@ -9,25 +9,30 @@ using UnityEngine.SceneManagement;
 
 namespace NoMansBlocks.Modules.View {
     /// <summary>
-    /// The login menu of the game. This is the first thing loaded.
+    /// The login menu of the client build. This is the first
+    /// thing the client is presented with and won't allow them
+    /// to proceed any further unless logged in.
     /// </summary>
     public sealed class LoginView : GameView {
         #region Properties
         /// <summary>
-        /// Only the client can open the login view.
+        /// The type of engine that can run this scene.
+        /// A server build has no need for a login screen.
         /// </summary>
-        public override EngineType Type => EngineType.Client;
+        public override GameEngineType Type => GameEngineType.Client;
 
         /// <summary>
         /// The unique name of the view. This should match up
         /// with the name of the Unity scene to use.
         /// </summary>
-        protected override string Name => "LoginView";
+        public override string Name => "LoginView";
 
         /// <summary>
-        /// The menu used to get username + password
-        /// from the user.
+        /// The on screen controls used to obtain username
+        /// and password from the player. This is loaded by 
+        /// default.
         /// </summary>
+        [DefaultMenu]
         private LoginMenu LoginMenu { get; set; }
         #endregion
 
@@ -49,16 +54,6 @@ namespace NoMansBlocks.Modules.View {
         }
         #endregion
 
-        #region Life Cycle Events
-        /// <summary>
-        /// Whenever the view is first loaded, set up
-        /// the login menu to be visible.
-        /// </summary>
-        protected override void OnLoad() {
-            LoginMenu.SetVisible();
-        }
-        #endregion
-
         #region Input Events
         /// <summary>
         /// Fired everytime the user attempts to log in.
@@ -74,7 +69,6 @@ namespace NoMansBlocks.Modules.View {
                 User.Current = user;
                 LoadView<MainView>();
             }
-            //Failed, show error.
             else {
                 LoginMenu.ShowErrorMessage();
             }

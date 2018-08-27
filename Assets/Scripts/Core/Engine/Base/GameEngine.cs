@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using NoMansBlocks.Modules.CommandConsole;
 using NoMansBlocks.Modules.Network;
-using NoMansBlocks.Core.UserSystem;
 using System.Reflection;
 using NoMansBlocks.Modules.View;
 
@@ -21,7 +20,12 @@ namespace NoMansBlocks.Core.Engine {
         /// <summary>
         /// If the engine is a client or server instance.
         /// </summary>
-        public abstract EngineType Type { get; }
+        public abstract GameEngineType Type { get; }
+
+        /// <summary>
+        /// If the engine is currently running or not.
+        /// </summary>
+        public bool IsRunning { get; private set; }
 
         /// <summary>
         /// The module used to handle logging to console and
@@ -51,6 +55,11 @@ namespace NoMansBlocks.Core.Engine {
 
         #region Members
         /// <summary>
+        /// Handles firing off the events of the game engine.
+        /// </summary>
+        private IGameEngineTicker engineTicker;
+
+        /// <summary>
         /// The collection of modules that belong to the engine.
         /// This should never be interacted with directly.
         /// </summary>
@@ -63,14 +72,77 @@ namespace NoMansBlocks.Core.Engine {
         /// is required to know how to run the engine.
         /// </summary>
         /// <param name="user">The user running the game.</param>
-        protected GameEngine() {
+        protected GameEngine(IGameEngineTicker engineTicker) {
+            this.engineTicker = engineTicker;
+
             LogModule     = new LogModule(this);
             CommandModule = new CommandConsoleModule(this);
             ViewModule    = new ViewModule(this);
+
+            this.engineTicker.OnInit   += OnTickerInit;
+            this.engineTicker.OnStart  += OnTickerStart;
+            this.engineTicker.OnUpdate += OnTickerUpdate;
+            this.engineTicker.OnEnd    += OnTickerEnd;
+        }
+
+        /// <summary>
+        /// Free up resources by unsubbing from the
+        /// ticker events.
+        /// </summary>
+        ~GameEngine() {
+            engineTicker.OnInit   -= OnTickerInit;
+            engineTicker.OnStart  -= OnTickerStart;
+            engineTicker.OnUpdate -= OnTickerUpdate;
+            engineTicker.OnEnd    -= OnTickerEnd;
         }
         #endregion
 
-        #region Lifecycle Events
+        #region Publics
+        /// <summary>
+        /// Start up the engine. This fires off the init
+        /// event, and gets things moving.
+        /// </summary>
+        public void Run() {
+            if(IsRunning) {
+                throw new InvalidOperationException("Engine is already running! Cannot call Run() twice.");
+            }
+
+            engineTicker.StartTicking();
+            IsRunning = true;
+        }
+
+        /// <summary>
+        /// Stop the engine. Deallocate resources and shut
+        /// down the modules.
+        /// </summary>
+        public void Stop() {
+            if (!IsRunning) {
+                throw new InvalidOperationException("Engine is not running. Cannot stop it.");
+            }
+
+            engineTicker.StopTicking();
+            IsRunning = false;
+        }
+
+        /// <summary>
+        /// Retrieve a module via it's type.
+        /// </summary>
+        /// <typeparam name="T">The type (or base type) of module to look for.</typeparam>
+        /// <returns>The module found (if any).</returns>
+        public T GetModule<T>() where T : Module {
+            for (int i = 0; i < modules.Length; i++) {
+                Type moduleType = modules[i].GetType();
+
+                if (moduleType == typeof(T) || moduleType.IsSubclassOf(typeof(T))) {
+                    return modules[i] as T;
+                }
+            }
+
+            return null;
+        }
+        #endregion
+
+        #region Life Cycle Events
         /// <summary>
         /// Override this to do any work needed for the engine when
         /// things are just getting ready.
@@ -100,12 +172,13 @@ namespace NoMansBlocks.Core.Engine {
         }
         #endregion
 
-        #region Publics
+        #region Helpers
         /// <summary>
-        /// Fires off the init event for every single module
-        /// associated with the engine.
+        /// Initialize the engine and get things ready to roll.
         /// </summary>
-        public void Init() {
+        /// <param name="sender">The ticker.</param>
+        /// <param name="e">Always null.</param>
+        private void OnTickerInit(object sender, EventArgs e) {
             //Find the modules
             PropertyInfo[] memberProperties = this.GetType().GetProperties().Where(p => p.PropertyType.IsSubclassOf(typeof(Module)) || p.PropertyType == typeof(Module)).ToArray();
             modules = new Module[memberProperties.Length];
@@ -137,9 +210,11 @@ namespace NoMansBlocks.Core.Engine {
         }
 
         /// <summary>
-        /// Called when the engine has initialized. Alert the modules.
+        /// Start up the engine.
         /// </summary>
-        public void Start() {
+        /// <param name="sender">The ticker.</param>
+        /// <param name="e">Always null.</param>
+        private void OnTickerStart(object sender, EventArgs e) {
             if (modules != null) {
                 for (int i = 0; i < modules.Length; i++) {
                     if (modules[i].Enabled) {
@@ -150,9 +225,11 @@ namespace NoMansBlocks.Core.Engine {
         }
 
         /// <summary>
-        /// Called every tick of the engine. Update every single module
+        /// Update the engine by 1 tick.
         /// </summary>
-        public void Update() {
+        /// <param name="sender">The ticker.</param>
+        /// <param name="e">Always null.</param>
+        private void OnTickerUpdate(object sender, EventArgs e) {
             if (modules != null) {
                 for (int i = 0; i < modules.Length; i++) {
                     if (modules[i].Enabled && !modules[i].DisableUpdate) {
@@ -163,9 +240,11 @@ namespace NoMansBlocks.Core.Engine {
         }
 
         /// <summary>
-        /// Called when the engine is stopping. Alert every module.
+        /// Stop the engine. Free up resources.
         /// </summary>
-        public void End() {
+        /// <param name="sender">The ticker.</param>
+        /// <param name="e">Always null.</param>
+        private void OnTickerEnd(object sender, EventArgs e) {
             if (modules != null) {
                 for (int i = 0; i < modules.Length; i++) {
                     if (modules[i].Enabled) {
@@ -173,23 +252,6 @@ namespace NoMansBlocks.Core.Engine {
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Retrieve a module via it's type.
-        /// </summary>
-        /// <typeparam name="T">The type (or base type) of module to look for.</typeparam>
-        /// <returns>The module found (if any).</returns>
-        public T GetModule<T>() where T : Module {
-            for (int i = 0; i < modules.Length; i++) {
-                Type moduleType = modules[i].GetType();
-
-                if (moduleType == typeof(T) || moduleType.IsSubclassOf(typeof(T))) {
-                    return modules[i] as T;
-                }
-            }
-
-            return null;
         }
         #endregion
     }

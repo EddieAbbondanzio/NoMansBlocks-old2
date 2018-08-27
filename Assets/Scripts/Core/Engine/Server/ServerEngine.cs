@@ -18,7 +18,7 @@ namespace NoMansBlocks.Core.Engine {
         /// <summary>
         /// Flag indicating what kind of engine it is.
         /// </summary>
-        public override EngineType Type => EngineType.Server;
+        public override GameEngineType Type => GameEngineType.Server;
 
         /// <summary>
         /// The config settings for the file.
@@ -29,8 +29,9 @@ namespace NoMansBlocks.Core.Engine {
         #region Constructor(s)
         /// <summary>
         /// Create a new instance of the server game engine.
+        /// <paramref name="engineTicker">The engine game loop.</paramref>
         /// </summary>
-        public ServerEngine(int capacity, int port) : base() {
+        public ServerEngine(IGameEngineTicker engineTicker) : base(engineTicker) {
         }
         #endregion
 
@@ -43,7 +44,6 @@ namespace NoMansBlocks.Core.Engine {
             Config = await LoadConfig();
 
             NetModule = new NetModule(this, Config.Capacity, Config.Port);
-            base.Init();
         }
         #endregion
 

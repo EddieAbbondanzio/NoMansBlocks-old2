@@ -21,7 +21,7 @@ namespace NoMansBlocks.Modules.Network {
         /// If this network module is the host of
         /// the lobby.
         /// </summary>
-        public bool IsServer { get { return Engine.Type == EngineType.Server; } }
+        public bool IsServer { get { return Engine.Type == GameEngineType.Server; } }
 
         /// <summary>
         /// Handles firing off alerts when messages come

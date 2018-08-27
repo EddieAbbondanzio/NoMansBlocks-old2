@@ -9,7 +9,7 @@ namespace NoMansBlocks.Core.Engine {
     /// Base class for Modules to derive from. Modules are components of
     /// the engine that require tracking their state, etc... 
     /// </summary>
-    public abstract class Module : IEngineCycleListener {
+    public abstract class Module {
         #region Properties
         /// <summary>
         /// The instance of the engine that is running
@@ -36,7 +36,7 @@ namespace NoMansBlocks.Core.Engine {
         /// <summary>
         /// The mode we are currently executing in.
         /// </summary>
-        public EngineType EngineType { get { return Engine.Type; } }
+        public GameEngineType EngineType { get { return Engine.Type; } }
         #endregion
 
         #region Constructor(s)

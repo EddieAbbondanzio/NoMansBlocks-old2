@@ -25,23 +25,23 @@ namespace NoMansBlocks.Modules.View {
         /// <summary>
         /// The engine instance that can run this scene.
         /// </summary>
-        public abstract EngineType Type { get; }
+        public abstract GameEngineType Type { get; }
 
         /// <summary>
-        /// The menus of the scene.
+        /// The name of the view, and scene in Unity.
         /// </summary>
-        public List<GameMenu> Menus { get; private set; }
+        public abstract string Name { get; }
 
         /// <summary>
         /// The menu that is currently active in
         /// the scene. (if any).
         /// </summary>
-        public GameMenu VisibleMenu { get; private set; }
+        public GameMenu ActiveMenu { get; private set; }
 
         /// <summary>
-        /// The name of the view, and scene in Unity.
+        /// The menus of the scene.
         /// </summary>
-        protected abstract string Name { get; }
+        private List<GameMenu> Menus { get; set; }
 
         /// <summary>
         /// The module that owns the view.
@@ -70,9 +70,8 @@ namespace NoMansBlocks.Modules.View {
         protected GameView(ViewModule viewModule) {
             ViewModule = viewModule;
 
-            Scene scene = SceneManager.GetSceneByName(Name);
-
-            if (scene == null) {
+            //Validate that a scene exists for the name passed in.
+            if (SceneManager.GetSceneByName(Name) == null) {
                 throw new Exception(string.Format("Scene not found for view {0}", Name));
             }
         }
@@ -84,24 +83,25 @@ namespace NoMansBlocks.Modules.View {
         /// get things ready for use.
         /// </summary>
         public void Load() {
-            //Check that this scene isn't already loaded to prevent an infinite loop...
-            if(SceneManager.GetActiveScene().name != Name) {
-                SceneManager.LoadScene(Name);
-            }
-
-            Transform menuContainer = FindMenuContainer(SceneManager.GetSceneByName(Name));
-
-            if (menuContainer == null) {
-                throw new Exception("No menu container found!");
-            }
+            Transform menuContainer = FindMenuContainer(SceneManager.GetActiveScene());
 
             //Hunt down the menus
             PropertyInfo[] menuProperties = this.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).Where(p => p.PropertyType.IsSubclassOf(typeof(GameMenu))).ToArray();
             Menus = new List<GameMenu>();
 
+            int defaultMenuIndex = -1;
             //Add them to the list of menus available.
             for (int i = 0; i < menuProperties.Length; i++) {
                 Menus.Add(menuProperties[i].GetValue(this) as GameMenu);
+
+                DefaultMenuAttribute defaultMenu = menuProperties[i].GetCustomAttribute<DefaultMenuAttribute>();
+                if(defaultMenu != null) {
+                    if(defaultMenuIndex != -1) {
+                        throw new Exception("Two or more menus have been set as the default menu. This is not allowed.");
+                    }
+
+                    defaultMenuIndex = i;
+                }
             }
 
             //Then we fire off the on load event
@@ -109,7 +109,9 @@ namespace NoMansBlocks.Modules.View {
                 OnLoaded(this, new ViewLoadedArgs(menuContainer));
             }
 
-            OnLoad();
+            if (defaultMenuIndex != -1) {
+                Menus[defaultMenuIndex].SetVisible();
+            }
         }
 
         /// <summary>
@@ -117,15 +119,14 @@ namespace NoMansBlocks.Modules.View {
         /// view is no longer needed.
         /// </summary>
         public void Destroy() {
-            OnPreDestroy();
-
             if(OnDestroyed != null) {
                 OnDestroyed(this, null);
             }
         }
 
         /// <summary>
-        /// Get a menu using it's type.
+        /// Get a menu using it's type. This is expensive, avoid 
+        /// using it when possible.
         /// </summary>
         /// <typeparam name="T">The type of menu to hunt for.</typeparam>
         /// <returns>The menu found (if any).</returns>
@@ -144,37 +145,12 @@ namespace NoMansBlocks.Modules.View {
 
         #region Helpers
         /// <summary>
-        /// Search for a view using the type of the view
-        /// as the search parameter.
-        /// </summary>
-        /// <typeparam name="T">The type of view to search for</typeparam>
-        /// <returns>The found view (if any).</returns>
-        protected T GetView<T>() where T : GameView {
-            return ViewModule.GetView<T>();
-        }
-
-        /// <summary>
         /// Load a view into use. This calls Destroy() on the current one,
         /// if there is one.
         /// </summary>
         /// <typeparam name="T">The type of view to load.</typeparam>
         protected void LoadView<T>() where T : GameView {
             ViewModule.LoadView<T>();
-        }
-
-        /// <summary>
-        /// Called after the view has been loaded into the game.
-        /// This allows the view to do any custom work, such as 
-        /// loading a specific menu.
-        /// </summary>
-        protected virtual void OnLoad() {
-        }
-
-        /// <summary>
-        /// Called right before the view is destroyed. This allows
-        /// the view to get any info it wants before killing itself.
-        /// </summary>
-        protected virtual void OnPreDestroy() {
         }
 
         /// <summary>
@@ -192,7 +168,7 @@ namespace NoMansBlocks.Modules.View {
                 }
             }
 
-            return null;
+            throw new Exception(string.Format("Scene {0} was improperly set up. No gameobject with the tag 'MenuContainer' was found.", scene.name));
         }
         #endregion
     }

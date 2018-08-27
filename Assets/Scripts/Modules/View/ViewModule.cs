@@ -18,7 +18,7 @@ namespace NoMansBlocks.Modules.View {
         /// <summary>
         /// The view currently loaded.
         /// </summary>
-        public GameView Current { get; private set; }
+        public GameView ActiveView { get; private set; }
         #endregion
 
         #region Members
@@ -36,13 +36,24 @@ namespace NoMansBlocks.Modules.View {
         /// <param name="engine">The engine that owns the module.</param>
         public ViewModule(GameEngine engine) : base(engine) {
         }
+
+        /// <summary>
+        /// Prevent memory leaks.
+        /// </summary>
+        ~ViewModule() {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
         #endregion
 
         #region Module Events
         /// <summary>
-        /// Init the module by going out and finding all
-        /// views possible.
+        /// Initialize the module by searching for every GameView associated
+        /// with this engine type and creating an instance of it in the cache.
+        /// Then attempt to figure out the current view so we can load the menus
+        /// on it.
         /// </summary>
+        /// <exception cref="Exception">When an unknown scene is started, and
+        /// we can't figure out where we are.</exception>
         public override void OnInit() {
             views = new List<GameView>();
 
@@ -60,27 +71,19 @@ namespace NoMansBlocks.Modules.View {
             }
 
             //Figure out what scene is active
-            Current = views.Find(v => v.IsActive());
+            ActiveView = views.Find(v => v.IsActive());
 
-            if(Current == null) {
+            if(ActiveView == null) {
                 throw new Exception("Unknown view loaded.");
             }
 
             //Trigger it's load method
-            Current.Load();
+            ActiveView.Load();
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         #endregion
 
         #region Publics
-        /// <summary>
-        /// Search for a view using it's type as the search
-        /// parameter.
-        /// </summary>
-        /// <typeparam name="T">The type of view to search for.</typeparam>
-        /// <returns>The view found.</returns>
-        public T GetView<T>() where T : GameView {
-            return views.Find(v => v.GetType() == typeof(T)) as T;
-        }
 
         /// <summary>
         /// Load a view into use. This calls Destroy() on the current one,
@@ -88,10 +91,38 @@ namespace NoMansBlocks.Modules.View {
         /// </summary>
         /// <typeparam name="T">The type of view to load.</typeparam>
         public void LoadView<T>() where T : GameView {
-            Current.Destroy();
+            //Don't bother loading, it's already loaded.
+            if(ActiveView?.GetType() == typeof(T)) {
+                return;
+            }
 
-            Current = views.Find(v => v.GetType() == typeof(T));
-            Current.Load();
+            //Find the view we want to load
+            GameView nextView = views.Find(v => v.GetType() == typeof(T));
+
+            ActiveView.Destroy();
+            ActiveView = nextView;
+
+            //Now we need to being the loading of the scene
+            SceneManager.LoadScene(nextView.Name);
+        }
+        #endregion
+
+        #region Helpers
+        /// <summary>
+        /// Fired off everytime a scene is loaded. We use this to check if
+        /// a scene we were waiting on is loaded, and finalize it's load process.
+        /// </summary>
+        /// <param name="arg0">The loaded scene.</param>
+        /// <param name="arg1">How it was loaded.</param>
+        /// <exception cref="InvalidOperationException">Thrown when a scene is loaded
+        /// but it does not match the one we were expecting.</exception>
+        private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1) {
+            if(ActiveView.Name == arg0.name) {
+                ActiveView.Load();
+            }
+            else {
+                throw new InvalidOperationException(string.Format("Incorrect scene was loaded. Expected: {0}, but got: {1}", ActiveView.Name, arg0.name));
+            }
         }
         #endregion
     }
