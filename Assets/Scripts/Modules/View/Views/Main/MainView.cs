@@ -30,6 +30,11 @@ namespace NoMansBlocks.Modules.View {
         /// </summary>
         [DefaultMenu]
         private MainMenu MainMenu { get; set; }
+
+        /// <summary>
+        /// The menu used to connect to servers
+        /// </summary>
+        private ConnectMenu ConnectMenu { get; set; }
         #endregion
 
         #region Constructor(s)
@@ -39,7 +44,8 @@ namespace NoMansBlocks.Modules.View {
         /// <paramref name="viewModule">The module that owns this view<paramref name="viewModule"/>
         /// </summary>
         public MainView(ViewModule viewModule) : base(viewModule) {
-            MainMenu = new MainMenu(this);
+            MainMenu    = new MainMenu(this);
+            ConnectMenu = new ConnectMenu(this);
         }
         #endregion
     }

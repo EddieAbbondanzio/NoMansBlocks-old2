@@ -49,7 +49,7 @@ namespace NoMansBlocks.Modules.View {
         /// <summary>
         /// Fired off everytime the user attempts to log in.
         /// </summary>
-        public event EventHandler<LoginArgs> OnLoginSubmit;
+        public event EventHandler<LoginEventArgs> OnLoginSubmit;
         #endregion
 
         #region Constructor(s)
@@ -110,7 +110,7 @@ namespace NoMansBlocks.Modules.View {
             }
 
             if(OnLoginSubmit != null) {
-                OnLoginSubmit(this, new LoginArgs(username, password));
+                OnLoginSubmit(this, new LoginEventArgs(username, password));
             }
         }
         #endregion

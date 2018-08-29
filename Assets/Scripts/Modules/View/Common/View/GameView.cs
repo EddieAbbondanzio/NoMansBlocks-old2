@@ -53,7 +53,7 @@ namespace NoMansBlocks.Modules.View {
         /// <summary>
         /// Fired off when the view is loaded into the game.
         /// </summary>
-        public event EventHandler<ViewLoadedArgs> OnLoaded;
+        public event EventHandler<ViewLoadedEventArgs> OnLoaded;
 
         /// <summary>
         /// Fired off when the view is replaced by another.
@@ -106,7 +106,7 @@ namespace NoMansBlocks.Modules.View {
 
             //Then we fire off the on load event
             if (OnLoaded != null) {
-                OnLoaded(this, new ViewLoadedArgs(menuContainer));
+                OnLoaded(this, new ViewLoadedEventArgs(menuContainer));
             }
 
             if (defaultMenuIndex != -1) {

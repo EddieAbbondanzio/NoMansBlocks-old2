@@ -134,12 +134,14 @@
     <Compile Include="Assets\Scripts\Modules\View\Common\Menu\GameMenu.cs" />
     <Compile Include="Assets\Scripts\Modules\View\Common\Menu\MenuState.cs" />
     <Compile Include="Assets\Scripts\Modules\View\Common\View\GameView.cs" />
-    <Compile Include="Assets\Scripts\Modules\View\Common\View\ViewLoadedArgs.cs" />
+    <Compile Include="Assets\Scripts\Modules\View\Common\View\ViewLoadedEventArgs.cs" />
     <Compile Include="Assets\Scripts\Modules\View\ViewModule.cs" />
-    <Compile Include="Assets\Scripts\Modules\View\Views\Login\LoginArgs.cs" />
     <Compile Include="Assets\Scripts\Modules\View\Views\Login\LoginView.cs" />
+    <Compile Include="Assets\Scripts\Modules\View\Views\Login\Menus\LoginEventArgs.cs" />
     <Compile Include="Assets\Scripts\Modules\View\Views\Login\Menus\LoginMenu.cs" />
     <Compile Include="Assets\Scripts\Modules\View\Views\Main\MainView.cs" />
+    <Compile Include="Assets\Scripts\Modules\View\Views\Main\Menus\ConnectEventArgs.cs" />
+    <Compile Include="Assets\Scripts\Modules\View\Views\Main\Menus\ConnectMenu.cs" />
     <Compile Include="Assets\Scripts\Modules\View\Views\Main\Menus\MainMenu.cs" />
     <Compile Include="Assets\Scripts\Utils\NetUtils.cs" />
     <Reference Include="UnityEditor.StandardEvents">

@@ -60,7 +60,7 @@ namespace NoMansBlocks.Modules.View {
         /// </summary>
         /// <param name="sender">The login menu</param>
         /// <param name="e">Event args</param>
-        private void OnLoginSubmitted(object sender, LoginArgs e) {
+        private void OnLoginSubmitted(object sender, LoginEventArgs e) {
             //Attempt to log the user in.
             User user = User.Login(e.Username, e.Password);
 

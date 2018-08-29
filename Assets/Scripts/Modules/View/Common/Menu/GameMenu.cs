@@ -12,7 +12,8 @@ namespace NoMansBlocks.Modules.View {
     /// <summary>
     /// A menu represents, well a menu. This is useful for including
     /// more than one screen per view. Each menu should have it's own
-    /// prefab that can quickly be loaded into use.
+    /// prefab that can quickly be loaded into use. This is the ViewPresenter
+    /// in other terms
     /// </summary>
     public abstract class GameMenu {
         #region Properties
@@ -123,7 +124,7 @@ namespace NoMansBlocks.Modules.View {
         /// </summary>
         /// <param name="sender">The parent view.</param>
         /// <param name="e">Always null.</param>
-        private void OnViewLoaded(object sender, ViewLoadedArgs e) {
+        private void OnViewLoaded(object sender, ViewLoadedEventArgs e) {
             instance = FindOrInstantiateMenu(e.MenuContainer);
             OnLoad();
         }
