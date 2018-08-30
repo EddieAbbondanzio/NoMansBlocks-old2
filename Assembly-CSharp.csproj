@@ -130,6 +130,11 @@
     <Compile Include="Assets\Scripts\Modules\Network\Messages\Types\Meta\Types\NetLatencyMessage.cs" />
     <Compile Include="Assets\Scripts\Modules\Network\NetModule.cs" />
     <Compile Include="Assets\Scripts\Modules\Network\NetModule_NetMessageListener.cs" />
+    <Compile Include="Assets\Scripts\Modules\UI\Menu\Base\ControlPresenters\ButtonPresenter.cs" />
+    <Compile Include="Assets\Scripts\Modules\UI\Menu\Base\ControlPresenters\IControlPresenter.cs" />
+    <Compile Include="Assets\Scripts\Modules\UI\Menu\Base\Menu.cs" />
+    <Compile Include="Assets\Scripts\Modules\UI\Menu\Types\LoginMenu.cs" />
+    <Compile Include="Assets\Scripts\Modules\UI\UIModule.cs" />
     <Compile Include="Assets\Scripts\Modules\View\Common\Menu\DefaultMenuAttribute.cs" />
     <Compile Include="Assets\Scripts\Modules\View\Common\Menu\GameMenu.cs" />
     <Compile Include="Assets\Scripts\Modules\View\Common\Menu\MenuState.cs" />

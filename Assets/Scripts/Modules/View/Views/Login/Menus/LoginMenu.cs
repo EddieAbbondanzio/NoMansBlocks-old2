@@ -13,13 +13,7 @@ namespace NoMansBlocks.Modules.View {
     /// server.
     /// </summary>
     public sealed class LoginMenu : GameMenu {
-        #region Properties
-        /// <summary>
-        /// The prefab name of the prefab to 
-        /// load for this menu.
-        /// </summary>
-        protected override string PrefabPath => "Menus/LoginView/LoginMenu";
-        #endregion
+
 
         #region Members
         /// <summary>
