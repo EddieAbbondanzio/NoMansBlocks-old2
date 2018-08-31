@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace NoMansBlocks.Modules.UI {
     /// <summary>
@@ -58,6 +59,17 @@ namespace NoMansBlocks.Modules.UI {
 
             if(MenuContainer == null) {
                 throw new FormatException("Scene is poorly formatted. No menu container found.");
+            }
+        }
+
+        /// <summary>
+        /// Destroy any existing menus right before switching scenes.
+        /// This will handle calling their release of resources.
+        /// </summary>
+        /// <param name="scene"></param>
+        public override void OnSceneDestroyed(Scene scene) {
+            for(int i = 0; i < LoadedMenus.Count; i++) {
+                LoadedMenus[i].Destroy();
             }
         }
         #endregion

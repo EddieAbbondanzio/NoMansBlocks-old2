@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 using NoMansBlocks.Modules.CommandConsole;
 using NoMansBlocks.Modules.Network;
 using System.Reflection;
-using NoMansBlocks.Modules.View;
+using NoMansBlocks.Modules.UI;
+using UnityEngine.SceneManagement;
 
 namespace NoMansBlocks.Core.Engine {
     /// <summary>
@@ -44,7 +45,7 @@ namespace NoMansBlocks.Core.Engine {
         /// The module that handles loading scenes.
         /// </summary>
         [ModuleExecution(ExecutionIndex = 2, DisableUpdate = true)]
-        public ViewModule ViewModule { get; private set; }
+        public UIModule UIModule { get; private set; }
 
         /// <summary>
         /// The module used to interface with the network.
@@ -77,12 +78,14 @@ namespace NoMansBlocks.Core.Engine {
 
             LogModule     = new LogModule(this);
             CommandModule = new CommandConsoleModule(this);
-            ViewModule    = new ViewModule(this);
+            UIModule      = new UIModule(this);
 
             this.engineTicker.OnInit   += OnTickerInit;
             this.engineTicker.OnStart  += OnTickerStart;
             this.engineTicker.OnUpdate += OnTickerUpdate;
             this.engineTicker.OnEnd    += OnTickerEnd;
+
+            SceneManager.sceneLoaded   += SceneManagerSceneLoaded;
         }
 
         /// <summary>
@@ -94,6 +97,8 @@ namespace NoMansBlocks.Core.Engine {
             engineTicker.OnStart  -= OnTickerStart;
             engineTicker.OnUpdate -= OnTickerUpdate;
             engineTicker.OnEnd    -= OnTickerEnd;
+
+            SceneManager.sceneLoaded   -= SceneManagerSceneLoaded;
         }
         #endregion
 
@@ -122,6 +127,21 @@ namespace NoMansBlocks.Core.Engine {
 
             engineTicker.StopTicking();
             IsRunning = false;
+        }
+
+        /// <summary>
+        /// Load a scene via it's unique name.
+        /// </summary>
+        /// <param name="name">The name of the scene to load.</param>
+        public void LoadScene(string name) {
+            Scene scene = SceneManager.GetActiveScene();
+            OnSceneDestroyed(scene);
+
+            for (int i = 0; i < modules.Length; i++) {
+                modules[i].OnSceneDestroyed(scene);
+            }
+
+            SceneManager.LoadScene(name);
         }
 
         /// <summary>
@@ -169,6 +189,22 @@ namespace NoMansBlocks.Core.Engine {
         /// engine is shutting down.
         /// </summary>
         protected virtual void OnEnd() {
+        }
+
+        /// <summary>
+        /// Override this to do any work right after a new
+        /// scene is loaded into the game.
+        /// </summary>
+        protected virtual void OnSceneLoaded(Scene scene) {
+
+        }
+
+        /// <summary>
+        /// Override this to do any work right before a scene
+        /// is unloaded.
+        /// </summary>
+        protected virtual void OnSceneDestroyed(Scene scene) {
+
         }
         #endregion
 
@@ -251,6 +287,19 @@ namespace NoMansBlocks.Core.Engine {
                         modules[i].OnEnd();
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Fired off everytime a new scene is loaded.
+        /// </summary>
+        /// <param name="arg0">The scene that was loaded.</param>
+        /// <param name="arg1">How it was loaded.</param>
+        private void SceneManagerSceneLoaded(Scene arg0, LoadSceneMode arg1) {
+            OnSceneLoaded(arg0);
+
+            for(int i = 0; i < modules.Length; i++) {
+                modules[i].OnSceneLoaded(arg0);
             }
         }
         #endregion

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine.SceneManagement;
 
 namespace NoMansBlocks.Core.Engine {
     /// <summary>
@@ -82,6 +83,21 @@ namespace NoMansBlocks.Core.Engine {
         /// state, etc...
         /// </summary>
         public virtual void OnEnd() {
+        }
+
+        /// <summary>
+        /// Fired right after a new scene has been loaded into the
+        /// game.
+        /// </summary>
+        /// <param name="scene">The newly loaded scene</param>
+        public virtual void OnSceneLoaded(Scene scene) {
+        }
+
+        /// <summary>
+        /// Fired right before a scene is unloaded.
+        /// </summary>
+        /// <param name="scene">The scene being unloaded.</param>
+        public virtual void OnSceneDestroyed(Scene scene) {
         }
         #endregion
 
