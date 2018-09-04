@@ -1,5 +1,5 @@
 ﻿using NoMansBlocks.Core.Engine;
-using NoMansBlocks.Modules.UI.Model;
+using NoMansBlocks.Modules.UI.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,18 +27,22 @@ namespace NoMansBlocks.Modules.UI {
         /// <summary>
         /// The currently active menu (if any).
         /// </summary>
-        public Menu CurrentMenu { get; private set; }
+        public IMenu ActiveMenu { get; private set; }
 
+        #endregion
+
+        #region Members
         /// <summary>
-        /// The loaded menus in the module.
+        /// The list of found menu presenters being used to run
+        /// menus.
         /// </summary>
-        public List<Menu> LoadedMenus { get; private set; }
+        private List<MenuPresenter> loadedPresenters;
 
         /// <summary>
         /// The menu container that will hold every
         /// menu instnace.
         /// </summary>
-        private Transform MenuContainer { get; set; }
+        private Transform menuContainer;
         #endregion
 
         #region Constructor(s)
@@ -47,7 +51,7 @@ namespace NoMansBlocks.Modules.UI {
         /// </summary>
         /// <param name="engine">The engine that owns it.</param>
         public UIModule(GameEngine engine) : base(engine) {
-            LoadedMenus = new List<Menu>();
+            loadedPresenters = new List<MenuPresenter>();
         }
         #endregion
 
@@ -57,9 +61,9 @@ namespace NoMansBlocks.Modules.UI {
         /// we can find our menu container in the scene.
         /// </summary>
         public override void OnInit() {
-            MenuContainer = GameObject.FindGameObjectWithTag(MenuContainerTag)?.transform;
+            menuContainer = GameObject.FindGameObjectWithTag(MenuContainerTag)?.transform;
 
-            if (MenuContainer == null) {
+            if (menuContainer == null) {
                 throw new FormatException("Scene is poorly formatted. No menu container found.");
             }
         }
@@ -70,9 +74,9 @@ namespace NoMansBlocks.Modules.UI {
         /// </summary>
         /// <param name="scene"></param>
         public override void OnSceneDestroyed(Scene scene) {
-            for (int i = 0; i < LoadedMenus.Count; i++) {
-                LoadedMenus[i].Destroy();
-            }
+            //for (int i = 0; i < LoadedMenus.Count; i++) {
+            //    LoadedMenus[i].Destroy();
+            //}
         }
         #endregion
 
@@ -82,7 +86,7 @@ namespace NoMansBlocks.Modules.UI {
         /// </summary>
         /// <typeparam name="T">The type of menu to load</typeparam>
         /// <param name="showOnLoad">If it should be made visible upon load.</param>
-        public void LoadMenu<T>(bool showOnLoad = false) where T : Menu {
+        public void LoadMenu<T>(bool showOnLoad = false) where T : class, IMenu {
             T newInstance = Activator.CreateInstance(typeof(T)) as T;
             LoadMenu(newInstance, showOnLoad);
         }
@@ -93,28 +97,28 @@ namespace NoMansBlocks.Modules.UI {
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="T">The type of menu to load</typeparam>
         /// <param name="showOnLoad">If it should be made visible upon load.</param>
-        public void LoadMenu<T>(T menu, bool showOnLoad = false) where T : Menu {
+        public void LoadMenu<T>(T menu, bool showOnLoad = false) where T : class, IMenu {
             //Check that this menu isn't already present
-            if (LoadedMenus.Any(m => m.GetType() == typeof(T))) {
-                throw new Exception(string.Format("A menu of type {0} has already been loaded.", typeof(T)));
-            }
+            //if (LoadedMenus.Any(m => m.GetType() == typeof(T))) {
+            //    throw new Exception(string.Format("A menu of type {0} has already been loaded.", typeof(T)));
+            //}
 
             T newMenu = Activator.CreateInstance(typeof(T)) as T;
-            newMenu.Load(MenuContainer);
+            //newMenu.Load(MenuContainer);
 
-            LoadedMenus.Add(newMenu);
+            //LoadedMenus.Add(newMenu);
         }
 
         /// <summary>
         /// Release the resources of the menu
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public void DestroyMenu<T>() where T : Menu {
-            for (int i = 0; i < LoadedMenus.Count; i++) {
-                if (LoadedMenus[i].GetType() == typeof(T)) {
-                    LoadedMenus.RemoveAt(i);
-                }
-            }
+        public void UnloadMenu<T>() where T : IMenu {
+            //for (int i = 0; i < LoadedMenus.Count; i++) {
+            //    if (LoadedMenus[i].GetType() == typeof(T)) {
+            //        LoadedMenus.RemoveAt(i);
+            //    }
+            //}
         }
         #endregion
     }
