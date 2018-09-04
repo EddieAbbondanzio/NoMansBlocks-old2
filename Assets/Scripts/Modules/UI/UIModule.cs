@@ -1,4 +1,5 @@
 ﻿using NoMansBlocks.Core.Engine;
+using NoMansBlocks.Modules.UI.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -93,7 +94,15 @@ namespace NoMansBlocks.Modules.UI {
         /// <typeparam name="T">The type of menu to load</typeparam>
         /// <param name="showOnLoad">If it should be made visible upon load.</param>
         public void LoadMenu<T>(T menu, bool showOnLoad = false) where T : Menu {
+            //Check that this menu isn't already present
+            if (LoadedMenus.Any(m => m.GetType() == typeof(T))) {
+                throw new Exception(string.Format("A menu of type {0} has already been loaded.", typeof(T)));
+            }
 
+            T newMenu = Activator.CreateInstance(typeof(T)) as T;
+            newMenu.Load(MenuContainer);
+
+            LoadedMenus.Add(newMenu);
         }
 
         /// <summary>
@@ -107,34 +116,6 @@ namespace NoMansBlocks.Modules.UI {
                 }
             }
         }
-
-        ///// <summary>
-        ///// Load the menu that matches the passed in type.
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        //public void LoadMenu<T>() where T : Menu {
-        //    //Check that this menu isn't already present
-        //    if (LoadedMenus.Any(menu => menu.GetType() == typeof(T))) {
-        //        throw new Exception(string.Format("A menu of type {0} has already been loaded.", typeof(T)));
-        //    }
-
-        //    T newMenu = Activator.CreateInstance(typeof(T)) as T;
-        //    newMenu.Load(MenuContainer);
-
-        //    LoadedMenus.Add(newMenu);
-        //}
-
-        ///// <summary>
-        ///// Release the resources of the menu
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        //public void DestroyMenu<T>() where T : Menu {
-        //    for(int i = 0; i < LoadedMenus.Count; i++) {
-        //        if(LoadedMenus[i].GetType() == typeof(T)) {
-        //            LoadedMenus.RemoveAt(i);
-        //        }
-        //    }
-        //}
         #endregion
     }
 }

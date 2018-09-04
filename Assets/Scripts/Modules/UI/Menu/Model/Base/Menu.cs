@@ -1,11 +1,13 @@
-﻿using System;
+﻿using NoMansBlocks.Modules.UI.Presenter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace NoMansBlocks.Modules.UI {
+namespace NoMansBlocks.Modules.UI.Model {
     /// <summary>
     /// Base class for all menus to derive from.
     /// </summary>
@@ -14,14 +16,14 @@ namespace NoMansBlocks.Modules.UI {
         /// <summary>
         /// If the menu is currently
         /// </summary>
-        public bool IsLoaded { get; private set; }
+        public bool IsLoaded { get { return view != null; } }
 
         /// <summary>
         /// If the menu is currently active and visible on screen.
         /// </summary>
         public bool IsActive {
-            get { return instance?.activeSelf ?? false; }
-            set { if (IsActive) { instance.SetActive(value); } }
+            get { return view?.activeSelf ?? false; }
+            set { if (IsActive) { view.SetActive(value); } }
         }
 
         /// <summary>
@@ -33,9 +35,15 @@ namespace NoMansBlocks.Modules.UI {
 
         #region Members
         /// <summary>
+        /// The presenter that handles interacting with
+        /// the view for us.
+        /// </summary>
+        private MenuPresenter presenter;
+
+        /// <summary>
         /// The spawned instance of the menu.
         /// </summary>
-        private GameObject instance;
+        private GameObject view;
         #endregion
 
         #region Publics
@@ -49,17 +57,26 @@ namespace NoMansBlocks.Modules.UI {
                 throw new InvalidOperationException("Menu is already loaded");
             }
 
-            instance = Resources.Load<GameObject>(PrefabPath);
-            instance.transform.SetParent(menuContainer);
+            GameObject prefab = Resources.Load<GameObject>(PrefabPath);
+            view = GameObject.Instantiate<GameObject>(prefab);
+            view.transform.SetParent(menuContainer);
 
             //Reset the rect transform
-            RectTransform menuTransform = instance.GetComponent<RectTransform>();
+            RectTransform menuTransform = view.GetComponent<RectTransform>();
             menuTransform.localScale = new Vector3(1, 1, 1);
             menuTransform.offsetMin  = new Vector2(0, 0);
             menuTransform.offsetMax  = new Vector2(0, 0);
 
+            presenter = view.GetComponent<MenuPresenter>();
+
+            if(presenter == null) {
+                throw new FormatException(string.Format("Menu View {0} is missing it's presenter component.", PrefabPath));
+            }
+
+            presenter.OnInput += Presenter_OnInput;
             OnLoad();
         }
+
 
         /// <summary>
         /// Release the resources of the menu and destroy the gameobject.
@@ -69,8 +86,9 @@ namespace NoMansBlocks.Modules.UI {
                 throw new InvalidOperationException("Menu is not loaded! Cannot destroy.");
             }
 
+            presenter.OnInput -= Presenter_OnInput;
             OnDestroy();
-            GameObject.Destroy(instance);
+            GameObject.Destroy(view);
         }
         #endregion
 
@@ -79,17 +97,34 @@ namespace NoMansBlocks.Modules.UI {
         /// Called right after the menu has been loaded.
         /// Use this to initialize resources.
         /// </summary>
-        protected void OnLoad() {
+        protected virtual void OnLoad() {
         }
 
         /// <summary>
         /// Called right before the menu is destroyed.
         /// Use this to free up resources.
         /// </summary>
-        protected void OnDestroy() {
+        protected virtual void OnDestroy() {
         }
 
-        protected void OnInput(string controlName, )
+        /// <summary>
+        /// Fired off everytime a control on the menu view is acted upon.
+        /// </summary>
+        /// <param name="control">The control that was modified.</param>
+        /// <param name="actionType">How it was modified.</param>
+        protected virtual void OnInput(IControlPresenter control, InputActionType actionType) {
+        }
+        #endregion
+
+        #region Helpers
+        /// <summary>
+        /// Propogate the input event further to the model view itself.
+        /// </summary>
+        /// <param name="sender">The model presenter itself.</param>
+        /// <param name="e">Details on the event.</param>
+        private void Presenter_OnInput(object sender, InputEventArgs e) {
+            OnInput(e.Control, e.ActionType);
+        }
         #endregion
     }
 }

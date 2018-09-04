@@ -1,6 +1,7 @@
 ﻿using NoMansBlocks.Core;
 using NoMansBlocks.Core.Engine;
 using NoMansBlocks.Core.UserSystem;
+using NoMansBlocks.Modules.UI.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -34,6 +35,8 @@ namespace NoMansBlocks.Core.Engine {
             Engine = new ClientEngine(engineTicker);
 
             Engine.Run();
+
+            Engine.UIModule.LoadMenu<LoginMenu>(true);
         }
         #endregion
     }

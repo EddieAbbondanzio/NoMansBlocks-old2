@@ -1,84 +1,29 @@
-﻿//using NoMansBlocks.Modules.UI.Controls;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using UnityEngine.UI;
+﻿using NoMansBlocks.Modules.UI.Presenter;
 
-//namespace NoMansBlocks.Modules.UI {
-//    /// <summary>
-//    /// The menu responsible for getting user login
-//    /// credentials from the user.
-//    /// </summary>
-//    public sealed class LoginMenu : Menu {
-//        #region Properties
-//        /// <summary>
-//        /// The prefab name of the prefab to 
-//        /// load for this menu.
-//        /// </summary>
-//        protected override string PrefabPath => "Menus/LoginView/LoginMenu";
-//        #endregion
+namespace NoMansBlocks.Modules.UI.Model {
+    /// <summary>
+    /// The client login menu. Attempts to get 
+    /// Username + password from the client.
+    /// </summary>
+    public sealed class LoginMenu : Menu {
+        #region Properties
+        /// <summary>
+        /// The path where the prefab view can
+        /// be found.
+        /// </summary>
+        protected override string PrefabPath => "Menus/LoginView/LoginMenu";
+        #endregion
 
-//        #region Members
-//        /// <summary>
-//        /// The button that the user presses when
-//        /// they want to attempt to login.
-//        /// </summary>
-//        private TriggerButtonBehaviour loginButton;
-
-//        /// <summary>
-//        /// The text field for the user's username.
-//        /// </summary>
-//        private InputField usernameField;
-
-//        /// <summary>
-//        /// The text field for the user's password.
-//        /// </summary>
-//        private InputField passwordField;
-
-//        /// <summary>
-//        /// The toggle indicating if the user wants us to save
-//        /// their credentials for later use.
-//        /// </summary>
-//        private Toggle rememberCredentialsToggle;
-//        #endregion
-
-//        #region Life Cycle Events
-//        /// <summary>
-//        /// Attempt to find all the important controls in the
-//        /// menu.
-//        /// </summary>
-//        protected override void OnLoad() {
-//            //loginButton = FindControl<ButtonPresenter>("LoginButton");
-
-//            //usernameField = FindChildGameObject("UsernameField").GetComponent<InputField>();
-//            //passwordField = FindChildGameObject("PasswordField").GetComponent<InputField>();
-//            //rememberCredentialsToggle = FindChildGameObject("RememberToggle").GetComponent<Toggle>();
-
-//            loginButton.OnClick += OnLoginClicked;
-//        }
-
-//        /// <summary>
-//        /// Called as the menu instance is destroyed. Remove
-//        /// any event listeners.
-//        /// </summary>
-//        protected override void OnDestroy() {
-//            loginButton.OnClick -= OnLoginClicked;
-//        }
-//        #endregion
-
-//        #region Helpers
-//        /// <summary>
-//        /// Fired everytime the login button is pressed. Attempt
-//        /// to login the credentials passed in.
-//        /// </summary>
-//        private void OnLoginClicked(object sender, EventArgs e) {
-//            string username = usernameField.text;
-//            string password = passwordField.text;
-
-          
-//        }
-//        #endregion
-//    }
-//}
+        #region Helpers
+        /// <summary>
+        /// Called each time a control has some kind of
+        /// input from the user.
+        /// </summary>
+        /// <param name="control">The control that was modified</param>
+        /// <param name="actionType">What kind of action was performed.</param>
+        protected override void OnInput(IControlPresenter control, InputActionType actionType) {
+            Log.Debug("Control {0} was modified by {1}", control.Name, actionType.ToString());
+        }
+        #endregion
+    }
+}
