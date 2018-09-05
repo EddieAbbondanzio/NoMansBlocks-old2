@@ -3,6 +3,7 @@ using NoMansBlocks.Modules.UI.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace NoMansBlocks.Modules.UI {
     /// user interfaces such as menus and more in game. This is
     /// the controller of menus
     /// </summary>
-    public sealed class UIModule : Module {
+    public sealed class UIModule : Module, IMenuController {
         #region Constants
         /// <summary>
         /// The tag to look for in the scene to find the gameobject
@@ -33,12 +34,6 @@ namespace NoMansBlocks.Modules.UI {
 
         #region Members
         /// <summary>
-        /// The list of found menu presenters being used to run
-        /// menus.
-        /// </summary>
-        private List<MenuPresenter> loadedPresenters;
-
-        /// <summary>
         /// The menu container that will hold every
         /// menu instnace.
         /// </summary>
@@ -51,7 +46,6 @@ namespace NoMansBlocks.Modules.UI {
         /// </summary>
         /// <param name="engine">The engine that owns it.</param>
         public UIModule(GameEngine engine) : base(engine) {
-            loadedPresenters = new List<MenuPresenter>();
         }
         #endregion
 
@@ -82,43 +76,61 @@ namespace NoMansBlocks.Modules.UI {
 
         #region Publics
         /// <summary>
-        /// Load a menu using it's default values. 
+        /// Load a memory into memory by instantiating an instance of its 
+        /// view and loading it with a default instance of it's menu model.
         /// </summary>
-        /// <typeparam name="T">The type of menu to load</typeparam>
-        /// <param name="showOnLoad">If it should be made visible upon load.</param>
-        public void LoadMenu<T>(bool showOnLoad = false) where T : class, IMenu {
-            T newInstance = Activator.CreateInstance(typeof(T)) as T;
-            LoadMenu(newInstance, showOnLoad);
+        /// <typeparam name="T">THe type of menu to load.</typeparam>
+        /// <param name="activateOnLoad">If it should be made visible once loaded.</param>
+        public void LoadMenu<T>(bool activateOnLoad) where T : class, IMenu {
+            T menuInstance = Activator.CreateInstance(typeof(T)) as T;
+            LoadMenu<T>(menuInstance, activateOnLoad);
         }
 
         /// <summary>
-        /// Load a menu with custom values.
+        /// Load a menu into memory by instantiating an instance of it's view
+        /// and populating it with the data from the model passed in.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="T">The type of menu to load</typeparam>
-        /// <param name="showOnLoad">If it should be made visible upon load.</param>
-        public void LoadMenu<T>(T menu, bool showOnLoad = false) where T : class, IMenu {
-            //Check that this menu isn't already present
-            //if (LoadedMenus.Any(m => m.GetType() == typeof(T))) {
-            //    throw new Exception(string.Format("A menu of type {0} has already been loaded.", typeof(T)));
-            //}
+        /// <typeparam name="T">The type of menu to load.</typeparam>
+        /// <param name="menu">The menu's model.</param>
+        /// <param name="activateOnLoad">If it should be made visible once loaded.</param>
+        public void LoadMenu<T>(T menu, bool activateOnLoad) where T : class, IMenu {
+            MenuPresenterAttribute presenterAttribute = typeof(T).GetCustomAttribute<MenuPresenterAttribute>();
 
-            T newMenu = Activator.CreateInstance(typeof(T)) as T;
-            //newMenu.Load(MenuContainer);
+            //Easy. We know what kind of presenter to use.
+            if(presenterAttribute != null) {
 
-            //LoadedMenus.Add(newMenu);
+            }
+            //Need to brute force find one that can handle it.
+            else {
+
+            }
         }
 
         /// <summary>
-        /// Release the resources of the menu
+        /// Relase the resources of a loaded menu by deleting it
+        /// from memory.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        public void UnloadMenu<T>() where T : IMenu {
-            //for (int i = 0; i < LoadedMenus.Count; i++) {
-            //    if (LoadedMenus[i].GetType() == typeof(T)) {
-            //        LoadedMenus.RemoveAt(i);
-            //    }
-            //}
+        /// <typeparam name="T">The type of menu to unload.</typeparam>
+        public void UnloadMenu<T>() where T : class, IMenu {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Show an already loaded menu of type T
+        /// on screen. This will hide any other currently
+        /// visible menus.
+        /// </summary>
+        /// <typeparam name="T">The type of menu to load.</typeparam>
+        public void ShowMenu<T>() where T : class, IMenu {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Hide all menus in the scene so none are visible to
+        /// the player. This retains them in memory however.
+        /// </summary>
+        public void HideMenus() {
+            throw new NotImplementedException();
         }
         #endregion
     }

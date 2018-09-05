@@ -28,12 +28,22 @@ namespace NoMansBlocks.Modules.UI.Menus {
         #endregion
 
         #region Constructor(s)
-        protected MenuPresenter(UIModule uiModule) {
-            
+        /// <summary>
+        /// Create a new base instance of a menu presenter.
+        /// </summary>
+        /// <param name="menuController">The UI Module.</param>
+        protected MenuPresenter(IMenuController menuController) {
+            this.menuController = menuController;
         }
         #endregion
 
         #region Members
+        /// <summary>
+        /// The menu controller handling all menus in the game.
+        /// This can be used to load other menus from this presenter.
+        /// </summary>
+        protected IMenuController menuController;
+
         /// <summary>
         /// The model of the menu
         /// </summary>
@@ -43,11 +53,6 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// The view instance of the menu.
         /// </summary>
         private GameObject view;
-
-        /// <summary>
-        /// The parent ui module running the show.
-        /// </summary>
-        private UIModule uiModule;
         #endregion
 
         #region Publics
@@ -87,7 +92,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// Release the resources of the menu and destroy the view
         /// currently loaded.
         /// </summary>
-        public void Destroy() {
+        public void Unload() {
             if (!IsLoaded) {
                 throw new InvalidOperationException("Menu is not loaded! Cannot destroy.");
             }
@@ -98,6 +103,14 @@ namespace NoMansBlocks.Modules.UI.Menus {
             GameObject.Destroy(view);
             model = null;
         }
+
+        /// <summary>
+        /// If the menu passed in is a supported model type
+        /// that can be loaded by this presenter.
+        /// </summary>
+        /// <param name="model">The model to check</param>
+        /// <returns>True if the model can be loaded.</returns>
+        public abstract bool IsSupportedModel(IMenu model);
         #endregion
 
         #region Life Cycle Events
@@ -134,33 +147,6 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// <param name="e">Info about the event.</param>
         private void InputCoordinator_OnInput(object sender, InputEventArgs e) {
             OnInput(e.Control, e.ActionType);
-        }
-
-        /// <summary>
-        /// Load a default instance of a menu. 
-        /// </summary>
-        /// <typeparam name="T">The type of menu to load.</typeparam>
-        /// <param name="showOnLoad">If the menu should be set to active on load.</param>
-        protected void LoadMenu<T>(bool showOnLoad) where T : class, IMenu {
-            uiModule.LoadMenu<T>(showOnLoad);
-        }
-
-        /// <summary>
-        /// Load a preinitialized menu.
-        /// </summary>
-        /// <typeparam name="T">The type of menu to load.</typeparam>
-        /// <param name="menu">The menu data to pre-populate it with.</param>
-        /// <param name="showOnLoad">If the menu should be set to active on load.</param>
-        protected void LoadMenu<T>(T menu, bool showOnLoad) where T : class, IMenu {
-            uiModule.LoadMenu<T>(menu, showOnLoad);
-        }
-
-        /// <summary>
-        /// Unload a menu by releasing it's resources.
-        /// </summary>
-        /// <typeparam name="T">The type of menu to unload.</typeparam>
-        protected void UnloadMenu<T>() where T : class, IMenu {
-            uiModule.UnloadMenu<T>();
         }
         #endregion
     }

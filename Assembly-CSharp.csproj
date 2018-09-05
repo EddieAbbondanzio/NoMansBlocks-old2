@@ -140,11 +140,13 @@
     <Compile Include="Assets\Scripts\Modules\UI\Controls\CheckBox\ICheckBoxHandler.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\TextBox\ITextBoxHandler.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\TextBox\TextBoxHandler.cs" />
+    <Compile Include="Assets\Scripts\Modules\UI\IMenuController.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Input\InputActionType.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Input\InputCoordinator.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Input\InputEventArgs.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Menus\Base\IMenu.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Menus\Base\MenuPresenter.cs" />
+    <Compile Include="Assets\Scripts\Modules\UI\Menus\Base\MenuPresenterAttribute.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Menus\Types\LoginMenu\LoginMenu.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Menus\Types\LoginMenu\LoginMenuPresenter.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\UIModule.cs" />

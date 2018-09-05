@@ -10,12 +10,5 @@ namespace NoMansBlocks.Modules.UI.Menus {
     /// menu model.
     /// </summary>
     public interface IMenu {
-        #region Properties
-        /// <summary>
-        /// The type of presenter that is needed
-        /// to run this menu.
-        /// </summary>
-        Type MenuPresenterType { get; }
-        #endregion
     }
 }
