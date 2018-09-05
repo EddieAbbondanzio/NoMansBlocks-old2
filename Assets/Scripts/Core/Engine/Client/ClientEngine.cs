@@ -1,6 +1,7 @@
 ﻿using NoMansBlocks.Core.Engine;
 using NoMansBlocks.Core.UserSystem;
 using NoMansBlocks.Modules.Network;
+using NoMansBlocks.Modules.UI.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,5 +30,15 @@ namespace NoMansBlocks.Core.Engine {
             NetModule = new NetModule(this, 1, 0);
         }
         #endregion
+
+        #region Life Cycle Events
+        /// <summary>
+        /// When the engine starts up load the login menu
+        /// so the user can sign in.
+        /// </summary>
+        protected override void OnStart() {
+            UIModule.LoadMenu<LoginMenu>(new LoginMenu() { Username = "bert", Password = "Joe" });
+        }
+        #endregion 
     }
 }

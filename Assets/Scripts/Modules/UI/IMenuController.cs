@@ -25,8 +25,7 @@ namespace NoMansBlocks.Modules.UI {
         /// view and loading it with a default instance of it's menu model.
         /// </summary>
         /// <typeparam name="T">THe type of menu to load.</typeparam>
-        /// <param name="activateOnLoad">If it should be made visible once loaded.</param>
-        void LoadMenu<T>(bool activateOnLoad = false) where T : class, IMenu;
+        void LoadMenu<T>() where T : class, IMenu;
 
         /// <summary>
         /// Load a menu into memory by instantiating an instance of it's view
@@ -34,8 +33,7 @@ namespace NoMansBlocks.Modules.UI {
         /// </summary>
         /// <typeparam name="T">The type of menu to load.</typeparam>
         /// <param name="menu">The menu's model.</param>
-        /// <param name="activateOnLoad">If it should be made visible once loaded.</param>
-        void LoadMenu<T>(T menu, bool activateOnLoad = false) where T : class, IMenu;
+        void LoadMenu<T>(T menu) where T : class, IMenu;
 
         /// <summary>
         /// Relase the resources of a loaded menu by deleting it
@@ -43,20 +41,6 @@ namespace NoMansBlocks.Modules.UI {
         /// </summary>
         /// <typeparam name="T">The type of menu to unload.</typeparam>
         void UnloadMenu<T>() where T : class, IMenu;
-
-        /// <summary>
-        /// Show an already loaded menu of type T
-        /// on screen. This will hide any other currently
-        /// visible menus.
-        /// </summary>
-        /// <typeparam name="T">The type of menu to load.</typeparam>
-        void ShowMenu<T>() where T : class, IMenu;
-
-        /// <summary>
-        /// Hide all menus in the scene so none are visible to
-        /// the player. This retains them in memory however.
-        /// </summary>
-        void HideMenus();
         #endregion
     }
 }

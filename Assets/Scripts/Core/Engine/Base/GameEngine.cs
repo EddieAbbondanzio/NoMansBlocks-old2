@@ -235,6 +235,8 @@ namespace NoMansBlocks.Core.Engine {
             //Lastly we order by execution index
             modules = modules.OrderBy(m => m.ExecutionIndex).ToArray();
 
+            OnInit();
+
             //Init the modules.
             if (modules != null) {
                 for (int i = 0; i < modules.Length; i++) {
@@ -251,6 +253,8 @@ namespace NoMansBlocks.Core.Engine {
         /// <param name="sender">The ticker.</param>
         /// <param name="e">Always null.</param>
         private void OnTickerStart(object sender, EventArgs e) {
+            OnStart();
+
             if (modules != null) {
                 for (int i = 0; i < modules.Length; i++) {
                     if (modules[i].Enabled) {
@@ -266,6 +270,8 @@ namespace NoMansBlocks.Core.Engine {
         /// <param name="sender">The ticker.</param>
         /// <param name="e">Always null.</param>
         private void OnTickerUpdate(object sender, EventArgs e) {
+            OnUpdate();
+
             if (modules != null) {
                 for (int i = 0; i < modules.Length; i++) {
                     if (modules[i].Enabled && !modules[i].DisableUpdate) {
@@ -281,6 +287,8 @@ namespace NoMansBlocks.Core.Engine {
         /// <param name="sender">The ticker.</param>
         /// <param name="e">Always null.</param>
         private void OnTickerEnd(object sender, EventArgs e) {
+            OnEnd();
+
             if (modules != null) {
                 for (int i = 0; i < modules.Length; i++) {
                     if (modules[i].Enabled) {

@@ -35,8 +35,6 @@ namespace NoMansBlocks.Core.Engine {
             Engine = new ClientEngine(engineTicker);
 
             Engine.Run();
-
-            Engine.UIModule.LoadMenu<LoginMenu>(true);
         }
         #endregion
     }

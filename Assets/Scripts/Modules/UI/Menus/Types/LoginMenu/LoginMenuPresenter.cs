@@ -10,12 +10,35 @@ namespace NoMansBlocks.Modules.UI.Menus {
     /// Presenter that handles loading and syncing up the login menu view with
     /// it's model counterpart.
     /// </summary>
-    public sealed class LoginMenuPresenter : MenuPresenter {
+    public sealed class LoginMenuPresenter : MenuPresenter<LoginMenu> {
         #region Properties
         /// <summary>
         /// The path where the view prefab resides.
         /// </summary>
         protected override string PrefabPath => "Menus/LoginView/LoginMenu";
+        #endregion
+
+        #region Members 
+        /// <summary>
+        /// The textbox that users enter their username into.
+        /// </summary>
+        private ITextBoxHandler usernameTextBox;
+
+        /// <summary>
+        /// The textbox that users enter their password into
+        /// </summary>
+        private ITextBoxHandler passwordTextBox;
+
+        /// <summary>
+        /// The textbox that users tick if they want to remember
+        /// their credentials for later on.
+        /// </summary>
+        private ICheckBoxHandler rememberMeCheckBox;
+
+        /// <summary>
+        /// The button the user presses to attempt to log in.
+        /// </summary>
+        private ITriggerButtonHandler loginButton;
         #endregion
 
         #region Constructor(s)
@@ -28,26 +51,44 @@ namespace NoMansBlocks.Modules.UI.Menus {
         }
         #endregion
 
-        #region Publics
+        #region Life Cycle Events
         /// <summary>
-        /// Checks if this menu presenter can load the menu passed in.
+        /// Anytime the menu view is loaded, find all the important views.
         /// </summary>
-        /// <param name="model">The model to check.</param>
-        /// <returns>True if it is on type login menu.</returns>
-        public override bool IsSupportedModel(IMenu model) {
-            return model.GetType() == typeof(LoginMenu);
+        protected override void OnLoad() {
+            usernameTextBox    = controlCoordinator.GetControl<ITextBoxHandler>("UsernameField");
+            passwordTextBox    = controlCoordinator.GetControl<ITextBoxHandler>("PasswordField");
+            rememberMeCheckBox = controlCoordinator.GetControl<ICheckBoxHandler>("RememberToggle");
+            loginButton        = controlCoordinator.GetControl<ITriggerButtonHandler>("LoginButton");
+
+            loginButton.OnClick += LoginButton_OnClick;
+        }
+
+        /// <summary>
+        /// Called when the view is being destroyed. Frees up resources and
+        /// prevents memory leaks.
+        /// </summary>
+        protected override void OnUnload() {
+            loginButton.OnClick -= LoginButton_OnClick;
+        }
+
+        /// <summary>
+        /// Syncs up all the controls on the view with the current data in the model.
+        /// </summary>
+        protected override void OnDataBind() {
+            usernameTextBox.Text         = Model.Username;
+            passwordTextBox.Text         = Model.Password;
+            rememberMeCheckBox.IsChecked = Model.RememberMe;
         }
         #endregion
 
-        #region Life Cycle Events
+        #region Helpers
         /// <summary>
-        /// Called each time a control in the menu view recieves some kind of
-        /// input.
+        /// Fired when the user clicks the login button. They want to try to
+        /// log in.
         /// </summary>
-        /// <param name="control">The control that was modified.</param>
-        /// <param name="actionType">The type of action performed on it.</param>
-        protected override void OnInput(IControlHandler control, InputActionType actionType) {
-            Log.Debug("Control {0} was modified by {1}", control.Name, actionType.ToString());
+        private void LoginButton_OnClick(object sender, EventArgs e) {
+            Log.Debug("Loggin in!");
         }
         #endregion
     }

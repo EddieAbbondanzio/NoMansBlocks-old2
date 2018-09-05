@@ -12,13 +12,24 @@ namespace NoMansBlocks.Modules.UI.Menus {
     /// Presenter for handling menu views and interacting with the
     /// menu models.
     /// </summary>
-    public abstract class MenuPresenter {
+    public abstract class MenuPresenter<T> : IMenuPresenter where T : class, IMenu {
         #region Properties
         /// <summary>
         /// If the presenter currently has a menu loaded with an
         /// active view.
         /// </summary>
         public bool IsLoaded { get { return view != null; } }
+
+        /// <summary>
+        /// The menu model
+        /// </summary>
+        public T Model { get; set; }
+
+        /// <summary>
+        /// Underlying implementation to get the model
+        /// when all that is available is an interface reference.
+        /// </summary>
+        IMenu IMenuPresenter.Model { get { return Model as IMenu; } }
 
         /// <summary>
         /// The resource path of where the prefab representing
@@ -45,9 +56,9 @@ namespace NoMansBlocks.Modules.UI.Menus {
         protected IMenuController menuController;
 
         /// <summary>
-        /// The model of the menu
+        /// The coordinator for finding controls in the view
         /// </summary>
-        protected IMenu model;
+        protected IInputControlCoordinator controlCoordinator;
 
         /// <summary>
         /// The view instance of the menu.
@@ -62,11 +73,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// </summary>
         /// <param name="menuContainer">The container to attach the menu view to.</param>
         /// <param name="menu">The menu model to load.</param>
-        public void Load(Transform menuContainer, IMenu menu) {
-            if (IsLoaded) {
-                throw new InvalidOperationException("Menu is already loaded");
-            }
-
+        public void Load(Transform menuContainer, T menu) {
             GameObject prefab = Resources.Load<GameObject>(PrefabPath);
             view = GameObject.Instantiate<GameObject>(prefab);
             view.transform.SetParent(menuContainer);
@@ -77,15 +84,31 @@ namespace NoMansBlocks.Modules.UI.Menus {
             menuTransform.offsetMin = new Vector2(0, 0);
             menuTransform.offsetMax = new Vector2(0, 0);
 
-            InputCoordinator inputCoordinator = prefab.GetComponent<InputCoordinator>();
+            InputControlCoordinator inputCoordinator = view.GetComponent<InputControlCoordinator>();
 
             if(inputCoordinator == null) {
-                throw new FormatException(string.Format("Menu view {0} is poorly formatted. No input coordinator found.", PrefabPath));
+                throw new FormatException(string.Format("Menu view {0} is poorly formatted. No input control coordinator found.", PrefabPath));
             }
 
             inputCoordinator.OnInput += InputCoordinator_OnInput;
-            model = menu;
+            controlCoordinator = inputCoordinator as IInputControlCoordinator;
+            Model = menu;
+
             OnLoad();
+            DataBind();
+        }
+
+        /// <summary>
+        /// Load a model into use via this presenter.
+        /// </summary>
+        /// <param name="menuContainer">The container to put it in.</param>
+        /// <param name="model">The model to load.</param>
+        void IMenuPresenter.Load(Transform menuContainer, IMenu model) {
+            T convertedModel = model as T;
+
+            if(convertedModel != null) {
+                Load(menuContainer, convertedModel);
+            }
         }
 
         /// <summary>
@@ -98,19 +121,21 @@ namespace NoMansBlocks.Modules.UI.Menus {
             }
 
             OnUnload();
-            InputCoordinator inputCoordinator = view.GetComponent<InputCoordinator>();
+            InputControlCoordinator inputCoordinator = view.GetComponent<InputControlCoordinator>();
             inputCoordinator.OnInput -= InputCoordinator_OnInput;
             GameObject.Destroy(view);
-            model = null;
+            Model = null;
         }
 
         /// <summary>
-        /// If the menu passed in is a supported model type
-        /// that can be loaded by this presenter.
+        /// Sync up view with the model by binding any important
+        /// info from the model to the view.
         /// </summary>
-        /// <param name="model">The model to check</param>
-        /// <returns>True if the model can be loaded.</returns>
-        public abstract bool IsSupportedModel(IMenu model);
+        public void DataBind() {
+            if(Model != null) {
+                OnDataBind();
+            }
+        }
         #endregion
 
         #region Life Cycle Events
@@ -136,6 +161,12 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// <param name="action">The category of action performed.</param>
         protected virtual void OnInput(IControlHandler control, InputActionType action) {
         }
+
+        /// <summary>
+        /// Fired off everytime the presenter needs to update the view with
+        /// the latest model info.
+        /// </summary>
+        protected abstract void OnDataBind();
         #endregion
 
         #region Helpers
