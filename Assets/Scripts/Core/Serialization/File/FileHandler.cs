@@ -22,7 +22,8 @@ namespace NoMansBlocks.Core.Serialization {
 
         /// <summary>
         /// The maximum number of files allowed in the directory.
-        /// Leave this as 0, if no limit.
+        /// Leave this as 0, if no limit. This only works if a 
+        /// file directory has been specified.
         /// </summary>
         public virtual int Capacity { get; }
         #endregion
@@ -57,7 +58,7 @@ namespace NoMansBlocks.Core.Serialization {
         /// </summary>
         /// <param name="file">The file to save.</param>
         /// <returns>True if the operation completed successfully.</returns>
-        public async Task Save(T file) {
+        public async Task SaveAsync(T file) {
             //Validate the directory.
             DirectoryInfo fileDirectory = null;
             if (Directory != null) {
@@ -85,7 +86,7 @@ namespace NoMansBlocks.Core.Serialization {
         /// </summary>
         /// <param name="fileName">The name of the file to load.</param>
         /// <returns>The loaded file. (If it exists)</returns>
-        public async Task<T> Load(string fileName) {
+        public async Task<T> LoadAsync(string fileName) {
             FileInfo fileInfo = ResolveFilePath(fileName);
             return await FileSystem.LoadAsync<T>(fileInfo);
         }

@@ -72,8 +72,6 @@
     <Compile Include="Assets\Scripts\Core\Engine\Base\Ticker\UnityEngineTicker.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Client\ClientBehaviour.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Client\ClientEngine.cs" />
-    <Compile Include="Assets\Scripts\Core\Engine\Server\Config\ConfigFile.cs" />
-    <Compile Include="Assets\Scripts\Core\Engine\Server\Config\ServerConfig.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Server\ServerBehaviour.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Server\ServerEngine.cs" />
     <Compile Include="Assets\Scripts\Core\Serialization\File\Common\File.cs" />
@@ -97,6 +95,14 @@
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Common\CommandType.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\Network\ConnectCommand.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\Network\DisconnectCommand.cs" />
+    <Compile Include="Assets\Scripts\Modules\Config\Common\ConfigType.cs" />
+    <Compile Include="Assets\Scripts\Modules\Config\Common\IConfig.cs" />
+    <Compile Include="Assets\Scripts\Modules\Config\ConfigModule.cs" />
+    <Compile Include="Assets\Scripts\Modules\Config\Configs\ClientConfig.cs" />
+    <Compile Include="Assets\Scripts\Modules\Config\Configs\ServerConfig.cs" />
+    <Compile Include="Assets\Scripts\Modules\Config\Serialization\ConfigFile.cs" />
+    <Compile Include="Assets\Scripts\Modules\Config\Serialization\ConfigFileConverter.cs" />
+    <Compile Include="Assets\Scripts\Modules\Config\Serialization\ConfigFileHandler.cs" />
     <Compile Include="Assets\Scripts\Modules\Logging\Analyzer\CpuInfo.cs" />
     <Compile Include="Assets\Scripts\Modules\Logging\Analyzer\GpuInfo.cs" />
     <Compile Include="Assets\Scripts\Modules\Logging\Analyzer\SystemAnalyzer.cs" />

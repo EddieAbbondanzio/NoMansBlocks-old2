@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -52,7 +53,18 @@ namespace NoMansBlocks.Core.Serialization {
         /// </summary>
         /// <returns>The content of the file serialized.</returns>
         public override byte[] Serialize() {
-            string jsonString = JsonConvert.SerializeObject(Content);
+            //See if we can find a JsonConverter attribute on the derived class
+            JsonConverterAttribute converterAttribute = GetType().GetCustomAttribute<JsonConverterAttribute>();
+
+            string jsonString;
+            if(converterAttribute != null) {
+                JsonConverter jsonConverter = Activator.CreateInstance(converterAttribute.ConverterType) as JsonConverter;
+                jsonString = JsonConvert.SerializeObject(Content, jsonConverter);
+            }
+            else {
+                jsonString = JsonConvert.SerializeObject(Content);
+            }
+
             return Encoding.UTF8.GetBytes(jsonString);
         }
         #endregion

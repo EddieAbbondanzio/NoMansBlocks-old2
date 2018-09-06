@@ -78,7 +78,7 @@ namespace NoMansBlocks.Modules.Logging {
 
             //Create and save the file.
             LogFile logFile = LogFileHandler.Create(logFileName, logReport);
-            Task.Run(async () => { await LogFileHandler.Save(logFile); });
+            Task.Run(async () => { await LogFileHandler.SaveAsync(logFile); });
 
             //Remove the logger event to prevent memory leaks.
             Logger.OnLogStatementCreated -= OnLogStatementCreated;

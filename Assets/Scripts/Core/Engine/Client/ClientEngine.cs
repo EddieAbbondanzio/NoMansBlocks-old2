@@ -1,5 +1,6 @@
 ﻿using NoMansBlocks.Core.Engine;
 using NoMansBlocks.Core.UserSystem;
+using NoMansBlocks.Modules.Config;
 using NoMansBlocks.Modules.Network;
 using NoMansBlocks.Modules.UI.Menus;
 using System;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NoMansBlocks.Core.Engine {
+namespace NoMansBlocks.Core.Engine.Client {
     /// <summary>
     /// A client instance of the No Mans Block
     /// game engine.
@@ -19,6 +20,11 @@ namespace NoMansBlocks.Core.Engine {
         /// Flag indicating what kind of engine it is.
         /// </summary>
         public override GameEngineType Type => GameEngineType.Client;
+
+        /// <summary>
+        /// The configuration settings loaded in.
+        /// </summary>
+        public ClientConfig Config { get; private set; }
         #endregion
 
         #region Constructor(s)
@@ -37,7 +43,7 @@ namespace NoMansBlocks.Core.Engine {
         /// so the user can sign in.
         /// </summary>
         protected override void OnStart() {
-            UIModule.LoadMenu<LoginMenu>(new LoginMenu() { Username = "bert", Password = "Joe" });
+            UIModule.LoadMenu<LoginMenu>(new LoginMenu());
         }
         #endregion 
     }

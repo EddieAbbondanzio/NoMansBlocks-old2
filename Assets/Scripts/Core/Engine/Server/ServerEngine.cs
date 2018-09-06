@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace NoMansBlocks.Core.Engine {
+namespace NoMansBlocks.Core.Engine.Server {
     /// <summary>
     /// A server instance of the no mans block game engine.
     /// </summary>
@@ -54,11 +54,11 @@ namespace NoMansBlocks.Core.Engine {
         /// </summary>
         /// <returns>The loaded configurations to use.</returns>
         private async Task<ServerConfig> LoadConfig() {
-            FileHandler<ConfigFile> configFileHandler = new FileHandler<ConfigFile>();
+            FileHandler<ServerConfigFile> configFileHandler = new FileHandler<ServerConfigFile>();
 
             //Load in the server settings.
             if (configFileHandler.Exists("serverconfig.json")) {
-                var configFile = await configFileHandler.Load("serverconfig.json");
+                var configFile = await configFileHandler.LoadAsync("serverconfig.json");
                 return configFile.Content;
             }
             else {

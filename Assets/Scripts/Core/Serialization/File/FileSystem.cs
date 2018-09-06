@@ -34,10 +34,13 @@ namespace NoMansBlocks.Core.Serialization {
         /// </summary>
         /// <typeparam name="T">The type of file to load.</typeparam>
         /// <param name="path">The file's full path.</param>
+        /// <param name="resolvePath">If the path passed in was a relative path and
+        /// needs to be resolved.</param>
         /// <returns>The loaded file.</returns>
         /// <exception cref="FileNotFoundException">When the file isn't found.</exception>
-        public static async Task<T> LoadAsync<T>(string path) where T : IFile {
-            return await LoadAsync<T>(new FileInfo(path));
+        public static async Task<T> LoadAsync<T>(string path, bool resolvePath = false) where T : IFile {
+            FileInfo fileInfo = resolvePath ? ResolveFilePath(path) : new FileInfo(path);
+            return await LoadAsync<T>(fileInfo);
         }
 
         /// <summary>

@@ -1,11 +1,12 @@
 ﻿using NoMansBlocks.Core;
 using NoMansBlocks.Core.Engine;
+using NoMansBlocks.Core.Engine.Server;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NoMansBlocks.Core.Engine {
+namespace NoMansBlocks.Core.Engine.Server {
     /// <summary>
     /// Server module for running the game engine
     /// as a server.
