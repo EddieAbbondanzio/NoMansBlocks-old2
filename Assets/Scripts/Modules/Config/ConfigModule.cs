@@ -42,18 +42,30 @@ namespace NoMansBlocks.Modules.Config {
 
         #region Publics
         /// <summary>
-        /// Get the specific config desired.
+        /// Get the specific config desired. If the config is not
+        /// found, a default instance will be returned.
         /// </summary>
         /// <typeparam name="T">The config type to hunt for.</typeparam>
         /// <returns>The config (if any).</returns>
         public T GetConfig<T>() where T : class, IConfig {
-            for(int i = 0; i < configs.Count; i++) {
-                if(configs[i].GetType() == typeof(T)) {
+            //See if we already have it, and it is supported for this engine.
+            for (int i = 0; i < configs.Count; i++) {
+                if (typeof(T).IsAssignableFrom(configs[i].GetType()) && (configs[i].EngineType & Engine.Type) > 0) {
                     return configs[i] as T;
                 }
             }
 
-            return null;
+            //Otherwise load a default
+            T config = Activator.CreateInstance(typeof(T)) as T;
+
+            if((config.EngineType & Engine.Type) == 0) {
+                throw new Exception(string.Format("Config {0} does not support engine type: {0}", config.ConfigType.ToString(), Engine.Type.ToString()));
+            }
+
+            config.ResetToDefault(Engine.Type);
+            configs.Add(config);
+
+            return config;
         }
         #endregion
 

@@ -9,8 +9,10 @@ namespace NoMansBlocks.Core.Engine {
     /// Flag to indicate if we are running a client or 
     /// server instance of the engine.
     /// </summary>
+    [Flags]
     public enum GameEngineType {
-        Server = 0,
-        Client = 1,
+        Server = 1,
+        Client = 2,
+        All    = 3
     }
 }

@@ -10,6 +10,7 @@ using NoMansBlocks.Modules.Network;
 using System.Reflection;
 using NoMansBlocks.Modules.UI;
 using UnityEngine.SceneManagement;
+using NoMansBlocks.Modules.Config;
 
 namespace NoMansBlocks.Core.Engine {
     /// <summary>
@@ -29,28 +30,34 @@ namespace NoMansBlocks.Core.Engine {
         public bool IsRunning { get; private set; }
 
         /// <summary>
+        /// The module that holds all of the config settings
+        /// </summary>
+        [ModuleExecution(ExecutionIndex = 0, DisableUpdate = true)]
+        public ConfigModule ConfigModule { get; private set; }
+
+        /// <summary>
         /// The module used to handle logging to console and
         /// building useful log files.
         /// </summary>
-        [ModuleExecution(ExecutionIndex = 0, DisableUpdate = true)]
+        [ModuleExecution(ExecutionIndex = 1, DisableUpdate = true)]
         public LogModule LogModule { get; private set; }
 
         /// <summary>
         /// Processes inputs for commands from the user.
         /// </summary>
-        [ModuleExecution(ExecutionIndex = 1, DisableUpdate = true)]
+        [ModuleExecution(ExecutionIndex = 2, DisableUpdate = true)]
         public CommandConsoleModule CommandModule { get; private set; }
 
         /// <summary>
         /// The module that handles loading scenes.
         /// </summary>
-        [ModuleExecution(ExecutionIndex = 2, DisableUpdate = true)]
+        [ModuleExecution(ExecutionIndex = 3, DisableUpdate = true)]
         public UIModule UIModule { get; private set; }
 
         /// <summary>
         /// The module used to interface with the network.
         /// </summary>
-        [ModuleExecution(ExecutionIndex = 3)]
+        [ModuleExecution(ExecutionIndex = 4)]
         public NetModule NetModule { get; protected set; }
         #endregion
 
@@ -79,6 +86,7 @@ namespace NoMansBlocks.Core.Engine {
             LogModule     = new LogModule(this);
             CommandModule = new CommandConsoleModule(this);
             UIModule      = new UIModule(this);
+            NetModule     = new NetModule(this);
 
             this.engineTicker.OnInit   += OnTickerInit;
             this.engineTicker.OnStart  += OnTickerStart;

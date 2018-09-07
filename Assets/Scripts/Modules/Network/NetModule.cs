@@ -2,6 +2,7 @@
 using NoMansBlocks.Core;
 using NoMansBlocks.Core.Engine;
 using NoMansBlocks.Logging;
+using NoMansBlocks.Modules.Config;
 using NoMansBlocks.Modules.Network.Messages;
 using System;
 using System.Collections.Generic;
@@ -36,25 +37,25 @@ namespace NoMansBlocks.Modules.Network {
         /// <summary>
         /// The manager for the connections with the network.
         /// </summary>
-        public NetConnectionManager ConnectionManager { get; }
+        public NetConnectionManager ConnectionManager { get; private set; }
         #endregion
 
         #region Members
         /// <summary>
-        /// The port number to use.
-        /// </summary>
-        private int port;
-
-        /// <summary>
         /// The NetManager for interfacing directly with the network.
         /// </summary>
-        private readonly NetManager netManager;
+        private NetManager netManager;
 
         /// <summary>
         /// The listener that fires off message recieved 
         /// events.
         /// </summary>
-        private readonly NetMessageListener messageListener;
+        private NetMessageListener messageListener;
+
+        /// <summary>
+        /// The configurations to run under.
+        /// </summary>
+        private NetworkConfig config;
         #endregion
 
         #region Constructor(s)
@@ -63,14 +64,9 @@ namespace NoMansBlocks.Modules.Network {
         /// needs to know whether to run in client, or host mode.
         /// </summary>
         /// <paramref name="engine">The engine that owns the module.</paramref>
-        /// <param name="maxConnections">The maximum number of connections permitted.</param>
-        /// <param name="port">The port number to use.</param>
-        public NetModule(GameEngine engine, int maxConnections, int port = 0) : base(engine) {
-            this.port = port;
-
+        public NetModule(GameEngine engine) : base(engine) {
             messageListener = new NetMessageListener();
             netManager = new NetManager(messageListener, "NoMansBlocks");
-            ConnectionManager = new NetConnectionManager(messageListener, maxConnections);
         }
         #endregion
 
@@ -78,8 +74,13 @@ namespace NoMansBlocks.Modules.Network {
         /// <summary>
         /// Prepare the netmodule for use.
         /// </summary>
-        public override void OnInit() {
-            netManager.Start(port);
+        public override void OnStart() {
+            //Pull in the network configs
+            config = GetModule<ConfigModule>().GetConfig<NetworkConfig>();
+
+            //Set up the connection manager and start it.
+            ConnectionManager = new NetConnectionManager(messageListener, config.ConnectionCapacity);
+            netManager.Start(config.Port);
         }
         #endregion
 
@@ -90,7 +91,7 @@ namespace NoMansBlocks.Modules.Network {
         /// <param name="endPoint">The server's ip address.</param>
         public void Connect(NetEndPoint endPoint) {
             if (!netManager.IsRunning) {
-                netManager.Start(port);
+                netManager.Start(config.Port);
             }
 
             if (!IsServer && netManager.PeersCount == 0) {

@@ -33,7 +33,6 @@ namespace NoMansBlocks.Core.Engine.Client {
         /// that wants to play the game.
         /// </summary>
         public ClientEngine(IGameEngineTicker engineTicker) : base(engineTicker) {
-            NetModule = new NetModule(this, 1, 0);
         }
         #endregion
 

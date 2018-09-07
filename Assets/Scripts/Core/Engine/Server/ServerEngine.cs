@@ -19,11 +19,6 @@ namespace NoMansBlocks.Core.Engine.Server {
         /// Flag indicating what kind of engine it is.
         /// </summary>
         public override GameEngineType Type => GameEngineType.Server;
-
-        /// <summary>
-        /// The config settings for the file.
-        /// </summary>
-        public ServerConfig Config { get; private set; }
         #endregion
 
         #region Constructor(s)
@@ -34,37 +29,5 @@ namespace NoMansBlocks.Core.Engine.Server {
         public ServerEngine(IGameEngineTicker engineTicker) : base(engineTicker) {
         }
         #endregion
-
-        #region Engine Events
-        /// <summary>
-        /// Called when the engine is first starting up. This goes out 
-        /// and attempts to load the configuration file.
-        /// </summary>
-        protected async override void OnInit() {
-            Config = await LoadConfig();
-
-            NetModule = new NetModule(this, Config.Capacity, Config.Port);
-        }
-        #endregion
-
-        #region Helpers
-        /// <summary>
-        /// Attempt to load the config from file if it exists, else just use
-        /// the default settings.
-        /// </summary>
-        /// <returns>The loaded configurations to use.</returns>
-        private async Task<ServerConfig> LoadConfig() {
-            FileHandler<ServerConfigFile> configFileHandler = new FileHandler<ServerConfigFile>();
-
-            //Load in the server settings.
-            if (configFileHandler.Exists("serverconfig.json")) {
-                var configFile = await configFileHandler.LoadAsync("serverconfig.json");
-                return configFile.Content;
-            }
-            else {
-                return ServerConfig.DefaultConfig;
-            }
-        }
     }
-    #endregion
 }
