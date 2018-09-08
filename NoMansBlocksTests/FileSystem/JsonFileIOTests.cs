@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NoMansBlocks.Core.Serialization;
 using System.IO;
+using NoMansBlocks.Core.FileIO;
 
 namespace NoMansBlocks.Tests.Serialization {
     /// <summary>

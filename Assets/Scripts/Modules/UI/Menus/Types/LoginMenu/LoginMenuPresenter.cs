@@ -88,7 +88,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// log in.
         /// </summary>
         private void LoginButton_OnClick(object sender, EventArgs e) {
-            Log.Debug("Loggin in!");
+            menuController.LoadMenu<MainMenu>();
         }
         #endregion
     }

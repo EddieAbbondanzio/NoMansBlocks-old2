@@ -24,7 +24,7 @@ namespace NoMansBlocks.Core.Engine.Client {
         /// <summary>
         /// The configuration settings loaded in.
         /// </summary>
-        public ClientConfig Config { get; private set; }
+        //public ClientConfig Config { get; private set; }
         #endregion
 
         #region Constructor(s)

@@ -84,6 +84,7 @@ namespace NoMansBlocks.Core.Engine {
             this.engineTicker = engineTicker;
 
             LogModule     = new LogModule(this);
+            ConfigModule = new ConfigModule(this);
             CommandModule = new CommandConsoleModule(this);
             UIModule      = new UIModule(this);
             NetModule     = new NetModule(this);

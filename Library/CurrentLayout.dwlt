@@ -20,7 +20,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 2}
-  m_MinSize: {x: 950, y: 300}
+  m_MinSize: {x: 950, y: 362}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -106,10 +106,10 @@ MonoBehaviour:
     y: 30
     width: 1536
     height: 731
-  m_MinSize: {x: 483, y: 82}
-  m_MaxSize: {x: 12008, y: 8042}
+  m_MinSize: {x: 509, y: 312}
+  m_MaxSize: {x: 14004, y: 14042}
   vertical: 0
-  controlID: 72
+  controlID: 10
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -130,10 +130,10 @@ MonoBehaviour:
     y: 0
     width: 1227
     height: 731
-  m_MinSize: {x: 206, y: 82}
-  m_MaxSize: {x: 8006, y: 8042}
+  m_MinSize: {x: 232, y: 312}
+  m_MaxSize: {x: 10002, y: 14042}
   vertical: 1
-  controlID: 73
+  controlID: 58
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -157,7 +157,7 @@ MonoBehaviour:
   m_MinSize: {x: 206, y: 41}
   m_MaxSize: {x: 8006, y: 4021}
   vertical: 0
-  controlID: 12
+  controlID: 59
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -229,14 +229,14 @@ MonoBehaviour:
     y: 460
     width: 1227
     height: 271
-  m_MinSize: {x: 102, y: 41}
-  m_MaxSize: {x: 4002, y: 4021}
-  m_ActualView: {fileID: 17}
+  m_MinSize: {x: 232, y: 271}
+  m_MaxSize: {x: 10002, y: 10021}
+  m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 17}
   - {fileID: 18}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -369,9 +369,9 @@ MonoBehaviour:
   m_PersistentViewDataDictionary: {fileID: 0}
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 
+    m_SelectedIDs: aa0b0000
     m_LastClickedID: 0
-    m_ExpandedIDs: d6fbffff00000000
+    m_ExpandedIDs: daa3ffffdca3ffffd8a7ffffdaa7ffff62a9ffffe6fbffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -603,20 +603,20 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Resources/Menus/LoginView
+    - Assets/Scenes/Client
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Resources/Menus/LoginView
+  - Assets/Scenes/Client
   m_LastFoldersGridSize: 64
   m_LastProjectPath: C:\Users\Eddie\Development\NoMansBlocks
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 100.49957}
-    m_SelectedIDs: 600d0000
-    m_LastClickedID: 3424
-    m_ExpandedIDs: 00000000500a0000660a00007e0a0000ce0a0000ea0a00000e0b00003c0b00004e0b00006a0b00008e0b0000ac0b0000580c0000ec0c00003c0d0000580d00007e0d00008c0d0000ca2e0000cc2e0000ce2e0000d02e0000d22e0000d42e0000d62e0000
+    scrollPos: {x: 0, y: 87}
+    m_SelectedIDs: 120d0000
+    m_LastClickedID: 3346
+    m_ExpandedIDs: 000000004c0a0000620a00007a0a0000ca0a0000e60a00000a0b0000380b00004a0b0000660b00008a0b0000a80b0000560c0000ea0c00003a0d0000560d00007c0d00008a0d0000d62e0000d82e0000da2e0000dc2e0000de2e0000e02e0000e22e000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -644,7 +644,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000500a0000660a00007e0a0000ce0a0000ea0a00000e0b00003c0b00004e0b00006a0b00008e0b0000ac0b0000580c0000ec0c00003c0d0000580d00007e0d00008c0d0000ca2e0000cc2e0000ce2e0000d02e0000d22e0000d42e0000d62e0000
+    m_ExpandedIDs: 000000004c0a0000620a00007a0a0000ca0a0000e60a00000a0b0000380b00004a0b0000660b00008a0b0000a80b0000560c0000ea0c00003a0d0000560d00007c0d00008a0d0000d62e0000d82e0000da2e0000dc2e0000de2e0000e02e0000e22e0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -669,8 +669,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 860d0000
-    m_LastClickedInstanceID: 3462
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: 420500005605000044050000460500004805000058050000520500005a050000dc040000d643ffff0a05000052a8ffff8205000084050000b6abffff760600003c070000660500007c1c000034050000fe040000581c0000e0e8ffffa2060000240c0000ae0700003c06000042060000b607000044060000460600009e1d0000261e0000500500002e060000380600003e1d00006a0600007c0500000e070000480600007e05000088050000660600004a0600009005000000000000662500009624000008250000222500009e2400002625000036260000d2250000e22500005a290000a0260000b4400e00bc260000fc0b00007c0d0000
     m_RenameOverlay:

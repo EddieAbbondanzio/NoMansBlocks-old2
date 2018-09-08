@@ -55,6 +55,15 @@ namespace NoMansBlocks.Core {
                 OnUpdate(this, null);
             }
         }
+
+        /// <summary>
+        /// Called when the game is shutting down. Free up resources.
+        /// </summary>
+        private void OnApplicationQuit() {
+            if (isTicking) {
+                StopTicking();
+            }
+        }
         #endregion
 
         #region Publics

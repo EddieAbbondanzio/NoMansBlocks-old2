@@ -1,7 +1,9 @@
 ﻿using NoMansBlocks.Core.Engine;
+using NoMansBlocks.Core.FileIO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,7 +13,7 @@ namespace NoMansBlocks.Modules.Config {
     /// client. Handles loading and saving them to file when the game is
     /// started and stopped.
     /// </summary>
-    public sealed class ConfigModule : Module {
+    public sealed class ConfigModule : Core.Engine.Module {
         #region Constants
         /// <summary>
         /// The name to use for loading the config file from memory.
@@ -23,7 +25,7 @@ namespace NoMansBlocks.Modules.Config {
         /// <summary>
         /// The filehandler for loading in the config file.
         /// </summary>
-        private ConfigFileHandler fileHandler;
+        private FileHandler<ConfigFile> fileHandler;
 
         /// <summary>
         /// The collection of configs that were loaded from the file.
@@ -37,6 +39,7 @@ namespace NoMansBlocks.Modules.Config {
         /// </summary>
         /// <param name="engine">The parent engine that owns this module.</param>
         public ConfigModule(GameEngine engine) : base (engine) {
+            configs = new List<IConfig>();
         }
         #endregion
 
@@ -55,16 +58,14 @@ namespace NoMansBlocks.Modules.Config {
                 }
             }
 
-            //Otherwise load a default
             T config = Activator.CreateInstance(typeof(T)) as T;
 
-            if((config.EngineType & Engine.Type) == 0) {
-                throw new Exception(string.Format("Config {0} does not support engine type: {0}", config.ConfigType.ToString(), Engine.Type.ToString()));
+            if (config == null || (config.EngineType & Engine.Type) == 0) {
+                throw new Exception(string.Format("No config of type {0} found to support this engine type {1}", typeof(T), Engine.Type));
             }
 
             config.ResetToDefault(Engine.Type);
             configs.Add(config);
-
             return config;
         }
         #endregion
@@ -75,15 +76,19 @@ namespace NoMansBlocks.Modules.Config {
         /// in the config file.
         /// </summary>
         public async override void OnInit() {
-            fileHandler = new ConfigFileHandler();
+            fileHandler = new FileHandler<ConfigFile>();
 
             if (fileHandler.Exists(ConfigFileName)) {
-                ConfigFile configFile = await fileHandler.LoadAsync(ConfigFileName);
-                configs = configFile.Content;
+                try {
+                    ConfigFile configFile = await fileHandler.LoadAsync(ConfigFileName);
+                    configs = configFile.Content;
+                }
+                catch (Exception) {
+                    Log.Debug("Failed to pull in the config file. Resetting to defaults");
+                }
             }
-            else {
-                configs = new List<IConfig>();
-            }
+
+            configs = new List<IConfig>();
         }
 
         /// <summary>

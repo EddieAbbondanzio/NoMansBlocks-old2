@@ -1,4 +1,5 @@
 ﻿using NoMansBlocks.Core.Serialization;
+using NoMansBlocks.Core.Serialization.Binary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
