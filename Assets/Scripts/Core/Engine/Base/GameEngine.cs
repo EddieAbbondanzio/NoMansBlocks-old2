@@ -11,6 +11,7 @@ using System.Reflection;
 using NoMansBlocks.Modules.UI;
 using UnityEngine.SceneManagement;
 using NoMansBlocks.Modules.Config;
+using UnityEngine;
 
 namespace NoMansBlocks.Core.Engine {
     /// <summary>
@@ -136,6 +137,12 @@ namespace NoMansBlocks.Core.Engine {
 
             engineTicker.StopTicking();
             IsRunning = false;
+
+#if (UNITY_EDITOR)
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
         }
 
         /// <summary>

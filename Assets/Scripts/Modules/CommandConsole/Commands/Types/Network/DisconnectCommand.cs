@@ -37,7 +37,7 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
         /// <summary>
         /// Execute the command.
         /// </summary>
-        /// <param name="executingContext"></param>
+        /// <param name="executingContext">The currently running game engine.</param>
         public override void Execute(GameEngine executingContext) {
             executingContext.NetModule.Disconnect();
         }

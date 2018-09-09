@@ -82,6 +82,13 @@ namespace NoMansBlocks.Modules.Config {
                 try {
                     ConfigFile configFile = await fileHandler.LoadAsync(ConfigFileName);
                     configs = configFile.Content;
+
+                    //Validate everything, when we find bad data just reset to defaults.
+                    for(int i = 0; i < configs.Count; i++) {
+                        if (!configs[i].Validate(Engine.Type)) {
+                            configs[i].ResetToDefault(Engine.Type);
+                        }
+                    }
                 }
                 catch (Exception) {
                     Log.Debug("Failed to pull in the config file. Resetting to defaults");

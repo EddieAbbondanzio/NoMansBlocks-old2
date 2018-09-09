@@ -1,4 +1,5 @@
 ﻿using NoMansBlocks.Core.Engine;
+using NoMansBlocks.Modules.CommandConsole;
 using NoMansBlocks.Modules.UI.Menus;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace NoMansBlocks.Modules.UI {
     /// user interfaces such as menus and more in game. This is
     /// the controller of menus
     /// </summary>
-    public sealed class UIModule : Core.Engine.Module, IMenuController {
+    public sealed class UIModule : Core.Engine.Module, IUIModule {
         #region Constants
         /// <summary>
         /// The tag to look for in the scene to find the gameobject
@@ -43,6 +44,11 @@ namespace NoMansBlocks.Modules.UI {
         /// menu instnace.
         /// </summary>
         private Transform menuContainer;
+
+        /// <summary>
+        /// Reference back to the command console.
+        /// </summary>
+        private ICommandConsole commandConsole;
         #endregion
 
         #region Constructor(s)
@@ -61,6 +67,7 @@ namespace NoMansBlocks.Modules.UI {
         /// </summary>
         public override void OnInit() {
             menuContainer = GameObject.FindGameObjectWithTag(MenuContainerTag)?.transform;
+            commandConsole = GetModule<CommandConsoleModule>();
 
             if (menuContainer == null) {
                 throw new FormatException("Scene is poorly formatted. No menu container found.");
@@ -73,9 +80,7 @@ namespace NoMansBlocks.Modules.UI {
         /// </summary>
         /// <param name="scene"></param>
         public override void OnSceneDestroyed(Scene scene) {
-            //for (int i = 0; i < LoadedMenus.Count; i++) {
-            //    LoadedMenus[i].Destroy();
-            //}
+            menuPresenter?.Unload();
         }
         #endregion
 
@@ -84,7 +89,7 @@ namespace NoMansBlocks.Modules.UI {
         /// Load a memory into memory by instantiating an instance of its 
         /// view and loading it with a default instance of it's menu model.
         /// </summary>
-        /// <typeparam name="T">THe type of menu to load.</typeparam>
+        /// <typeparam name="T">The type of menu to load.</typeparam>
         public void LoadMenu<T>() where T : class, IMenu {
             T menuInstance = Activator.CreateInstance(typeof(T)) as T;
             LoadMenu(menuInstance);
@@ -97,13 +102,17 @@ namespace NoMansBlocks.Modules.UI {
         /// <typeparam name="T">The type of menu to load.</typeparam>
         /// <param name="menu">The menu's model.</param>
         public void LoadMenu<T>(T menu) where T : class, IMenu {
+            if(menuPresenter != null) {
+                menuPresenter.Unload();
+            }
+
             MenuPresenterAttribute presenterAttribute = typeof(T).GetCustomAttribute<MenuPresenterAttribute>();
 
             //Easy. We know what kind of presenter to use.
             if (presenterAttribute != null) {
                 //Is the current one what we need?
                 if((menuPresenter?.GetType() ?? null) != presenterAttribute.Type) {
-                    menuPresenter = Activator.CreateInstance(presenterAttribute.Type, this) as IMenuPresenter;
+                    menuPresenter = Activator.CreateInstance(presenterAttribute.Type, this, commandConsole) as IMenuPresenter;
                 }
             }
             else {
@@ -117,8 +126,7 @@ namespace NoMansBlocks.Modules.UI {
         /// Relase the resources of a loaded menu by deleting it
         /// from memory.
         /// </summary>
-        /// <typeparam name="T">The type of menu to unload.</typeparam>
-        public void UnloadMenu<T>() where T : class, IMenu {
+        public void UnloadMenu() {
             menuPresenter?.Unload();
         }
         #endregion

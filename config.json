@@ -1,4 +1,9 @@
 /*Developer here, I'd highly recommend not modifying this file. Everytime the game is started*/
 /*it will perform a validation check on the config file. In the event bad data is found it's just*/
 /*going to reset everything back to defaults.*/
-{}
+{
+  "Network": {
+    "Port": 0,
+    "ConnectionCapacity": 1
+  }
+}

@@ -11,7 +11,7 @@ namespace NoMansBlocks.Modules.CommandConsole {
     /// <summary>
     /// Module for handling and issue commands to the system.
     /// </summary>
-    public sealed class CommandConsoleModule : Module, IStatementProducer {
+    public sealed class CommandConsoleModule : Module, ICommandConsole, IStatementProducer {
         #region Properties
         /// <summary>
         /// Indicator for the IStatementProducer interface to flag what
@@ -47,9 +47,9 @@ namespace NoMansBlocks.Modules.CommandConsole {
         /// <summary>
         /// Parse and process a new command.
         /// </summary>
-        /// <param name="input">The text of the command to parse.</param>
-        public void Parse(string input) {
-            if(input == null || input[0] != '/') {
+        /// <param name="command">The text of the command to parse.</param>
+        public void Execute(string command) {
+            if(command == null || command[0] != '/') {
                 return;
             }
 
@@ -57,10 +57,10 @@ namespace NoMansBlocks.Modules.CommandConsole {
                 throw new Exception("No executing context has been set!");
             }
 
-            Command command = CommandParser.ParseCommand(input);
+            Command cmd = CommandParser.ParseCommand(command);
 
             if(command != null) {
-                Execute(command);
+                Execute(cmd);
             }
         }
 
@@ -84,8 +84,12 @@ namespace NoMansBlocks.Modules.CommandConsole {
 
             Log.Debug(command.Summarize());
 
+            //Dont' care who's executing.
+            if(command.RequiredPermissions == PermissionLevel.All) {
+                command.Execute(Engine);
+            }
             //Check we can execute it, and if we can. Do so.
-            if((User.Current.PermissionLevel & command.RequiredPermissions) != 0) {
+            else if ((User.Current.PermissionLevel & command.RequiredPermissions) != 0) {
                 command.Execute(Engine);
             }
         }

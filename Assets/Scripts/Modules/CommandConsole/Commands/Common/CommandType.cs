@@ -9,7 +9,9 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
     /// Flag to indicate the type of command.
     /// </summary>
     public enum CommandType : byte {
-        Connect    = 0,
-        Disconnect = 1,
+        Start      = 0,
+        Stop       = 1,
+        Connect    = 2,
+        Disconnect = 3,
     }
 }

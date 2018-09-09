@@ -1,4 +1,6 @@
-﻿using NoMansBlocks.Modules.UI.Controls;
+﻿using NoMansBlocks.Modules.CommandConsole;
+using NoMansBlocks.Modules.CommandConsole.Commands;
+using NoMansBlocks.Modules.UI.Controls;
 using NoMansBlocks.Modules.UI.Input;
 using System;
 using System.Collections.Generic;
@@ -38,32 +40,39 @@ namespace NoMansBlocks.Modules.UI.Menus {
         protected abstract string PrefabPath { get; }
         #endregion
 
-        #region Constructor(s)
-        /// <summary>
-        /// Create a new base instance of a menu presenter.
-        /// </summary>
-        /// <param name="menuController">The UI Module.</param>
-        protected MenuPresenter(IMenuController menuController) {
-            this.menuController = menuController;
-        }
-        #endregion
-
         #region Members
+        /// <summary>
+        /// The coordinator for finding controls in the view
+        /// </summary>
+        private IInputControlCoordinator controlCoordinator;
+
         /// <summary>
         /// The menu controller handling all menus in the game.
         /// This can be used to load other menus from this presenter.
         /// </summary>
-        protected IMenuController menuController;
+        private IUIModule uiModule;
 
         /// <summary>
-        /// The coordinator for finding controls in the view
+        /// The command console module for submitting commands though.
         /// </summary>
-        protected IInputControlCoordinator controlCoordinator;
+        private ICommandConsole commandConsole;
 
         /// <summary>
         /// The view instance of the menu.
         /// </summary>
         private GameObject view;
+        #endregion
+
+        #region Constructor(s)
+        /// <summary>
+        /// Create a new base instance of a menu presenter.
+        /// </summary>
+        /// <param name="uiModule">The UI Module.</param>
+        /// <param name="commandConsole">The command console of the engine</param>
+        protected MenuPresenter(IUIModule uiModule, ICommandConsole commandConsole) {
+            this.uiModule = uiModule;
+            this.commandConsole = commandConsole;
+        }
         #endregion
 
         #region Publics
@@ -166,10 +175,65 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// Fired off everytime the presenter needs to update the view with
         /// the latest model info.
         /// </summary>
-        protected abstract void OnDataBind();
+        protected virtual void OnDataBind() {
+        }
         #endregion
 
         #region Helpers
+        /// <summary>
+        /// Parse and process a new command.
+        /// </summary>
+        /// <param name="command">The text of the command to parse.</param>
+        protected void ExecuteCommand(string command) {
+            commandConsole.Execute(command);
+        }
+
+        /// <summary>
+        /// Execute a command.
+        /// </summary>
+        /// <param name="command">The command to execute.</param>
+        protected void ExecuteCommand(Command command) {
+            commandConsole.Execute(command);
+        }
+
+        /// <summary>
+        /// Load a memory into memory by instantiating an instance of its 
+        /// view and loading it with a default instance of it's menu model.
+        /// </summary>
+        /// <typeparam name="U">THe type of menu to load.</typeparam>
+        protected void LoadMenu<U>() where U : class, IMenu {
+            uiModule.LoadMenu<U>();
+        }
+
+        /// <summary>
+        /// Load a menu into memory by instantiating an instance of it's view
+        /// and populating it with the data from the model passed in.
+        /// </summary>
+        /// <typeparam name="U">The type of menu to load.</typeparam>
+        /// <param name="menu">The menu's model.</param>
+        protected void LoadMenu<U>(U menu) where U : class, IMenu {
+            uiModule.LoadMenu<U>(menu);
+        }
+
+        /// <summary>
+        /// Search for a specific control in the view.
+        /// </summary>
+        /// <typeparam name="U">The control type to look for.</typeparam>
+        /// <param name="name">The name of the control</param>
+        /// <returns>The control if found</returns>
+        protected U GetControl<U>(string name) where U : class, IControlHandler {
+            return controlCoordinator.GetControl<U>(name);
+        }
+
+        /// <summary>
+        /// Search for all controls of a specific type.
+        /// </summary>
+        /// <typeparam name="U">The type to hunt for.</typeparam>
+        /// <returns>The controls of the matching type</returns>
+        protected List<U> GetControls<U>() where U : class, IControlHandler {
+            return controlCoordinator.GetControls<U>();
+        }
+
         /// <summary>
         /// Propogate the input event further to the derived instance
         /// of this class.
