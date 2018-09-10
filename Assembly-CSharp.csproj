@@ -87,8 +87,14 @@
     <Compile Include="Assets\Scripts\Core\FileIO\FileTypes\TextFile.cs" />
     <Compile Include="Assets\Scripts\Core\Input\Common\IInputController.cs" />
     <Compile Include="Assets\Scripts\Core\Input\Common\IInputProfile.cs" />
-    <Compile Include="Assets\Scripts\Core\Input\Controllers\PlayerInputController.cs" />
-    <Compile Include="Assets\Scripts\Core\Input\Profiles\PlayerInputProfile.cs" />
+    <Compile Include="Assets\Scripts\Core\Input\Player\Action\PlayerActionEventArgs.cs" />
+    <Compile Include="Assets\Scripts\Core\Input\Player\Action\PlayerActionType.cs" />
+    <Compile Include="Assets\Scripts\Core\Input\Player\Interaction\PlayerInteractionEventArgs.cs" />
+    <Compile Include="Assets\Scripts\Core\Input\Player\Interaction\PlayerInteractionType.cs" />
+    <Compile Include="Assets\Scripts\Core\Input\Player\Movement\PlayerMovementEventArgs.cs" />
+    <Compile Include="Assets\Scripts\Core\Input\Player\Movement\PlayerMovementType.cs" />
+    <Compile Include="Assets\Scripts\Core\Input\Player\PlayerInputController.cs" />
+    <Compile Include="Assets\Scripts\Core\Input\Player\PlayerInputProfile.cs" />
     <Compile Include="Assets\Scripts\Core\Serialization\Binary\IBinarySerializable.cs" />
     <Compile Include="Assets\Scripts\Core\Serialization\Json\IJsonSerializable.cs" />
     <Compile Include="Assets\Scripts\Core\Serialization\Json\IJsonSerializableConverter.cs" />
