@@ -61,14 +61,6 @@ namespace NoMansBlocks.Modules.Config {
         /// <param name="serializer">The helper serializer</param>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
             writer.Formatting = Formatting.Indented;
-
-            writer.WriteComment("Developer here, I'd highly recommend not modifying this file. Everytime the game is started");
-            writer.WriteWhitespace("\n");
-            writer.WriteComment("it will perform a validation check on the config file. In the event bad data is found it's just");
-            writer.WriteWhitespace("\n");
-            writer.WriteComment("going to reset everything back to defaults.");
-            writer.WriteWhitespace("\n");
-
             List<IConfig> configs = value as List<IConfig>;
 
             writer.WriteStartObject();

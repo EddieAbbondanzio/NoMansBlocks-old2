@@ -15,6 +15,14 @@ namespace NoMansBlocks.Modules.Config {
     [Serializable]
     [JsonConverter(typeof(ConfigFileConverter))]
     public sealed class ConfigFile : JsonFile<List<IConfig>> {
+        #region Properties
+        /// <summary>
+        /// Config files will be read by users so they should
+        /// be pretty.
+        /// </summary>
+        public override Formatting Formatting => Formatting.Indented;
+        #endregion
+
         #region Constructor(s)
         /// <summary>
         /// Create a new empty config file.

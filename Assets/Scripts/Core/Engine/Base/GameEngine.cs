@@ -12,6 +12,7 @@ using NoMansBlocks.Modules.UI;
 using UnityEngine.SceneManagement;
 using NoMansBlocks.Modules.Config;
 using UnityEngine;
+using NoMansBlocks.Modules.Input;
 
 namespace NoMansBlocks.Core.Engine {
     /// <summary>
@@ -60,6 +61,13 @@ namespace NoMansBlocks.Core.Engine {
         /// </summary>
         [ModuleExecution(ExecutionIndex = 4)]
         public NetModule NetModule { get; protected set; }
+
+        /// <summary>
+        /// Handles retrieving inputs from the user via various
+        /// controllers such as the keyboard, and mouse.
+        /// </summary>
+        [ModuleExecution(ExecutionIndex = 5)]
+        public InputModule InputModule { get; private set; }
         #endregion
 
         #region Members
@@ -89,6 +97,7 @@ namespace NoMansBlocks.Core.Engine {
             CommandModule = new CommandConsoleModule(this);
             UIModule      = new UIModule(this);
             NetModule     = new NetModule(this);
+            InputModule  = new InputModule(this);
 
             this.engineTicker.OnInit   += OnTickerInit;
             this.engineTicker.OnStart  += OnTickerStart;

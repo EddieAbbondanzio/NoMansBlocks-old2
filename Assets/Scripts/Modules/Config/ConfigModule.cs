@@ -90,8 +90,9 @@ namespace NoMansBlocks.Modules.Config {
                         }
                     }
                 }
-                catch (Exception) {
+                catch (Exception e) {
                     Log.Debug("Failed to pull in the config file. Resetting to defaults");
+                    Log.Error(e);
                 }
             }
 

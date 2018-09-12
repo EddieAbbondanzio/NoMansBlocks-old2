@@ -29,12 +29,20 @@ namespace NoMansBlocks.Modules.Logging {
         public event EventHandler<StatementArgs> OnLogStatementCreated;
         #endregion
 
+        #region Members
+        /// <summary>
+        /// The semaphore lock object.
+        /// </summary>
+        private readonly object lockObj;
+        #endregion
+
         #region Constructor(s)
         /// <summary>
         /// Create a new Unity Console logger.
         /// </summary>
         public UnityLogger() {
             History = new List<LogStatement>();
+            lockObj = new object();
         }
         #endregion
 
@@ -46,8 +54,10 @@ namespace NoMansBlocks.Modules.Logging {
         public void Debug(string message) {
             LogStatement logStatement = new LogStatement(LogStatementType.Debug, message);
 
-            UnityEngine.Debug.Log(message);
-            History.Add(logStatement);
+            lock (lockObj) {
+                UnityEngine.Debug.Log(message);
+                History.Add(logStatement);
+            }
 
             //Fire off the event
             if(OnLogStatementCreated != null) {
@@ -65,8 +75,10 @@ namespace NoMansBlocks.Modules.Logging {
             string fullMessage = string.Format(message, parameters);
             LogStatement logStatement = new LogStatement(LogStatementType.Debug, fullMessage);
 
-            UnityEngine.Debug.Log(fullMessage);
-            History.Add(logStatement);
+            lock (lockObj) {
+                UnityEngine.Debug.Log(fullMessage);
+                History.Add(logStatement);
+            }
 
             //Fire off the event
             if (OnLogStatementCreated != null) {
@@ -81,8 +93,10 @@ namespace NoMansBlocks.Modules.Logging {
         public void Warn(string message) {
             LogStatement logStatement = new LogStatement(LogStatementType.Warning, message);
 
-            UnityEngine.Debug.LogWarning(message);
-            History.Add(logStatement);
+            lock (lockObj) {
+                UnityEngine.Debug.LogWarning(message);
+                History.Add(logStatement);
+            }
 
             //Fire off the event
             if (OnLogStatementCreated != null) {
@@ -100,8 +114,10 @@ namespace NoMansBlocks.Modules.Logging {
             string fullMessage = string.Format(message, parameters);
             LogStatement logStatement = new LogStatement(LogStatementType.Warning, fullMessage);
 
-            UnityEngine.Debug.LogWarning(fullMessage);
-            History.Add(logStatement);
+            lock (lockObj) {
+                UnityEngine.Debug.LogWarning(fullMessage);
+                History.Add(logStatement);
+            }
 
             //Fire off the event
             if (OnLogStatementCreated != null) {
@@ -116,8 +132,10 @@ namespace NoMansBlocks.Modules.Logging {
         public void Error(string message) {
             LogStatement logStatement = new LogStatement(LogStatementType.Error, message);
 
-            UnityEngine.Debug.LogError(message);
-            History.Add(logStatement);
+            lock (lockObj) {
+                UnityEngine.Debug.LogError(message);
+                History.Add(logStatement);
+            }
 
             //Fire off the event
             if (OnLogStatementCreated != null) {
@@ -135,8 +153,29 @@ namespace NoMansBlocks.Modules.Logging {
             string fullMessage = string.Format(message, parameters);
             LogStatement logStatement = new LogStatement(LogStatementType.Error, fullMessage);
 
-            UnityEngine.Debug.LogError(fullMessage);
-            History.Add(logStatement);
+            lock (lockObj) {
+                UnityEngine.Debug.LogError(fullMessage);
+                History.Add(logStatement);
+            }
+
+            //Fire off the event
+            if (OnLogStatementCreated != null) {
+                OnLogStatementCreated(this, new StatementArgs(logStatement));
+            }
+        }
+
+        /// <summary>
+        /// Log an exception to the console / file.
+        /// </summary>
+        /// <param name="exception">The exception to log.</param>
+        public void Error(Exception exception) {
+            string exceptionString = exception.ToString();
+            LogStatement logStatement = new LogStatement(LogStatementType.Error, exceptionString);
+
+            lock (lockObj) {
+                UnityEngine.Debug.LogError(exceptionString);
+                History.Add(logStatement);
+            }
 
             //Fire off the event
             if (OnLogStatementCreated != null) {
@@ -151,8 +190,10 @@ namespace NoMansBlocks.Modules.Logging {
         public void Fatal(string message) {
             LogStatement logStatement = new LogStatement(LogStatementType.Fatal, message);
 
-            UnityEngine.Debug.LogError(message);
-            History.Add(logStatement);
+            lock (lockObj) {
+                UnityEngine.Debug.LogError(message);
+                History.Add(logStatement);
+            }
 
             //Fire off the event
             if (OnLogStatementCreated != null) {
@@ -170,8 +211,10 @@ namespace NoMansBlocks.Modules.Logging {
             string fullMessage = string.Format(message, parameters);
             LogStatement logStatement = new LogStatement(LogStatementType.Fatal, message);
 
-            UnityEngine.Debug.LogError(fullMessage);
-            History.Add(logStatement);
+            lock (lockObj) {
+                UnityEngine.Debug.LogError(fullMessage);
+                History.Add(logStatement);
+            }
 
             //Fire off the event
             if (OnLogStatementCreated != null) {

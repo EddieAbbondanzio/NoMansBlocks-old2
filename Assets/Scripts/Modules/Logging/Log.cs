@@ -26,8 +26,6 @@ namespace NoMansBlocks {
         /// Called when Log is first accessed. This initializes resources needed.
         /// </summary>
         static Log() {
-            //Subscribe to when things shut down to save the log file
-            //Engine.OnStop += async (sender, e) => await OnEngineStop(sender, e);
         }
         #endregion
 
@@ -87,6 +85,14 @@ namespace NoMansBlocks {
         /// <param name="message">The error message.</param>
         public static void Error(string message) {
             Logger.Error(message);
+        }
+
+        /// <summary>
+        /// Log an exception message to the console / file.
+        /// </summary>
+        /// <param name="e">The exception to log.</param>
+        public static void Error(Exception e) {
+            Logger.Error(e);
         }
 
         /// <summary>

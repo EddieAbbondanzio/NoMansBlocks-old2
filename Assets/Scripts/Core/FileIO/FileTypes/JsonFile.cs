@@ -19,6 +19,11 @@ namespace NoMansBlocks.Core.FileIO {
         /// The type of file it is.
         /// </summary>
         public override FileType Type => FileType.Json;
+
+        /// <summary>
+        /// The type of formatting to use to write to the file.
+        /// </summary>
+        public virtual Formatting Formatting => Formatting.None;
         #endregion
 
         #region Constructor(s)
@@ -62,7 +67,7 @@ namespace NoMansBlocks.Core.FileIO {
                 jsonString = JsonConvert.SerializeObject(Content, jsonConverter);
             }
             else {
-                jsonString = JsonConvert.SerializeObject(Content);
+                jsonString = JsonConvert.SerializeObject(Content, Formatting);
             }
 
             return Encoding.UTF8.GetBytes(jsonString);

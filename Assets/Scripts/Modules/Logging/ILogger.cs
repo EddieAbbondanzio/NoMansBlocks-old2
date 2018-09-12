@@ -72,6 +72,12 @@ namespace NoMansBlocks.Modules.Logging {
         void Error(string message, params object[] parameters);
 
         /// <summary>
+        /// Log an exception message to the console / file.
+        /// </summary>
+        /// <param name="exception">The exception to log.</param>
+        void Error(Exception exception);
+
+        /// <summary>
         /// Log a fatal error that will cause the program to crash.
         /// </summary>
         /// <param name="message">The message to store with it.</param>

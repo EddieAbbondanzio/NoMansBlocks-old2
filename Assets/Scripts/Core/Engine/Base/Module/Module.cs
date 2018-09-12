@@ -16,7 +16,7 @@ namespace NoMansBlocks.Core.Engine {
         /// The instance of the engine that is running
         /// this module.
         /// </summary>
-        protected GameEngine Engine { get; private set; }
+        protected GameEngine Engine { get; set; }
 
         /// <summary>
         /// What position in the module array this is. This
