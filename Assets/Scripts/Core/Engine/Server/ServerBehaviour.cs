@@ -32,7 +32,7 @@ namespace NoMansBlocks.Core.Engine.Server {
             DontDestroyOnLoad(this.gameObject);
 
             IGameEngineTicker engineTicker = GetComponent<IGameEngineTicker>();
-            Engine = new ServerEngine(engineTicker);
+            Engine = new ServerEngine(engineTicker, new UnityServiceLocator());
             Engine.Run();
         }
         #endregion

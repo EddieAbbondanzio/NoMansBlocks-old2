@@ -50,8 +50,9 @@ namespace NoMansBlocks.Modules.Logging {
         /// Initialize a new log module for use.
         /// <paramref name="engine">The engine that owns the module.</paramref>
         /// </summary>
-        public LogModule(GameEngine engine) : base(engine) {
-            Logger         = new UnityLogger();
+        /// <param name="engine">The parent game engine.</param>
+        public LogModule(GameEngine engine, ILogger logger) : base(engine) {
+            Logger         = logger;
             SystemAnalyzer = new SystemAnalyzer();
             LogFileHandler = new LogFileHandler();
         }

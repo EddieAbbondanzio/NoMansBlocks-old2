@@ -38,6 +38,35 @@ namespace NoMansBlocks.Modules.Input {
         public bool IsButtonUp(KeyCode code) {
             return UnityEngine.Input.GetKeyUp(code);
         }
+
+        /// <summary>
+        /// Checks if the mouse button is being presssed
+        /// down this frame.
+        /// </summary>
+        /// <param name="button">The button to check.</param>
+        /// <returns>True if being depressed this frame.</returns>
+        public bool IsMouseButtonDown(int button) {
+            return UnityEngine.Input.GetMouseButtonDown(button);
+        }
+
+        /// <summary>
+        /// Checks if the mouse button is currently pressed on
+        /// this frame.
+        /// </summary>
+        /// <param name="button">The button to check.</param>
+        /// <returns>True if the button is pressed.</returns>
+        public bool IsMouseButtonPressed(int button) {
+            return UnityEngine.Input.GetMouseButton(button);
+        }
+
+        /// <summary>
+        /// Checks if the mouse button s being released this frame.
+        /// </summary>
+        /// <param name="button">The button to check.</param>
+        /// <returns>True if being released</returns>
+        public bool IsMouseButtonUp(int button) {
+            return UnityEngine.Input.GetMouseButtonUp(button);
+        }
         #endregion
     }
 }

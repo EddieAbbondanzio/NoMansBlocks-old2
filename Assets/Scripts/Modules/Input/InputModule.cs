@@ -36,8 +36,9 @@ namespace NoMansBlocks.Modules.Input {
         /// Create a new instance of the 
         /// </summary>
         /// <param name="engine">The parent engine instance.</param>
-        public InputModule(GameEngine engine) : base(engine) {
-            inputPoller = new UnityInputPoller();
+        /// <param name="inputPoller">The input state checker.</param>
+        public InputModule(GameEngine engine, IInputPoller inputPoller) : base(engine) {
+            this.inputPoller = inputPoller;
         }
         #endregion
 

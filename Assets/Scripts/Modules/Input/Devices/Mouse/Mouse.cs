@@ -5,134 +5,198 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace NoMansBlocks.Modules.Input.Devices {
-    ///// <summary>
-    ///// The standard computer mouse.
-    ///// </summary>
-    //public class Mouse : InputDevice {
-    //    #region Properties
-    //    /// <summary>
-    //    /// If the horizontal axis should be inverted.
-    //    /// </summary>
-    //    public bool InvertHorizontal { get; set; }
+    /// <summary>
+    /// The standard computer mouse. This is an event driven
+    /// wrapper around Unity's Input class to prevent the need from
+    /// manually polling the input state.
+    /// </summary>
+    public class Mouse : InputDevice {
+        #region Statics
+        /// <summary>
+        /// The singleton instance.
+        /// </summary>
+        private static Mouse instance;
+        #endregion
 
-    //    /// <summary>
-    //    /// If the vertical axis should be inverted.
-    //    /// </summary>
-    //    public bool InvertVertical { get; set; }
-    //    #endregion
+        #region Members
+        /// <summary>
+        /// The list of active handlers for any of the buttons on the mouse.
+        /// Each one is responsible for managing a single button.
+        /// </summary>
+        private List<MouseButtonHandler> buttonHandlers;
 
-    //    #region Publics
-    //    /// <summary>
-    //    /// Checks if the mouse button is being pressed down
-    //    /// this frame.
-    //    /// </summary>
-    //    /// <param name="button">The button to check.</param>
-    //    /// <returns>True if the being clicked this frame.</returns>
-    //    public bool IsButtonDown(MouseButton button) {
-    //        if (Enabled) {
-    //            return UnityEngine.Input.GetMouseButtonDown((int)button);
-    //        }
-    //        else {
-    //            return false;
-    //        }
-    //    }
+        /// <summary>
+        /// The list of active handlers for any of the axes on the mouse.
+        /// Each one is responsible for a single axis.
+        /// </summary>
+        private List<MouseAxisHandler> axisHandlers;
+        #endregion
 
-    //    /// <summary>
-    //    /// Checks if the mouse button is currently pressed.
-    //    /// </summary>
-    //    /// <param name="button">The button to check.</param>
-    //    /// <returns>True if currently clicked.</returns>
-    //    public bool IsButtonPressed(MouseButton button) {
-    //        if (Enabled) {
-    //            return UnityEngine.Input.GetMouseButton((int)button);
-    //        }
-    //        else {
-    //            return false;
-    //        }
-    //    }
+        #region Constructor(s)
+        /// <summary>
+        /// Create a new instance of the mouse device. Only one
+        /// is permitted at any time.
+        /// </summary>
+        /// <param name="deviceManager">The manager that owns this device.</param>
+        /// <param name="inputPoller">The poller to check input state from.</param>
+        public Mouse(IInputDeviceManager deviceManager, IInputPoller inputPoller) : base(deviceManager, inputPoller) {
+            if(instance == null) {
+                instance = this;
+            }
+            else {
+                throw new Exception("There is already a mouse instance present. Did you call InputModule.GetDevice<Mouse>()?");
+            }
+        }
+        #endregion
 
-    //    /// <summary>
-    //    /// Checks if the mouse button is being released 
-    //    /// this frame.
-    //    /// </summary>
-    //    /// <param name="button">The button to check.</param>
-    //    /// <returns>True if being released this frame.</returns>
-    //    public bool IsButtonUp(MouseButton button) {
-    //        if (Enabled) {
-    //            return UnityEngine.Input.GetMouseButtonUp((int)button);
-    //        }
-    //        else {
-    //            return false;
-    //        }
-    //    }
+        #region Life Cycle Events
+        /// <summary>
+        /// Process the input from the input poller.
+        /// </summary>
+        /// <param name="inputPoller">Checks the current input state of the engine.</param>
+        protected override void Update(IInputPoller inputPoller) {
+            for(int i = 0, buttonHandlerCount = buttonHandlers.Count; i < buttonHandlerCount; i++) {
+                buttonHandlers[i].Update(inputPoller);
+            }
+        }
+        #endregion
 
-    //    /// <summary>
-    //    /// Get the smoothened out axis.
-    //    /// </summary>
-    //    /// <param name="axis">The axis of the mouse to check.</param>
-    //    /// <returns>The axis from -1 to 1.</returns>
-    //    public float GetAxis(MouseAxis axis) {
-    //        if (Enabled) {
-    //            string axisName = ConvertAxisToName(axis);
-    //            float axisValue = UnityEngine.Input.GetAxis(axisName);
+        #region Publics
+        /// <summary>
+        /// Add a new event listener to the specific mouse button,
+        /// and action.
+        /// </summary>
+        /// <param name="button">The button to listen for.</param>
+        /// <param name="action">It's life cycle event to listen for.</param>
+        /// <param name="listener">The listener to invoke.</param>
+        public void AddListener(MouseButton button, MouseButtonAction action, MouseButtonListener listener) {
+            if (buttonHandlers != null) {
+                for (int i = 0, keyHandlerCount = buttonHandlers.Count; i < keyHandlerCount; i++) {
+                    if (buttonHandlers[i].Button == button) {
+                        buttonHandlers[i].AddListener(action, listener);
+                        return;
+                    }
+                }
+            }
+            else {
+                buttonHandlers = new List<MouseButtonHandler>();
+            }
 
-    //            switch (axis) {
-    //                case MouseAxis.Horizontal:
-    //                    return InvertHorizontal ? axisValue * -1 : axisValue;
-    //                case MouseAxis.Vertical:
-    //                    return InvertVertical ? axisValue * -1 : axisValue;
-    //                default:
-    //                    return axisValue;
-    //            }
-    //        }
-    //        else {
-    //            return 0;
-    //        }
-    //    }
+            MouseButtonHandler buttonHandler = new MouseButtonHandler(button);
+            buttonHandler.AddListener(action, listener);
+            buttonHandlers.Add(buttonHandler);
+        }
 
-    //    /// <summary>
-    //    /// Get the raw axis.
-    //    /// </summary>
-    //    /// <param name="axis">The axis of the mouse to check.</param>
-    //    /// <returns>The axis from -1 to 1.</returns>
-    //    public float GetAxisRaw(MouseAxis axis) {
-    //        if (Enabled) {
-    //            string axisName = ConvertAxisToName(axis);
-    //            float axisValue = UnityEngine.Input.GetAxisRaw(axisName);
+        /// <summary>
+        /// Add a new axis event listener to the specific mouse
+        /// axis.
+        /// </summary>
+        /// <param name="axis">The axis to listen to.</param>
+        /// <param name="listener">The listener to notify.</param>
+        public void AddListener(MouseAxis axis, MouseAxisListener listener) {
+            if(axisHandlers != null) {
+                for(int i = 0, axisHandlerCount = axisHandlers.Count; i < axisHandlerCount; i++) {
+                    if(axisHandlers[i].Axis == axis) {
+                        axisHandlers[i].AddListener(listener);
+                        return;
+                    }
+                }
+            }
+            else {
+                axisHandlers = new List<MouseAxisHandler>();
+            }
 
-    //            switch (axis) {
-    //                case MouseAxis.Horizontal:
-    //                    return InvertHorizontal ? axisValue * -1 : axisValue;
-    //                case MouseAxis.Vertical:
-    //                    return InvertVertical ? axisValue * -1 : axisValue;
-    //                default:
-    //                    return axisValue;
-    //            }
-    //        }
-    //        else {
-    //            return 0;
-    //        }
-    //    }
-    //    #endregion
+            MouseAxisHandler axisHandler = new MouseAxisHandler(axis);
+            axisHandler.AddListener(listener);
+            axisHandlers.Add(axisHandler);
+        }
 
-    //    #region Helpers
-    //    /// <summary>
-    //    /// Convert the mouse axis into it's unity string name.
-    //    /// </summary>
-    //    /// <param name="axis">The mouse axis to convert.</param>
-    //    /// <returns>The string representing it's Unity counterpart.</returns>
-    //    private string ConvertAxisToName(MouseAxis axis) {
-    //        switch (axis) {
-    //            case MouseAxis.Horizontal:
-    //                return "Horizontal";
-    //            case MouseAxis.Vertical:
-    //                return "Vertical";
-    //            case MouseAxis.ScrollWheel:
-    //                return "Mouse ScrollWheel";
-    //            default:
-    //                throw new NotSupportedException(string.Format("Mouse Axis of {0} is not supported.", axis.ToString()));
-    //        }
-    //    }
-    //    #endregion
-    //}
+        /// <summary>
+        /// Remove an existing listener from it's key and action.
+        /// </summary>
+        /// <param name="button">The button to remove a listener from.</param>
+        /// <param name="action">The action to stop listening to.</param>
+        /// <param name="listener">The listener to remove.</param>
+        public void RemoveListener(MouseButton button, MouseButtonAction action, MouseButtonListener listener) {
+            if (buttonHandlers != null) {
+                for (int i = 0, keyHandlerCount = buttonHandlers.Count; i < keyHandlerCount; i++) {
+                    if (buttonHandlers[i].Button == button) {
+                        buttonHandlers[i].RemoveListener(action, listener);
+                        return;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Remove an existing listener from it's axis.
+        /// </summary>
+        /// <param name="axis">The axis to remove a listener from.</param>
+        /// <param name="listener">The listener to remove.</param>
+        public void RemoveListener(MouseAxis axis, MouseAxisListener listener) {
+            if(axisHandlers != null) {
+                for(int i = 0, axisHandlerCount = axisHandlers.Count; i < axisHandlerCount; i++) {
+                    if(axisHandlers[i].Axis == axis) {
+                        axisHandlers[i].RemoveListener(listener);
+                        return;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Remove every single listener from the mouse.
+        /// </summary>
+        public void RemoveAllListeners() {
+            buttonHandlers = null;
+        }
+
+        /// <summary>
+        /// Remove every single listener from a single
+        /// button of the mouse.
+        /// </summary>
+        /// <param name="button">The button to remove listeners from.</param>
+        public void RemoveAllListeners(MouseButton button) {
+            if (buttonHandlers != null) {
+                for (int i = 0, keyCount = buttonHandlers.Count; i < keyCount; i++) {
+                    if (buttonHandlers[i].Button == button) {
+                        buttonHandlers.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Remove every single listener from a single
+        /// axis of the mouse.
+        /// </summary>
+        /// <param name="axis"></param>
+        public void RemoveAllListeners(MouseAxis axis) {
+            if(axisHandlers != null) {
+                for(int i = 0, axisHandlerCount = axisHandlers.Count; i < axisHandlerCount; i++) {
+                    if(axisHandlers[i].Axis == axis) {
+                        axisHandlers.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Remove very single listener from a button
+        /// and action of it.
+        /// </summary>
+        /// <param name="button">The button to remove listeners from.</param>
+        /// <param name="action">The action to clear listeners of.</param>
+        public void RemoveAllListeners(MouseButton button, MouseButtonAction action) {
+            for (int i = 0, keyCount = buttonHandlers.Count; i < keyCount; i++) {
+                if (buttonHandlers[i].Button == button) {
+                    buttonHandlers[i].RemoveAllListeners(action);
+                    break;
+                }
+            }
+        }
+        #endregion
+    }
 }

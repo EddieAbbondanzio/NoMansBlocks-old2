@@ -1,6 +1,7 @@
 ﻿using NoMansBlocks.Core;
 using NoMansBlocks.Core.Engine;
 using NoMansBlocks.Core.UserSystem;
+using NoMansBlocks.Modules.Input;
 using NoMansBlocks.Modules.Input.Devices;
 using NoMansBlocks.Modules.UI.Menus;
 using System;
@@ -33,9 +34,11 @@ namespace NoMansBlocks.Core.Engine.Client {
             DontDestroyOnLoad(this.gameObject);
 
             IGameEngineTicker engineTicker = GetComponent<IGameEngineTicker>();
-            Engine = new ClientEngine(engineTicker);
+            Engine = new ClientEngine(engineTicker, new UnityServiceLocator());
 
             Engine.Run();
+
+
         }
         #endregion
     }

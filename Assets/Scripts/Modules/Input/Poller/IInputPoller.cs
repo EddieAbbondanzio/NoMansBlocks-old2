@@ -34,6 +34,29 @@ namespace NoMansBlocks.Modules.Input {
         /// <param name="code">The keycode to check.</param>
         /// <returns></returns>
         bool IsButtonUp(KeyCode code);
+
+        /// <summary>
+        /// Checks if the mouse button is being presssed
+        /// down this frame.
+        /// </summary>
+        /// <param name="button">The button to check.</param>
+        /// <returns>True if being depressed this frame.</returns>
+        bool IsMouseButtonDown(int button);
+
+        /// <summary>
+        /// Checks if the mouse button is currently pressed on
+        /// this frame.
+        /// </summary>
+        /// <param name="button">The button to check.</param>
+        /// <returns>True if the button is pressed.</returns>
+        bool IsMouseButtonPressed(int button);
+
+        /// <summary>
+        /// Checks if the mouse button s being released this frame.
+        /// </summary>
+        /// <param name="button">The button to check.</param>
+        /// <returns>True if being released</returns>
+        bool IsMouseButtonUp(int button);
         #endregion
     }
 }

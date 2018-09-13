@@ -72,6 +72,11 @@ namespace NoMansBlocks.Core.Engine {
 
         #region Members
         /// <summary>
+        /// Dependency injection for the engine.
+        /// </summary>
+        private IServiceLocator serviceLocator;
+
+        /// <summary>
         /// Handles firing off the events of the game engine.
         /// </summary>
         private IGameEngineTicker engineTicker;
@@ -88,16 +93,18 @@ namespace NoMansBlocks.Core.Engine {
         /// Create a new instance of the game engine. A user
         /// is required to know how to run the engine.
         /// </summary>
-        /// <param name="user">The user running the game.</param>
-        protected GameEngine(IGameEngineTicker engineTicker) {
-            this.engineTicker = engineTicker;
+        /// <param name="engineTicker">The main game loop.</param>
+        /// <param name="serviceLocator">The dependency locator.</param>
+        protected GameEngine(IGameEngineTicker engineTicker, IServiceLocator serviceLocator) {
+            this.engineTicker   = engineTicker;
+            this.serviceLocator = serviceLocator;
 
-            LogModule     = new LogModule(this);
-            ConfigModule = new ConfigModule(this);
+            LogModule     = new LogModule(this, serviceLocator.GetLogger());
+            ConfigModule  = new ConfigModule(this);
             CommandModule = new CommandConsoleModule(this);
             UIModule      = new UIModule(this);
             NetModule     = new NetModule(this);
-            InputModule  = new InputModule(this);
+            InputModule   = new InputModule(this, serviceLocator.GetInputPoller());
 
             this.engineTicker.OnInit   += OnTickerInit;
             this.engineTicker.OnStart  += OnTickerStart;
