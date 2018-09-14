@@ -9,7 +9,7 @@ namespace NoMansBlocks.Modules.Input.Devices {
     /// Handles firing off event listeners for a single axis
     /// of the mouse.
     /// </summary>
-    public sealed class MouseAxisHandler : IInputHandler {
+    internal sealed class MouseAxisHandler : IInputHandler {
         #region Properties
         /// <summary>
         /// The axis to listen for changes on.
@@ -22,6 +22,11 @@ namespace NoMansBlocks.Modules.Input.Devices {
         /// The listeners to notify anytime the axis is changed.
         /// </summary>
         private List<MouseAxisListener> listeners;
+
+        /// <summary>
+        /// If the axis is active and being moved.
+        /// </summary>
+        private bool isActive;
         #endregion
 
         #region Constructor(s)
@@ -42,7 +47,30 @@ namespace NoMansBlocks.Modules.Input.Devices {
         /// </summary>
         /// <param name="inputPoller">The poller to check input state.</param>
         public void Update(IInputPoller inputPoller) {
-            throw new NotImplementedException();
+            float value = 0.0f;
+
+            switch (Axis) {
+                case MouseAxis.Horizontal:
+                    value = inputPoller.GetAxis("Mouse X");
+                    break;
+                case MouseAxis.Vertical:
+                    value = inputPoller.GetAxis("Mouse Y");
+                    break;
+                case MouseAxis.ScrollWheel:
+                    value = inputPoller.GetAxis("Mouse ScrollWheel");
+                    break;
+            }
+
+            if(value > 0.0001f || value < -0.0001f) { 
+                if (!isActive) {
+                    isActive = true;
+                }
+                NotifyListeners(value);
+            }
+            else if (isActive) {
+                isActive = false;
+                NotifyListeners(0.0f);
+            }
         }
         #endregion
 
@@ -79,6 +107,20 @@ namespace NoMansBlocks.Modules.Input.Devices {
         /// </summary>
         public void RemoveAllListeners() {
             listeners = null;
+        }
+        #endregion
+
+        #region Helpers
+        /// <summary>
+        /// Propogate the event out to all of the listeners.
+        /// </summary>
+        /// <param name="value">The current value of the axis.</param>
+        private void NotifyListeners(float value) {
+            if (listeners != null) {
+                for (int i = 0, listenerCount = listeners.Count; i < listenerCount; i++) {
+                    listeners[i](Axis, value);
+                }
+            }
         }
         #endregion
     }

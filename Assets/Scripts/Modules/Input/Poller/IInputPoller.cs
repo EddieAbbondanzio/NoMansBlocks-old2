@@ -57,6 +57,13 @@ namespace NoMansBlocks.Modules.Input {
         /// <param name="button">The button to check.</param>
         /// <returns>True if being released</returns>
         bool IsMouseButtonUp(int button);
+
+        /// <summary>
+        /// Get the current value of an input axis.
+        /// </summary>
+        /// <param name="axisName">The name of the axis to get.</param>
+        /// <returns>It's value between -1.0 and 1.0f</returns>
+        float GetAxis(string axisName);
         #endregion
     }
 }

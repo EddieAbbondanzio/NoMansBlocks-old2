@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace NoMansBlocks.Modules.Input.Devices {
     /// <summary>
@@ -19,6 +20,12 @@ namespace NoMansBlocks.Modules.Input.Devices {
         /// If the cursor should be displayed on screen.
         /// </summary>
         bool ShowCursor { get; set; }
+
+        /// <summary>
+        /// The cursors current position on the screen in
+        /// pixels. 0,0 is top left.
+        /// </summary>
+        Vector3 CursorPosition { get; set; }
         #endregion
     }
 }

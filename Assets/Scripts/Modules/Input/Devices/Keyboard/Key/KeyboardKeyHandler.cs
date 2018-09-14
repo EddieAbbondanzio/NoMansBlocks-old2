@@ -9,7 +9,7 @@ namespace NoMansBlocks.Modules.Input.Devices {
     /// <summary>
     /// Handler for a single keyboard key.
     /// </summary>
-    public sealed class KeyboardKeyHandler : IInputHandler {
+    internal sealed class KeyboardKeyHandler : IInputHandler {
         #region Properties
         /// <summary>
         /// The key it handles.

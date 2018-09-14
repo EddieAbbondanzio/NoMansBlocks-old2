@@ -8,7 +8,7 @@ namespace NoMansBlocks.Modules.Input.Devices {
     /// <summary>
     /// Handler for a single mouse button.
     /// </summary>
-    public sealed class MouseButtonHandler : IInputHandler {
+    internal sealed class MouseButtonHandler : IInputHandler {
         #region Properties
         /// <summary>
         /// The mouse button it handles.

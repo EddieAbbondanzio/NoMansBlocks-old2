@@ -67,6 +67,15 @@ namespace NoMansBlocks.Modules.Input {
         public bool IsMouseButtonUp(int button) {
             return UnityEngine.Input.GetMouseButtonUp(button);
         }
+
+        /// <summary>
+        /// Get the current value of an input axis.
+        /// </summary>
+        /// <param name="axisName">The name of the axis to get.</param>
+        /// <returns>It's value between -1.0 and 1.0f</returns>
+        public float GetAxis(string axisName) {
+            return UnityEngine.Input.GetAxis(axisName);
+        }
         #endregion
     }
 }

@@ -64,7 +64,6 @@ namespace NoMansBlocks.Modules.Logging {
         /// </summary>
         public override void OnInit() {
             Log.SetLogger(Logger);
-
             //Subscribe to the logger event
             Logger.OnLogStatementCreated += OnLogStatementCreated;
         }
@@ -89,12 +88,11 @@ namespace NoMansBlocks.Modules.Logging {
         #region Component Events
         /// <summary>
         /// Fired off whenever the logger creates a new log
-        /// message.
+        /// message. Propogate the event further for any listeners.
         /// </summary>
         /// <param name="sender">The logger that created the log.</param>
         /// <param name="e">Arguments containing the log message.</param>
         private void OnLogStatementCreated(object sender, StatementArgs e) {
-            //Propogate the event further if any listeners exist outside of this module.
             if(OnStatementCreated != null) {
                 OnStatementCreated(this, e);
             }

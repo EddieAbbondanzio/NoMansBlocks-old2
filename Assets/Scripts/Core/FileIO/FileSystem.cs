@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace NoMansBlocks.Core.FileIO {
@@ -121,6 +122,30 @@ namespace NoMansBlocks.Core.FileIO {
                 }
             }
         }
+
+        /// <summary>
+        /// Checks if an existing file is currently locked and
+        /// being used by another process.
+        /// </summary>
+        /// <param name="fileInfo">The file to check.</param>
+        /// <returns>True if the file is locked.</returns>
+        public static bool IsFileLocked(FileInfo fileInfo) {
+            FileStream stream = null;
+
+            try {
+                stream = fileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.None);
+            }
+            catch (IOException) {
+                return true;
+            }
+            finally {
+                if (stream != null) {
+                    stream.Close();
+                }
+            }
+
+            return false;
+        }
         #endregion
 
         #region Helpers
@@ -131,11 +156,21 @@ namespace NoMansBlocks.Core.FileIO {
         /// <param name="fileInfo">The path of the file.</param>
         /// <param name="fileContents">The content to populate the file with.</param>
         private async static Task SaveToFileAsync(FileInfo fileInfo, byte[] fileContents) {
-            using (FileStream fileStream = new FileStream(fileInfo.FullName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None, BufferSize, true)) {
-                byte[][] fileChunks = fileContents.Split(BufferSize);
+            if (!fileInfo.Exists) {
+                fileInfo.Create().Dispose();
+            }
 
-                for (int i = 0; i < fileChunks.Length; i++) {
-                    await fileStream.WriteAsync(fileChunks[i], 0, fileChunks[i].Length);
+            using (FileStream fileStream = new FileStream(fileInfo.FullName, FileMode.Truncate, FileAccess.Write, FileShare.None, BufferSize, true)) {
+                int writeCount = fileContents.Length / BufferSize;
+
+                if(fileContents.Length % BufferSize != 0) {
+                    writeCount++;
+                }
+
+                for (int i = 0; i < writeCount; i++) {
+                    int offset = i * BufferSize;
+                    int writeSize = Math.Min(BufferSize, fileContents.Length - i);
+                    await fileStream.WriteAsync(fileContents, i * BufferSize, writeSize);
                 }
             }
         }
@@ -145,8 +180,19 @@ namespace NoMansBlocks.Core.FileIO {
         /// as a byte array.
         /// </summary>
         /// <param name="fileInfo">The path of the file to read from.</param>
+        /// <param name="timeOut">The maximum number of seconds to wait before timing out.</param>
         /// <returns>The file's contents.</returns>
-        private static async Task<byte[]> LoadFromFileAsync(FileInfo fileInfo) {
+        private static async Task<byte[]> LoadFromFileAsync(FileInfo fileInfo, float timeOut = 0.5f) {
+            float timeWaited = 0.0f;
+            while (IsFileLocked(fileInfo) && timeWaited < timeOut) {
+                timeWaited += 0.05f;
+                Thread.Sleep(50);
+            }
+
+            if(timeWaited > timeOut) {
+                throw new TimeoutException(string.Format("Load of file {0} time out due to excessive wait time.", fileInfo.ToString()));
+            }
+
             using (FileStream fileStream = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read, BufferSize, true)) {
                 List<byte> content = new List<byte>();
                 byte[] byteBuffer = new byte[BufferSize];

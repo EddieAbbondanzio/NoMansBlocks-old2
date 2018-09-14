@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using NoMansBlocks.Core.Serialization.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +14,7 @@ namespace NoMansBlocks.Core.FileIO {
     /// </summary>
     /// <typeparam name="T">The type of object the
     /// file stores.</typeparam>
-    public class JsonFile<T> : File<T> where T : class {
+    public abstract class JsonFile<T> : File<T> where T : class {
         #region Properties
         /// <summary>
         /// The type of file it is.
@@ -58,19 +59,17 @@ namespace NoMansBlocks.Core.FileIO {
         /// </summary>
         /// <returns>The content of the file serialized.</returns>
         public override byte[] Serialize() {
-            //See if we can find a JsonConverter attribute on the derived class
-            JsonConverterAttribute converterAttribute = GetType().GetCustomAttribute<JsonConverterAttribute>();
+            StringBuilder stringBuilder = new StringBuilder();
 
-            string jsonString;
-            if(converterAttribute != null) {
-                JsonConverter jsonConverter = Activator.CreateInstance(converterAttribute.ConverterType) as JsonConverter;
-                jsonString = JsonConvert.SerializeObject(Content, jsonConverter);
-            }
-            else {
-                jsonString = JsonConvert.SerializeObject(Content, Formatting);
+            using (StringWriter stringWriter = new StringWriter(stringBuilder)) {
+                using (JsonTextWriter jsonWriter = new JsonTextWriter(stringWriter)) {
+                    jsonWriter.Formatting = Formatting;
+
+                    SerializeContent(jsonWriter, new JsonSerializer());
+                }
             }
 
-            return Encoding.UTF8.GetBytes(jsonString);
+            return Encoding.UTF8.GetBytes(stringBuilder.ToString());
         }
         #endregion
 
@@ -83,14 +82,29 @@ namespace NoMansBlocks.Core.FileIO {
         protected override T Deserialize(byte[] content) {
             string jsonString = Encoding.UTF8.GetString(content);
 
-            JsonConverterAttribute converterAttribute = GetType().GetCustomAttribute<JsonConverterAttribute>();
-            if (converterAttribute != null) {
-                JsonConverter jsonConverter = Activator.CreateInstance(converterAttribute.ConverterType) as JsonConverter;
-                return JsonConvert.DeserializeObject<T>(jsonString, jsonConverter);
+            using (StringReader stringReader = new StringReader(jsonString)) {
+                using(JsonTextReader jsonReader = new JsonTextReader(stringReader)) {
+                    return DeserializeContent(jsonReader, new JsonSerializer());
+                }
             }
-            else {
-                return JsonConvert.DeserializeObject<T>(jsonString);
-            }
+        }
+
+        /// <summary>
+        /// Serialize the content of the file into it's JSON representation.
+        /// </summary>
+        /// <param name="writer">The writer to use.</param>
+        /// <param name="serializer">The helper serializer.</param>
+        protected virtual void SerializeContent(JsonWriter writer, JsonSerializer serializer) {
+            serializer.Serialize(writer, Content);
+        }
+
+        /// <summary>
+        /// Deserialize the content of the file back into it's original form.
+        /// </summary>
+        /// <param name="reader">The reader to read from.</param>
+        /// <param name="serializer">The helper serializer.</param>
+        protected virtual T DeserializeContent(JsonReader reader, JsonSerializer serializer) {
+            return serializer.Deserialize(reader) as T;
         }
         #endregion
     }

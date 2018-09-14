@@ -89,6 +89,8 @@ namespace NoMansBlocks.Modules.Config {
                             configs[i].ResetToDefault(Engine.Type);
                         }
                     }
+
+                    return;
                 }
                 catch (Exception e) {
                     Log.Debug("Failed to pull in the config file. Resetting to defaults");

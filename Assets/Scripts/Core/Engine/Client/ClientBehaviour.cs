@@ -38,6 +38,8 @@ namespace NoMansBlocks.Core.Engine.Client {
 
             Engine.Run();
 
+            Mouse mouse = Engine.InputModule.GetInputDevice<Mouse>();
+            mouse.AddListener(MouseAxis.ScrollWheel, (MouseAxis axis, float value) => { Log.Debug(value.ToString()); });
 
         }
         #endregion

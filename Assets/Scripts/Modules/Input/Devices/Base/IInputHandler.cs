@@ -9,7 +9,7 @@ namespace NoMansBlocks.Modules.Input.Devices {
     /// An input handler is a object that handles a single source of
     /// input such as an axis, or button.
     /// </summary>
-    public interface IInputHandler {
+    internal interface IInputHandler {
         #region Publics
         /// <summary>
         /// Update the state of the input handler

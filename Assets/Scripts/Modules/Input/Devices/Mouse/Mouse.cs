@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace NoMansBlocks.Modules.Input.Devices {
     /// <summary>
@@ -10,12 +11,28 @@ namespace NoMansBlocks.Modules.Input.Devices {
     /// wrapper around Unity's Input class to prevent the need from
     /// manually polling the input state.
     /// </summary>
-    public class Mouse : InputDevice {
+    public class Mouse : InputDevice, ICursorDevice {
         #region Statics
         /// <summary>
         /// The singleton instance.
         /// </summary>
         private static Mouse instance;
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Lock the cursor in the center of the screen.
+        /// </summary>
+        public bool LockCursor { get; set; }
+
+        /// <summary>
+        /// If the cursor should be visible on screen
+        /// so that the player can see it.
+        /// </summary>
+        public bool ShowCursor { get; set; }
+
+        Vector3 CursorPosition { get {
+            } }
         #endregion
 
         #region Members
@@ -55,8 +72,16 @@ namespace NoMansBlocks.Modules.Input.Devices {
         /// </summary>
         /// <param name="inputPoller">Checks the current input state of the engine.</param>
         protected override void Update(IInputPoller inputPoller) {
-            for(int i = 0, buttonHandlerCount = buttonHandlers.Count; i < buttonHandlerCount; i++) {
-                buttonHandlers[i].Update(inputPoller);
+            if (buttonHandlers != null) {
+                for (int i = 0, buttonHandlerCount = buttonHandlers.Count; i < buttonHandlerCount; i++) {
+                    buttonHandlers[i].Update(inputPoller);
+                }
+            }
+
+            if(axisHandlers != null) { 
+                for(int i = 0, axisHandlerCount = axisHandlers.Count; i < axisHandlerCount; i++) {
+                    axisHandlers[i].Update(inputPoller);
+                }
             }
         }
         #endregion
