@@ -32,6 +32,8 @@ namespace NoMansBlocks.Modules.Input {
         /// The position of the cursor in pixels. (0,0) 
         /// is the top left corner of the screen.
         /// </summary>
-        public Vector3 ScreenPosition { get; set; }
+        public Vector3 ScreenPosition {
+            get { return UnityEngine.Input.mousePosition; }
+        }
     }
 }

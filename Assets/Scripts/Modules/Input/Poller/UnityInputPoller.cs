@@ -10,6 +10,23 @@ namespace NoMansBlocks.Modules.Input {
     /// Checks the current state of input from the user.
     /// </summary>
     public sealed class UnityInputPoller : IInputPoller {
+        #region Properties
+        /// <summary>
+        /// The cursor on screen.
+        /// </summary>
+        public ICursor Cursor { get; set; }
+        #endregion
+
+        #region Constructor(s)
+        /// <summary>
+        /// Create a new instance of the Unity input
+        /// state checker.
+        /// </summary>
+        public UnityInputPoller() {
+            Cursor = new UnityCursor();
+        }
+        #endregion
+
         #region Publics
         /// <summary>
         /// Checks if the button was pressed starting on

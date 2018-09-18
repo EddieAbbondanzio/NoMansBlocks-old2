@@ -12,20 +12,9 @@ namespace NoMansBlocks.Modules.Input.Devices {
     public interface ICursorDevice {
         #region Properties
         /// <summary>
-        /// Lock the cursor in the center of the screen.
+        /// The cursor that this device can control.
         /// </summary>
-        bool LockCursor { get; set; }
-
-        /// <summary>
-        /// If the cursor should be displayed on screen.
-        /// </summary>
-        bool ShowCursor { get; set; }
-
-        /// <summary>
-        /// The cursors current position on the screen in
-        /// pixels. 0,0 is top left.
-        /// </summary>
-        Vector3 CursorPosition { get; set; }
+        ICursor Cursor { get; }
         #endregion
     }
 }

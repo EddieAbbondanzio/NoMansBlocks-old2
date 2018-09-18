@@ -72,7 +72,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 224993570041331824}
-  - component: {fileID: 114482467087715538}
   m_Layer: 5
   m_Name: MainMenu
   m_TagString: Untagged
@@ -358,17 +357,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114482467087715538
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1561395233679194}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdca8ee6effe4fc448d9f96003078f6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114529218772617588
 MonoBehaviour:
   m_ObjectHideFlags: 1

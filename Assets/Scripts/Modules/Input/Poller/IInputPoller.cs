@@ -12,6 +12,13 @@ namespace NoMansBlocks.Modules.Input {
     /// are being manipulated, etc..
     /// </summary>
     public interface IInputPoller {
+        #region Properties
+        /// <summary>
+        /// The cursor on screen.
+        /// </summary>
+        ICursor Cursor { get; set; }
+        #endregion
+
         #region Publics
         /// <summary>
         /// Checks if the button was pressed starting on

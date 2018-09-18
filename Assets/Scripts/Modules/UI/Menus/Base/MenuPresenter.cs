@@ -1,7 +1,6 @@
 ﻿using NoMansBlocks.Modules.CommandConsole;
 using NoMansBlocks.Modules.CommandConsole.Commands;
 using NoMansBlocks.Modules.UI.Controls;
-using NoMansBlocks.Modules.UI.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,9 +41,9 @@ namespace NoMansBlocks.Modules.UI.Menus {
 
         #region Members
         /// <summary>
-        /// The coordinator for finding controls in the view
+        /// The controls found on the prefab of the menu model.
         /// </summary>
-        private IInputControlCoordinator controlCoordinator;
+        private IControl[] controls;
 
         /// <summary>
         /// The menu controller handling all menus in the game.
@@ -93,14 +92,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
             menuTransform.offsetMin = new Vector2(0, 0);
             menuTransform.offsetMax = new Vector2(0, 0);
 
-            InputControlCoordinator inputCoordinator = view.GetComponent<InputControlCoordinator>();
-
-            if(inputCoordinator == null) {
-                throw new FormatException(string.Format("Menu view {0} is poorly formatted. No input control coordinator found.", PrefabPath));
-            }
-
-            inputCoordinator.OnInput += InputCoordinator_OnInput;
-            controlCoordinator = inputCoordinator as IInputControlCoordinator;
+            controls = view.GetComponentsInChildren<IControl>();
             Model = menu;
 
             OnLoad();
@@ -130,9 +122,8 @@ namespace NoMansBlocks.Modules.UI.Menus {
             }
 
             OnUnload();
-            InputControlCoordinator inputCoordinator = view.GetComponent<InputControlCoordinator>();
-            inputCoordinator.OnInput -= InputCoordinator_OnInput;
             GameObject.Destroy(view);
+            controls = null;
             Model = null;
         }
 
@@ -160,15 +151,6 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// Use this to free up any resources.
         /// </summary>
         protected virtual void OnUnload() {
-        }
-
-        /// <summary>
-        /// Fired off everytime a control has some kind of input
-        /// event acted upon it.
-        /// </summary>
-        /// <param name="control">The control that was modified.</param>
-        /// <param name="action">The category of action performed.</param>
-        protected virtual void OnInput(IControlHandler control, InputActionType action) {
         }
 
         /// <summary>
@@ -221,8 +203,14 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// <typeparam name="U">The control type to look for.</typeparam>
         /// <param name="name">The name of the control</param>
         /// <returns>The control if found</returns>
-        protected U GetControl<U>(string name) where U : class, IControlHandler {
-            return controlCoordinator.GetControl<U>(name);
+        protected U GetControl<U>(string name) where U : class, IControl {
+            for (int i = 0; i < controls.Length; i++) {
+                if (typeof(U).IsAssignableFrom(controls[i].GetType()) && controls[i].Name == name) {
+                    return controls[i] as U;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -230,18 +218,16 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// </summary>
         /// <typeparam name="U">The type to hunt for.</typeparam>
         /// <returns>The controls of the matching type</returns>
-        protected List<U> GetControls<U>() where U : class, IControlHandler {
-            return controlCoordinator.GetControls<U>();
-        }
+        protected List<U> GetControls<U>() where U : class, IControl {
+            List<U> matchingControls = new List<U>();
 
-        /// <summary>
-        /// Propogate the input event further to the derived instance
-        /// of this class.
-        /// </summary>
-        /// <param name="sender">The control coordinator.</param>
-        /// <param name="e">Info about the event.</param>
-        private void InputCoordinator_OnInput(object sender, InputEventArgs e) {
-            OnInput(e.Control, e.ActionType);
+            for (int i = 0; i < controls.Length; i++) {
+                if (typeof(U).IsAssignableFrom(controls[i].GetType())) {
+                    matchingControls.Add(controls[i] as U);
+                }
+            }
+
+            return matchingControls;
         }
         #endregion
     }

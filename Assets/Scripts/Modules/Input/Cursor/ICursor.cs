@@ -27,7 +27,7 @@ namespace NoMansBlocks.Modules.Input {
         /// The position of the cursor in pixels. (0,0) 
         /// is the top left corner of the screen.
         /// </summary>
-        Vector3 ScreenPosition { get; set; }
+        Vector3 ScreenPosition { get; }
         #endregion
     }
 }

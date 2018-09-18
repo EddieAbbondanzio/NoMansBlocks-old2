@@ -23,23 +23,23 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// <summary>
         /// The textbox that users enter their username into.
         /// </summary>
-        private ITextBoxHandler usernameTextBox;
+        private ITextBox usernameTextBox;
 
         /// <summary>
         /// The textbox that users enter their password into
         /// </summary>
-        private ITextBoxHandler passwordTextBox;
+        private ITextBox passwordTextBox;
 
         /// <summary>
         /// The textbox that users tick if they want to remember
         /// their credentials for later on.
         /// </summary>
-        private ICheckBoxHandler rememberMeCheckBox;
+        private ICheckBox rememberMeCheckBox;
 
         /// <summary>
         /// The button the user presses to attempt to log in.
         /// </summary>
-        private ITriggerButtonHandler loginButton;
+        private ITriggerButton loginButton;
         #endregion
 
         #region Constructor(s)
@@ -58,10 +58,10 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// Anytime the menu view is loaded, find all the important views.
         /// </summary>
         protected override void OnLoad() {
-            usernameTextBox    = GetControl<ITextBoxHandler>("UsernameField");
-            passwordTextBox    = GetControl<ITextBoxHandler>("PasswordField");
-            rememberMeCheckBox = GetControl<ICheckBoxHandler>("RememberToggle");
-            loginButton        = GetControl<ITriggerButtonHandler>("LoginButton");
+            usernameTextBox    = GetControl<ITextBox>("UsernameField");
+            passwordTextBox    = GetControl<ITextBox>("PasswordField");
+            rememberMeCheckBox = GetControl<ICheckBox>("RememberToggle");
+            loginButton        = GetControl<ITriggerButton>("LoginButton");
 
             loginButton.OnClick += LoginButton_OnClick;
         }

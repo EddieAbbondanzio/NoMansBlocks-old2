@@ -21,18 +21,9 @@ namespace NoMansBlocks.Modules.Input.Devices {
 
         #region Properties
         /// <summary>
-        /// Lock the cursor in the center of the screen.
+        /// The on screen cursor.
         /// </summary>
-        public bool LockCursor { get; set; }
-
-        /// <summary>
-        /// If the cursor should be visible on screen
-        /// so that the player can see it.
-        /// </summary>
-        public bool ShowCursor { get; set; }
-
-        Vector3 CursorPosition { get {
-            } }
+        public ICursor Cursor { get; private set; }
         #endregion
 
         #region Members
@@ -63,6 +54,8 @@ namespace NoMansBlocks.Modules.Input.Devices {
             else {
                 throw new Exception("There is already a mouse instance present. Did you call InputModule.GetDevice<Mouse>()?");
             }
+
+            Cursor = inputPoller.Cursor;
         }
         #endregion
 

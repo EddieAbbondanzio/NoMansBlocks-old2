@@ -25,19 +25,19 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// Play button of the menu. This is for when a user wants to connect
         /// to a lobby and start playing.
         /// </summary>
-        private ITriggerButtonHandler playButton;
+        private ITriggerButton playButton;
 
         /// <summary>
         /// Settings button of the menu. Contains everything related to brightness,
         /// audio level, and input bindings.
         /// </summary>
-        private ITriggerButtonHandler settingsButton;
+        private ITriggerButton settingsButton;
 
         /// <summary>
         /// Exit button of the menu. The user clicks it when they want to shut 
         /// down and stop playing.
         /// </summary>
-        private ITriggerButtonHandler exitButton;
+        private ITriggerButton exitButton;
         #endregion
 
         #region Constructor(s)
@@ -57,9 +57,9 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// when the menu is loaded.
         /// </summary>
         protected override void OnLoad() {
-            playButton     = GetControl<ITriggerButtonHandler>("PlayButton");
-            settingsButton = GetControl<ITriggerButtonHandler>("SettingsButton");
-            exitButton     = GetControl<ITriggerButtonHandler>("ExitButton");
+            playButton     = GetControl<ITriggerButton>("PlayButton");
+            settingsButton = GetControl<ITriggerButton>("SettingsButton");
+            exitButton     = GetControl<ITriggerButton>("ExitButton");
 
             playButton.OnClick     += PlayButton_OnClick;
             settingsButton.OnClick += SettingsButton_OnClick;
