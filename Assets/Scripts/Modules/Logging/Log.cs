@@ -21,6 +21,14 @@ namespace NoMansBlocks {
         private static ILogger Logger { get; set; }
         #endregion
 
+        /// <summary>
+        /// Fired off anytime a log statement is produced.
+        /// </summary>
+        public static event EventHandler<LogEventArgs> OnLog {
+            add { Logger.OnLog += value; }
+            remove { Logger.OnLog -= value; }
+        }
+
         #region Constructor(s)
         /// <summary>
         /// Called when Log is first accessed. This initializes resources needed.

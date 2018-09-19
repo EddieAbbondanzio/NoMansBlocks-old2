@@ -47,7 +47,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// </summary>
         /// <param name="uiModule">The parent UI module.</param>
         /// <param name="commandConsole">The command console of the engine</param>
-        public MainMenuPresenter(IUIModule uiModule, ICommandConsole commandConsole) : base(uiModule, commandConsole) {
+        public MainMenuPresenter(IMenuManager uiModule, ICommandConsole commandConsole) : base(uiModule, commandConsole) {
         }
         #endregion
 

@@ -16,7 +16,7 @@ namespace NoMansBlocks.Modules.UI {
     /// user interfaces such as menus and more in game. This is
     /// the controller of menus
     /// </summary>
-    public sealed class UIModule : Core.Engine.Module, IUIModule {
+    public sealed class UIModule : Core.Engine.Module, IMenuManager {
         #region Constants
         /// <summary>
         /// The tag to look for in the scene to find the gameobject

@@ -62,10 +62,6 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Core\Engine\Base\GameEngine.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Base\GameEngineType.cs" />
-    <Compile Include="Assets\Scripts\Core\Engine\Base\Module\Interfaces\IStatementProducer\IStatement.cs" />
-    <Compile Include="Assets\Scripts\Core\Engine\Base\Module\Interfaces\IStatementProducer\IStatementProducer.cs" />
-    <Compile Include="Assets\Scripts\Core\Engine\Base\Module\Interfaces\IStatementProducer\StatementArgs.cs" />
-    <Compile Include="Assets\Scripts\Core\Engine\Base\Module\Interfaces\IStatementProducer\StatementType.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Base\Module\Module.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Base\Module\ModuleExecutionAttribute.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Base\Service\IServiceLocator.cs" />
@@ -134,15 +130,16 @@
     <Compile Include="Assets\Scripts\Modules\Logging\Analyzer\GpuInfo.cs" />
     <Compile Include="Assets\Scripts\Modules\Logging\Analyzer\SystemAnalyzer.cs" />
     <Compile Include="Assets\Scripts\Modules\Logging\Analyzer\SystemInfo.cs" />
-    <Compile Include="Assets\Scripts\Modules\Logging\ILogger.cs" />
     <Compile Include="Assets\Scripts\Modules\Logging\Log.cs" />
     <Compile Include="Assets\Scripts\Modules\Logging\Log\File\LogFile.cs" />
     <Compile Include="Assets\Scripts\Modules\Logging\Log\File\LogFileHandler.cs" />
     <Compile Include="Assets\Scripts\Modules\Logging\Log\Report\LogReport.cs" />
+    <Compile Include="Assets\Scripts\Modules\Logging\Log\Statement\LogEventArgs.cs" />
     <Compile Include="Assets\Scripts\Modules\Logging\Log\Statement\LogStatement.cs" />
     <Compile Include="Assets\Scripts\Modules\Logging\Log\Statement\LogStatementType.cs" />
+    <Compile Include="Assets\Scripts\Modules\Logging\Logger\ILogger.cs" />
+    <Compile Include="Assets\Scripts\Modules\Logging\Logger\UnityLogger.cs" />
     <Compile Include="Assets\Scripts\Modules\Logging\LogModule.cs" />
-    <Compile Include="Assets\Scripts\Modules\Logging\UnityLogger.cs" />
     <Compile Include="Assets\Scripts\Modules\Network\Connection\INetConnection.cs" />
     <Compile Include="Assets\Scripts\Modules\Network\Connection\NetConnectionManager.cs" />
     <Compile Include="Assets\Scripts\Modules\Network\Connection\NetConnectionManager_NetConnection.cs" />
@@ -174,7 +171,7 @@
     <Compile Include="Assets\Scripts\Modules\UI\Controls\TextBox\ITextBox.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\TextBox\TextBox.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\TextList\TextList.cs" />
-    <Compile Include="Assets\Scripts\Modules\UI\IUIModule.cs" />
+    <Compile Include="Assets\Scripts\Modules\UI\IMenuManager.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Menus\Base\IMenu.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Menus\Base\IMenuPresenter.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Menus\Base\MenuPresenter.cs" />
@@ -184,6 +181,8 @@
     <Compile Include="Assets\Scripts\Modules\UI\Menus\Main\MainMenu\MainMenu.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Menus\Main\MainMenu\MainMenuPresenter.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Menus\Main\SettingsMenu\SettingsMenu.cs" />
+    <Compile Include="Assets\Scripts\Modules\UI\Menus\Server\ServerMenu.cs" />
+    <Compile Include="Assets\Scripts\Modules\UI\Menus\Server\ServerMenuPresenter.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\UIModule.cs" />
     <Compile Include="Assets\Scripts\Utils\NetUtils.cs" />
     <Reference Include="UnityEditor.StandardEvents">

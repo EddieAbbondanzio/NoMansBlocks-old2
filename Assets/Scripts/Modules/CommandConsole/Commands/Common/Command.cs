@@ -11,13 +11,8 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
     /// <summary>
     /// Base class for commands to derive from.
     /// </summary>
-    public abstract class Command : IStatement {
+    public abstract class Command {
         #region Properties
-        /// <summary>
-        /// The type of statement it is.
-        /// </summary>
-        public StatementType StatementType => StatementType.Command;
-
         /// <summary>
         /// The category the command belongs to.
         /// </summary>

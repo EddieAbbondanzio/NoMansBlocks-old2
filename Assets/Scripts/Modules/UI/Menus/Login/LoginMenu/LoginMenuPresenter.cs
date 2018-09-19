@@ -49,7 +49,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// </summary>
         /// <param name="uiModule">The parent UI module</param>
         /// <param name="commandConsole">The command console of the engine</param>
-        public LoginMenuPresenter(IUIModule uiModule, ICommandConsole commandConsole) : base(uiModule, commandConsole) {
+        public LoginMenuPresenter(IMenuManager uiModule, ICommandConsole commandConsole) : base(uiModule, commandConsole) {
         }
         #endregion
 
@@ -78,9 +78,9 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// Syncs up all the controls on the view with the current data in the model.
         /// </summary>
         protected override void OnDataBind() {
-            usernameTextBox.Text         = Model.Username;
-            passwordTextBox.Text         = Model.Password;
-            rememberMeCheckBox.IsChecked = Model.RememberMe;
+            usernameTextBox.Text         = DataSource.Username;
+            passwordTextBox.Text         = DataSource.Password;
+            rememberMeCheckBox.IsChecked = DataSource.RememberMe;
         }
         #endregion
 

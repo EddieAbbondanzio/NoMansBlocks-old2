@@ -24,13 +24,13 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// <summary>
         /// The menu model
         /// </summary>
-        public T Model { get; set; }
+        public T DataSource { get; set; }
 
         /// <summary>
         /// Underlying implementation to get the model
         /// when all that is available is an interface reference.
         /// </summary>
-        IMenu IMenuPresenter.Model { get { return Model as IMenu; } }
+        IMenu IMenuPresenter.Model { get { return DataSource as IMenu; } }
 
         /// <summary>
         /// The resource path of where the prefab representing
@@ -49,7 +49,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// The menu controller handling all menus in the game.
         /// This can be used to load other menus from this presenter.
         /// </summary>
-        private IUIModule uiModule;
+        private IMenuManager uiModule;
 
         /// <summary>
         /// The command console module for submitting commands though.
@@ -68,7 +68,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// </summary>
         /// <param name="uiModule">The UI Module.</param>
         /// <param name="commandConsole">The command console of the engine</param>
-        protected MenuPresenter(IUIModule uiModule, ICommandConsole commandConsole) {
+        protected MenuPresenter(IMenuManager uiModule, ICommandConsole commandConsole) {
             this.uiModule = uiModule;
             this.commandConsole = commandConsole;
         }
@@ -93,7 +93,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
             menuTransform.offsetMax = new Vector2(0, 0);
 
             controls = view.GetComponentsInChildren<IControl>();
-            Model = menu;
+            DataSource = menu;
 
             OnLoad();
             DataBind();
@@ -124,7 +124,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
             OnUnload();
             GameObject.Destroy(view);
             controls = null;
-            Model = null;
+            DataSource    = null;
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// info from the model to the view.
         /// </summary>
         public void DataBind() {
-            if(Model != null) {
+            if(DataSource != null) {
                 OnDataBind();
             }
         }

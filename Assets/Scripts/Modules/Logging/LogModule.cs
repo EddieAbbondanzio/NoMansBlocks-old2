@@ -14,14 +14,8 @@ namespace NoMansBlocks.Modules.Logging {
     /// and more. This module can be accessed at any time by using
     /// the static Log interface.
     /// </summary>
-    public sealed class LogModule : Module, IStatementProducer {
+    public sealed class LogModule : Module {
         #region Properties
-        /// <summary>
-        /// Indicator for the IStatementProducer interface to flag what
-        /// kind of statements this module produces.
-        /// </summary>
-        public StatementType StatementType => StatementType.Log;
-
         /// <summary>
         /// The logger being used in the Log.cs class.
         /// </summary>
@@ -36,13 +30,6 @@ namespace NoMansBlocks.Modules.Logging {
         /// Handles loading and saving logs to file.
         /// </summary>
         public LogFileHandler LogFileHandler { get; private set; }
-        #endregion
-
-        #region Events
-        /// <summary>
-        /// Fired whenever a new log statement is made.
-        /// </summary>
-        public event EventHandler<StatementArgs> OnStatementCreated;
         #endregion
 
         #region Constructor(s)
@@ -64,8 +51,6 @@ namespace NoMansBlocks.Modules.Logging {
         /// </summary>
         public override void OnInit() {
             Log.SetLogger(Logger);
-            //Subscribe to the logger event
-            Logger.OnLogStatementCreated += OnLogStatementCreated;
         }
 
         /// <summary>
@@ -79,23 +64,6 @@ namespace NoMansBlocks.Modules.Logging {
             //Create and save the file.
             LogFile logFile = LogFileHandler.Create(logFileName, logReport);
             Task.Run(async () => { await LogFileHandler.SaveAsync(logFile); });
-
-            //Remove the logger event to prevent memory leaks.
-            Logger.OnLogStatementCreated -= OnLogStatementCreated;
-        }
-        #endregion
-
-        #region Component Events
-        /// <summary>
-        /// Fired off whenever the logger creates a new log
-        /// message. Propogate the event further for any listeners.
-        /// </summary>
-        /// <param name="sender">The logger that created the log.</param>
-        /// <param name="e">Arguments containing the log message.</param>
-        private void OnLogStatementCreated(object sender, StatementArgs e) {
-            if(OnStatementCreated != null) {
-                OnStatementCreated(this, e);
-            }
         }
         #endregion
     }

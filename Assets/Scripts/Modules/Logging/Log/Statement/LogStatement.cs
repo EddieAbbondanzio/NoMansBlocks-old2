@@ -8,14 +8,8 @@ namespace NoMansBlocks.Modules.Logging {
     /// written to the log file.
     /// </summary>
     [Serializable]
-    public class LogStatement : IStatement {
+    public class LogStatement {
         #region  Properties
-        /// <summary>
-        /// The type of base statement it is.
-        /// </summary>
-        [JsonIgnore]
-        public StatementType StatementType => StatementType.Log;
-
         /// <summary>
         /// The type of log message it is.
         /// </summary>
