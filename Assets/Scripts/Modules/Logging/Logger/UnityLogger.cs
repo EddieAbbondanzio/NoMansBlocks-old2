@@ -11,7 +11,7 @@ namespace NoMansBlocks.Modules.Logging {
     /// <summary>
     /// Logger for running within Unity. This ties in to the Debug
     /// class offered by the UnityEngine to spit out messages to the
-    /// console. This is threadsafe
+    /// console. This is threadsafe.
     /// </summary>
     public class UnityLogger : ILogger {
         #region Properties

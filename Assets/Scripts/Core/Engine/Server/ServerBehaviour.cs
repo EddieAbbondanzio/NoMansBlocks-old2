@@ -25,10 +25,6 @@ namespace NoMansBlocks.Core.Engine.Server {
         /// Prepares the engine for use.
         /// </summary>
         private void Awake() {
-            if (GameObject.FindGameObjectsWithTag("ScriptsObject")?.Length > 1) {
-                throw new Exception("More than one instance of the game engine has been found!");
-            }
-
             DontDestroyOnLoad(this.gameObject);
 
             IGameEngineTicker engineTicker = GetComponent<IGameEngineTicker>();

@@ -2,6 +2,7 @@
 using NoMansBlocks.Core.Serialization;
 using NoMansBlocks.Core.UserSystem;
 using NoMansBlocks.Modules.Network;
+using NoMansBlocks.Modules.UI.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,16 @@ namespace NoMansBlocks.Core.Engine.Server {
         /// <param name="engineTicker">The engine game loop.</param>
         /// <param name="serviceLocator">Dependency injector.</param>
         public ServerEngine(IGameEngineTicker engineTicker, IServiceLocator serviceLocator) : base(engineTicker, serviceLocator) {
+        }
+        #endregion
+
+        #region Life Cycle Events
+        /// <summary>
+        /// When the engine starts up, load the server menu so the
+        /// user can see everything going on.
+        /// </summary>
+        protected override void OnStart() {
+            UIModule.LoadMenu<ServerMenu>();
         }
         #endregion
     }

@@ -8,6 +8,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
     /// <summary>
     /// The menu model for the server.
     /// </summary>
+    [MenuPresenter(typeof(ServerMenuPresenter))]
     public sealed class ServerMenu : IMenu {
         #region Properties
         /// <summary>

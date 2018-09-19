@@ -44,7 +44,7 @@ namespace NoMansBlocks.Core.Engine.Client {
         /// so the user can sign in.
         /// </summary>
         protected override void OnStart() {
-            UIModule.LoadMenu<LoginMenu>(new LoginMenu());
+            UIModule.LoadMenu<LoginMenu>();
         }
         #endregion 
     }

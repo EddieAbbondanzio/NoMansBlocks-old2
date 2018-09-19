@@ -27,20 +27,11 @@ namespace NoMansBlocks.Core.Engine.Client {
         /// Prepares the engine for use.
         /// </summary>
         private void Awake() {
-            if(GameObject.FindGameObjectsWithTag("ScriptsObject")?.Length > 1) {
-                throw new Exception("More than one instance of the game engine has been found!");
-            }
-
             DontDestroyOnLoad(this.gameObject);
 
             IGameEngineTicker engineTicker = GetComponent<IGameEngineTicker>();
             Engine = new ClientEngine(engineTicker, new UnityServiceLocator());
-
             Engine.Run();
-
-            Mouse mouse = Engine.InputModule.GetInputDevice<Mouse>();
-            mouse.AddListener(MouseAxis.ScrollWheel, (MouseAxis axis, float value) => { Log.Debug(value.ToString()); });
-
         }
         #endregion
     }

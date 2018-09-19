@@ -20,6 +20,13 @@ namespace NoMansBlocks.Core.Engine {
     /// all of it's components.
     /// </summary>
     public abstract class GameEngine {
+        #region Statics
+        /// <summary>
+        /// Reference to ensure only 1 instance is running at any time.
+        /// </summary>
+        private static GameEngine instance;
+        #endregion
+
         #region Properties
         /// <summary>
         /// If the engine is a client or server instance.
@@ -96,6 +103,10 @@ namespace NoMansBlocks.Core.Engine {
         /// <param name="engineTicker">The main game loop.</param>
         /// <param name="serviceLocator">The dependency locator.</param>
         protected GameEngine(IGameEngineTicker engineTicker, IServiceLocator serviceLocator) {
+            if(instance != null) {
+                throw new Exception("Two or more instances of the game engine exist!");
+            }
+
             this.engineTicker   = engineTicker;
             this.serviceLocator = serviceLocator;
 
@@ -112,6 +123,7 @@ namespace NoMansBlocks.Core.Engine {
             this.engineTicker.OnEnd    += OnTickerEnd;
 
             SceneManager.sceneLoaded   += SceneManagerSceneLoaded;
+            instance = this;
         }
 
         /// <summary>
