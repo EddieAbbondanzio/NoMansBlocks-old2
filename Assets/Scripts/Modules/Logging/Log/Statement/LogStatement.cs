@@ -55,7 +55,7 @@ namespace NoMansBlocks.Modules.Logging {
         /// Generate a user friendly string to represent the log statement.
         /// </summary>
         /// <returns>A user-readable string.</returns>
-        public string Summarize() {
+        public override string ToString() {
             return string.Format("{0} {1} {2}", LogType.ToString(), Time, Message);
         }
         #endregion

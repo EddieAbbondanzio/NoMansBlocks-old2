@@ -13,7 +13,7 @@ namespace NoMansBlocks.Core.Engine.Client {
     /// <summary>
     /// MonoBehaviour to run the engine as a client.
     /// </summary>
-    [RequireComponent(typeof(UnityEngineTicker))]
+    [RequireComponent(typeof(UnityContext))]
     public class ClientBehaviour : MonoBehaviour {
         #region Properties
         /// <summary>
@@ -26,11 +26,11 @@ namespace NoMansBlocks.Core.Engine.Client {
         /// <summary>
         /// Prepares the engine for use.
         /// </summary>
-        private void Awake() {
+        private void Start() {
             DontDestroyOnLoad(this.gameObject);
 
-            IGameEngineTicker engineTicker = GetComponent<IGameEngineTicker>();
-            Engine = new ClientEngine(engineTicker, new UnityServiceLocator());
+            IContext context = GetComponent<IContext>();
+            Engine = new ClientEngine(context, new UnityServiceLocator());
             Engine.Run();
         }
         #endregion

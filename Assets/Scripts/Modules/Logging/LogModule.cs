@@ -51,6 +51,7 @@ namespace NoMansBlocks.Modules.Logging {
         /// </summary>
         public override void OnInit() {
             Log.SetLogger(Logger);
+            Engine.Context.OnUnhandledException += OnUnhandledException;
         }
 
         /// <summary>
@@ -64,6 +65,19 @@ namespace NoMansBlocks.Modules.Logging {
             //Create and save the file.
             LogFile logFile = LogFileHandler.Create(logFileName, logReport);
             Task.Run(async () => { await LogFileHandler.SaveAsync(logFile); });
+            Engine.Context.OnUnhandledException -= OnUnhandledException;
+        }
+        #endregion
+
+        #region Helpers
+        /// <summary>
+        /// Processess an unhandled exception by logging it before things crash.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e) {
+            Exception exception = e.ExceptionObject as Exception;
+            Log.Fatal(exception.ToString());
         }
         #endregion
     }

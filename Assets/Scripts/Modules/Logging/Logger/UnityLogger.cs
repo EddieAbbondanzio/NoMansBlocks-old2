@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace NoMansBlocks.Modules.Logging {
@@ -20,6 +21,19 @@ namespace NoMansBlocks.Modules.Logging {
         /// since it started.
         /// </summary>
         public List<LogStatement> History { get; private set; }
+        #endregion
+
+        #region Members
+        /// <summary>
+        /// The semaphore lock object.
+        /// </summary>
+        private readonly object lockObj;
+
+        /// <summary>
+        /// The list of log statements that need to be printed
+        /// out to Unity's console that came from other threads.
+        /// </summary>
+        private TQueue<LogStatement> logQueue;
         #endregion
 
         #region Events
@@ -45,13 +59,6 @@ namespace NoMansBlocks.Modules.Logging {
         private event EventHandler<LogEventArgs> onLog;
         #endregion
 
-        #region Members
-        /// <summary>
-        /// The semaphore lock object.
-        /// </summary>
-        private readonly object lockObj;
-        #endregion
-
         #region Constructor(s)
         /// <summary>
         /// Create a new Unity Console logger.
@@ -71,10 +78,10 @@ namespace NoMansBlocks.Modules.Logging {
             LogStatement logStatement = new LogStatement(LogStatementType.Debug, message);
 
             lock (lockObj) {
-                UnityEngine.Debug.Log(message);
                 History.Add(logStatement);
             }
 
+            LogToUnity(logStatement);
             TriggerOnLog(logStatement);
         }
 
@@ -89,10 +96,10 @@ namespace NoMansBlocks.Modules.Logging {
             LogStatement logStatement = new LogStatement(LogStatementType.Debug, fullMessage);
 
             lock (lockObj) {
-                UnityEngine.Debug.Log(fullMessage);
                 History.Add(logStatement);
             }
 
+            LogToUnity(logStatement);
             TriggerOnLog(logStatement);
         }
 
@@ -104,10 +111,10 @@ namespace NoMansBlocks.Modules.Logging {
             LogStatement logStatement = new LogStatement(LogStatementType.Warning, message);
 
             lock (lockObj) {
-                UnityEngine.Debug.LogWarning(message);
                 History.Add(logStatement);
             }
 
+            LogToUnity(logStatement);
             TriggerOnLog(logStatement);
         }
 
@@ -122,10 +129,10 @@ namespace NoMansBlocks.Modules.Logging {
             LogStatement logStatement = new LogStatement(LogStatementType.Warning, fullMessage);
 
             lock (lockObj) {
-                UnityEngine.Debug.LogWarning(fullMessage);
                 History.Add(logStatement);
             }
 
+            LogToUnity(logStatement);
             TriggerOnLog(logStatement);
         }
 
@@ -137,10 +144,10 @@ namespace NoMansBlocks.Modules.Logging {
             LogStatement logStatement = new LogStatement(LogStatementType.Error, message);
 
             lock (lockObj) {
-                UnityEngine.Debug.LogError(message);
                 History.Add(logStatement);
             }
 
+            LogToUnity(logStatement);
             TriggerOnLog(logStatement);
         }
 
@@ -155,10 +162,10 @@ namespace NoMansBlocks.Modules.Logging {
             LogStatement logStatement = new LogStatement(LogStatementType.Error, fullMessage);
 
             lock (lockObj) {
-                UnityEngine.Debug.LogError(fullMessage);
                 History.Add(logStatement);
             }
 
+            LogToUnity(logStatement);
             TriggerOnLog(logStatement);
         }
 
@@ -171,10 +178,10 @@ namespace NoMansBlocks.Modules.Logging {
             LogStatement logStatement = new LogStatement(LogStatementType.Error, exceptionString);
 
             lock (lockObj) {
-                UnityEngine.Debug.LogError(exceptionString);
                 History.Add(logStatement);
             }
 
+            LogToUnity(logStatement);
             TriggerOnLog(logStatement);
         }
 
@@ -186,10 +193,10 @@ namespace NoMansBlocks.Modules.Logging {
             LogStatement logStatement = new LogStatement(LogStatementType.Fatal, message);
 
             lock (lockObj) {
-                UnityEngine.Debug.LogError(message);
                 History.Add(logStatement);
             }
 
+            LogToUnity(logStatement);
             TriggerOnLog(logStatement);
         }
 
@@ -201,13 +208,13 @@ namespace NoMansBlocks.Modules.Logging {
         /// <param name="parameters">The objects to insert into the message.</param>
         public void Fatal(string message, params object[] parameters) {
             string fullMessage = string.Format(message, parameters);
-            LogStatement logStatement = new LogStatement(LogStatementType.Fatal, message);
+            LogStatement logStatement = new LogStatement(LogStatementType.Fatal, fullMessage);
 
             lock (lockObj) {
-                UnityEngine.Debug.LogError(fullMessage);
                 History.Add(logStatement);
             }
 
+            LogToUnity(logStatement);
             TriggerOnLog(logStatement);
         }
         #endregion
@@ -222,6 +229,40 @@ namespace NoMansBlocks.Modules.Logging {
                 if (onLog != null) {
                     onLog(this, new LogEventArgs(logStatement));
                 }
+            }
+        }
+
+        /// <summary>
+        /// Log the log statement to the Unity Debug.Log class.
+        /// </summary>
+        /// <param name="logStatement">The statement to log.</param>
+        private void LogToUnity(LogStatement logStatement) {
+            if (Context.IsCurrentThreadMain()) {
+                LogToUnityHelper(logStatement);
+            }
+            else {
+                Context.ExecuteOnMain(() => {
+                    LogToUnityHelper(logStatement);
+                });
+            }
+        }
+
+        /// <summary>
+        /// Helper to handle processing which Debug method to call.
+        /// </summary>
+        /// <param name="logStatement">The log statment to log.</param>
+        private void LogToUnityHelper(LogStatement logStatement) {
+            switch (logStatement.LogType) {
+                case LogStatementType.Debug:
+                    UnityEngine.Debug.Log(logStatement.ToString());
+                    break;
+                case LogStatementType.Warning:
+                    UnityEngine.Debug.LogWarning(logStatement.ToString());
+                    break;
+                case LogStatementType.Error:
+                case LogStatementType.Fatal:
+                    UnityEngine.Debug.LogError(logStatement.ToString());
+                    break;
             }
         }
         #endregion

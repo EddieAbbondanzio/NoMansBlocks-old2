@@ -11,7 +11,7 @@ namespace NoMansBlocks.Core.Engine.Server {
     /// Server module for running the game engine
     /// as a server.
     /// </summary>
-    [RequireComponent(typeof(UnityEngineTicker))]
+    [RequireComponent(typeof(UnityContext))]
     public class ServerBehaviour : MonoBehaviour {
         #region Properties
         /// <summary>
@@ -24,11 +24,11 @@ namespace NoMansBlocks.Core.Engine.Server {
         /// <summary>
         /// Prepares the engine for use.
         /// </summary>
-        private void Awake() {
+        private void Start() {
             DontDestroyOnLoad(this.gameObject);
 
-            IGameEngineTicker engineTicker = GetComponent<IGameEngineTicker>();
-            Engine = new ServerEngine(engineTicker, new UnityServiceLocator());
+            IContext context = GetComponent<IContext>();
+            Engine = new ServerEngine(context, new UnityServiceLocator());
             Engine.Run();
         }
         #endregion

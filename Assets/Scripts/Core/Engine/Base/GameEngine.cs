@@ -13,6 +13,7 @@ using UnityEngine.SceneManagement;
 using NoMansBlocks.Modules.Config;
 using UnityEngine;
 using NoMansBlocks.Modules.Input;
+using System.Threading;
 
 namespace NoMansBlocks.Core.Engine {
     /// <summary>
@@ -37,6 +38,11 @@ namespace NoMansBlocks.Core.Engine {
         /// If the engine is currently running or not.
         /// </summary>
         public bool IsRunning { get; private set; }
+
+        /// <summary>
+        /// The engines running context.
+        /// </summary>
+        public IContext Context { get; private set; }
 
         /// <summary>
         /// The module that holds all of the config settings
@@ -84,11 +90,6 @@ namespace NoMansBlocks.Core.Engine {
         private IServiceLocator serviceLocator;
 
         /// <summary>
-        /// Handles firing off the events of the game engine.
-        /// </summary>
-        private IGameEngineTicker engineTicker;
-
-        /// <summary>
         /// The collection of modules that belong to the engine.
         /// This should never be interacted with directly.
         /// </summary>
@@ -100,14 +101,14 @@ namespace NoMansBlocks.Core.Engine {
         /// Create a new instance of the game engine. A user
         /// is required to know how to run the engine.
         /// </summary>
-        /// <param name="engineTicker">The main game loop.</param>
+        /// <param name="context">The executing context of the engine.</param>
         /// <param name="serviceLocator">The dependency locator.</param>
-        protected GameEngine(IGameEngineTicker engineTicker, IServiceLocator serviceLocator) {
+        protected GameEngine(IContext context, IServiceLocator serviceLocator) {
             if(instance != null) {
                 throw new Exception("Two or more instances of the game engine exist!");
             }
 
-            this.engineTicker   = engineTicker;
+            this.Context        = context;
             this.serviceLocator = serviceLocator;
 
             LogModule     = new LogModule(this, serviceLocator.GetLogger());
@@ -117,13 +118,14 @@ namespace NoMansBlocks.Core.Engine {
             NetModule     = new NetModule(this);
             InputModule   = new InputModule(this, serviceLocator.GetInputPoller());
 
-            this.engineTicker.OnInit   += OnTickerInit;
-            this.engineTicker.OnStart  += OnTickerStart;
-            this.engineTicker.OnUpdate += OnTickerUpdate;
-            this.engineTicker.OnEnd    += OnTickerEnd;
+            this.Context.EngineTicker.OnInit   += OnTickerInit;
+            this.Context.EngineTicker.OnStart  += OnTickerStart;
+            this.Context.EngineTicker.OnUpdate += OnTickerUpdate;
+            this.Context.EngineTicker.OnEnd    += OnTickerEnd;
 
             SceneManager.sceneLoaded   += SceneManagerSceneLoaded;
             instance = this;
+            Core.Context.SetContext(context);
         }
 
         /// <summary>
@@ -131,10 +133,10 @@ namespace NoMansBlocks.Core.Engine {
         /// ticker events.
         /// </summary>
         ~GameEngine() {
-            engineTicker.OnInit   -= OnTickerInit;
-            engineTicker.OnStart  -= OnTickerStart;
-            engineTicker.OnUpdate -= OnTickerUpdate;
-            engineTicker.OnEnd    -= OnTickerEnd;
+            Context.EngineTicker.OnInit   -= OnTickerInit;
+            Context.EngineTicker.OnStart  -= OnTickerStart;
+            Context.EngineTicker.OnUpdate -= OnTickerUpdate;
+            Context.EngineTicker.OnEnd    -= OnTickerEnd;
 
             SceneManager.sceneLoaded   -= SceneManagerSceneLoaded;
         }
@@ -150,8 +152,10 @@ namespace NoMansBlocks.Core.Engine {
                 throw new InvalidOperationException("Engine is already running! Cannot call Run() twice.");
             }
 
-            engineTicker.StartTicking();
+            Context.EngineTicker.StartTicking();
             IsRunning = true;
+
+            ThreadPool.QueueUserWorkItem(delegate { Log.Debug("hi from  another thread!"); });
         }
 
         /// <summary>
@@ -163,7 +167,7 @@ namespace NoMansBlocks.Core.Engine {
                 throw new InvalidOperationException("Engine is not running. Cannot stop it.");
             }
 
-            engineTicker.StopTicking();
+            Context.EngineTicker.StopTicking();
             IsRunning = false;
 
 #if (UNITY_EDITOR)

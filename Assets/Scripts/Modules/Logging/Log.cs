@@ -29,14 +29,6 @@ namespace NoMansBlocks {
             remove { Logger.OnLog -= value; }
         }
 
-        #region Constructor(s)
-        /// <summary>
-        /// Called when Log is first accessed. This initializes resources needed.
-        /// </summary>
-        static Log() {
-        }
-        #endregion
-
         #region Publics
         /// <summary>
         /// Set the underlying logger to use. This only

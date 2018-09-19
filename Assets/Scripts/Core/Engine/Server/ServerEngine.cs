@@ -25,11 +25,10 @@ namespace NoMansBlocks.Core.Engine.Server {
         #region Constructor(s)
         /// <summary>
         /// Create a new instance of the server game engine.
-        /// <paramref name="engineTicker">The engine game loop.</paramref>
         /// </summary>
-        /// <param name="engineTicker">The engine game loop.</param>
+        /// <param name="context">The engine's executing context.</param>
         /// <param name="serviceLocator">Dependency injector.</param>
-        public ServerEngine(IGameEngineTicker engineTicker, IServiceLocator serviceLocator) : base(engineTicker, serviceLocator) {
+        public ServerEngine(IContext context, IServiceLocator serviceLocator) : base(context, serviceLocator) {
         }
         #endregion
 
