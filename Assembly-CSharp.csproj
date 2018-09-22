@@ -188,8 +188,11 @@
     <Compile Include="Assets\Scripts\Modules\UI\Menus\Server\ServerMenu.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Menus\Server\ServerMenuPresenter.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\UIModule.cs" />
+    <Compile Include="Assets\Scripts\Unity\Pooling\Base\IObjectPool.cs" />
+    <Compile Include="Assets\Scripts\Unity\Pooling\Base\ObjectPool.cs" />
+    <Compile Include="Assets\Scripts\Unity\Pooling\Types\TestPool.cs" />
+    <Compile Include="Assets\Scripts\Unity\ReadOnlyFieldAttribute.cs" />
     <Compile Include="Assets\Scripts\Utils\NetUtils.cs" />
-    <Compile Include="Assets\Scripts\Utils\Unity\ObjectPool\ObjectPool.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Users/Eddie/Development/NoMansBlocks/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
