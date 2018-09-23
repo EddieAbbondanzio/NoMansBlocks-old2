@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NoMansBlocks.Modules.UI.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,13 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// </summary>
         public List<string> PlayerNames { get; set; }
 
+        /// <summary>
+        /// The list of log messages 
+        /// </summary>
+        public TQueue<string> Logs { get; set; }
+        #endregion
+
+        #region Properties
 
         #endregion
     }

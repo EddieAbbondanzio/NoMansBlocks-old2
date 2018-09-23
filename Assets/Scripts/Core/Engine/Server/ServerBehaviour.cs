@@ -30,6 +30,8 @@ namespace NoMansBlocks.Core.Engine.Server {
             IContext context = GetComponent<IContext>();
             Engine = new ServerEngine(context, new UnityServiceLocator());
             Engine.Run();
+
+            Log.Debug("Test log please ignore");
         }
         #endregion
     }

@@ -58,6 +58,19 @@ namespace NoMansBlocks.Modules.Logging {
         public override string ToString() {
             return string.Format("{0} {1} {2}", LogType.ToString(), Time, Message);
         }
+
+        /// <summary>
+        /// Shorter variant of the statement in a string.
+        /// </summary>
+        /// <returns>A user readable string.</returns>
+        public string ToStringShort() {
+            if(LogType == LogStatementType.Debug) {
+                return string.Format("{0}: {1}", Time.ToShortTimeString(), Message);
+            }
+            else {
+                return string.Format("{0} {1}: {2}", Time.ToShortDateString(), LogType.ToString(), Message);
+            }
+        }
         #endregion
     }
 }

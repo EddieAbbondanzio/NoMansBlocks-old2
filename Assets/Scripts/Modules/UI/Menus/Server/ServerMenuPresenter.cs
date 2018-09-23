@@ -1,4 +1,6 @@
 ﻿using NoMansBlocks.Modules.CommandConsole;
+using NoMansBlocks.Modules.Logging;
+using NoMansBlocks.Modules.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +20,23 @@ namespace NoMansBlocks.Modules.UI.Menus {
         protected override string PrefabPath => "Menus/Server/ServerMenu";
         #endregion
 
+        #region Members
+        /// <summary>
+        /// The list control that renders player names to the screen.
+        /// </summary>
+        private ITextList playerList;
+
+        /// <summary>
+        /// The list control that renders logs to the screen.
+        /// </summary>
+        private ITextList logList;
+
+        /// <summary>
+        /// The textbox to pull input in from.
+        /// </summary>
+        private ITextBox commandTextBox;
+        #endregion
+
         #region Constructor(s)
         /// <summary>
         /// Create a new instance of the server menu presenter. This should
@@ -30,15 +49,53 @@ namespace NoMansBlocks.Modules.UI.Menus {
         #endregion
 
         #region Life Cycle Events
+        /// <summary>
+        /// Subscribe to the logger to listen in on when logs
+        /// are being made.
+        /// </summary>
         protected override void OnLoad() {
+            logList        = GetControl<ITextList>("ConsoleList");
+            commandTextBox = GetControl<ITextBox>("CommandTextBox");
+
+            Log.OnLog += Log_OnLog;
+            commandTextBox.OnEndEdit += CommandTextBox_OnEndEdit;
         }
+
+
 
         protected override void OnDataBind() {
 
         }
 
+        /// <summary>
+        /// Unsubscribe from any events to prevent member leaks.
+        /// </summary>
         protected override void OnUnload() {
+            Log.OnLog -= Log_OnLog;
+        }
+        #endregion
 
+        #region Helpers
+        /// <summary>
+        /// Listen for any logs made by the engine.
+        /// </summary>
+        /// <param name="sender">The logger.</param>
+        /// <param name="e">The log that was made.</param>
+        private void Log_OnLog(object sender, LogEventArgs e) {
+            logList.AddItem(e.LogStatement.ToStringShort());
+            logList.ScrollToBottom();
+        }
+
+        /// <summary>
+        /// Fired each time the command textbox submits their 
+        /// input.
+        /// </summary>
+        /// <param name="sender">The textbox.</param>
+        /// <param name="e">Nothing?.</param>
+        private void CommandTextBox_OnEndEdit(object sender, TextBoxEventArgs e) {
+            if (!string.IsNullOrWhiteSpace(e.Text)) {
+                ExecuteCommand(e.Text);
+            }
         }
         #endregion
     }

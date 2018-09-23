@@ -52,10 +52,11 @@ namespace NoMansBlocks {
         /// Create a new queue from an existing collection.
         /// </summary>
         /// <param name="collection">The collecton to populate the queue with.</param>
-        public TQueue(IEnumerable<T> collection) {
+        /// <param name="capacity">The maximum number of items allowed in the queue.</param>
+        public TQueue(IEnumerable<T> collection, int capacity = -1) {
             queue    = new Queue<T>(collection);
             lockObj  = new object();
-            Capacity = -1;
+            Capacity = capacity;
         }
 
         /// <summary>

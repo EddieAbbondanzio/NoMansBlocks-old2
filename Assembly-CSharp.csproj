@@ -60,6 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scenes\TestScript.cs" />
     <Compile Include="Assets\Scripts\Common\TQueue.cs" />
     <Compile Include="Assets\Scripts\Core\Context\Context.cs" />
     <Compile Include="Assets\Scripts\Core\Context\IContext.cs" />
@@ -94,7 +95,6 @@
     <Compile Include="Assets\Scripts\Core\UserSystem\User.cs" />
     <Compile Include="Assets\Scripts\Core\UserSystem\UserService.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\CommandConsoleModule.cs" />
-    <Compile Include="Assets\Scripts\Modules\CommandConsole\CommandParser.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Common\Command.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Common\CommandType.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\Application\StartCommand.cs" />
@@ -172,8 +172,13 @@
     <Compile Include="Assets\Scripts\Modules\UI\Controls\Button\Trigger\TriggerButton.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\CheckBox\CheckBox.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\CheckBox\ICheckBox.cs" />
+    <Compile Include="Assets\Scripts\Modules\UI\Controls\Label\ILabel.cs" />
+    <Compile Include="Assets\Scripts\Modules\UI\Controls\Label\Label.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\TextBox\ITextBox.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\TextBox\TextBox.cs" />
+    <Compile Include="Assets\Scripts\Modules\UI\Controls\TextBox\TextBoxEventArgs.cs" />
+    <Compile Include="Assets\Scripts\Modules\UI\Controls\TextList\ITextList.cs" />
+    <Compile Include="Assets\Scripts\Modules\UI\Controls\TextList\LabelPool.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\TextList\TextList.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\IMenuManager.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Menus\Base\IMenu.cs" />
@@ -188,9 +193,8 @@
     <Compile Include="Assets\Scripts\Modules\UI\Menus\Server\ServerMenu.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Menus\Server\ServerMenuPresenter.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\UIModule.cs" />
-    <Compile Include="Assets\Scripts\Unity\Pooling\Base\IObjectPool.cs" />
-    <Compile Include="Assets\Scripts\Unity\Pooling\Base\ObjectPool.cs" />
-    <Compile Include="Assets\Scripts\Unity\Pooling\Types\TestPool.cs" />
+    <Compile Include="Assets\Scripts\Unity\Pooling\IObjectPool.cs" />
+    <Compile Include="Assets\Scripts\Unity\Pooling\ObjectPool.cs" />
     <Compile Include="Assets\Scripts\Unity\ReadOnlyFieldAttribute.cs" />
     <Compile Include="Assets\Scripts\Utils\NetUtils.cs" />
     <Reference Include="UnityEditor.StandardEvents">

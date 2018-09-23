@@ -1,6 +1,5 @@
 ﻿using NoMansBlocks.Utils;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,27 +9,20 @@ using UnityEngine.UI;
 
 namespace NoMansBlocks.Modules.UI.Controls {
     /// <summary>
-    /// Presenter to handle rendering a list of text to the
-    /// screen. This provides the ability to scroll the list
-    /// as well.
+    /// List control for rendering a list on the screen.
     /// </summary>
+    [RequireComponent(typeof(LabelPool))]
     [RequireComponent(typeof(ScrollRect))]
-    public sealed class TextList : MonoBehaviour, IListControl<string> {
+    public sealed class TextList : MonoBehaviour, ITextList {
         #region Unity Fields
-        /// <summary>
-        /// The prefab to use to create new items with.
-        /// </summary>
-        public GameObject ItemPrefab;
-
-        /// <summary>
-        /// The content panel of the scroll rect.
-        /// </summary>
-        public GameObject ContentPanel;
+        [SerializeField]
+        [Tooltip("The maximum number of items allowed in the list.")]
+        private int capacity;
         #endregion
 
         #region Properties
         /// <summary>
-        /// The unique name of the list
+        /// The unique name of the texbox
         /// </summary>
         public string Name => gameObject.name;
 
@@ -44,39 +36,138 @@ namespace NoMansBlocks.Modules.UI.Controls {
         }
 
         /// <summary>
-        /// The list of items displayed in the control.
+        /// The maximum number of values allowed in the list
+        /// at any time.
         /// </summary>
-        public IList<string> DataSource { get; set; }
+        public int Capacity {
+            get { return capacity; }
+            set { capacity = value; }
+        }
+
+        /// <summary>
+        /// The items currently in the list.
+        /// </summary>
+        public string[] Items {
+            get { return items.ToArray(); }
+            set { items = new TQueue<string>(value, Capacity); }
+        }
         #endregion
 
-        #region Publics
+        #region Members
         /// <summary>
-        /// Databind the control so that it renders the latest
-        /// version of the list on screen.
+        /// The underlying queue for holding the items.
         /// </summary>
-        public void DataBind() {
-            //Improve this later
-            foreach(Transform child in ContentPanel.transform) {
-                GameObject.Destroy(child);
-            }
+        private TQueue<string> items;
 
-            for(int i = 0, itemCount = DataSource.Count; i < itemCount; i++) {
-                GameObject newItem = Instantiate(ItemPrefab) as GameObject;
-                newItem.GetComponent<Text>().text = DataSource[i];
+        /// <summary>
+        /// The pool of label ui objects to maintain.
+        /// </summary>
+        private IObjectPool<ILabel> labelPool;
 
-                newItem.transform.parent = ContentPanel.transform;
-                newItem.transform.position = new Vector3(0, 0, 0);
-                newItem.transform.localScale = Vector3.one;
+        /// <summary>
+        /// The active collection of UI Texts on screen.
+        /// </summary>
+        private List<ILabel> activeLabels;
+
+        /// <summary>
+        /// The unity scroll rect for handling scrolling.
+        /// </summary>
+        private ScrollRect scrollRect;
+        #endregion
+
+        #region Life Cycle Events
+        /// <summary>
+        /// Ensure everything is valid when ever a value is changed in
+        /// the editor.
+        /// </summary>
+        private void OnValidate() {
+            if(Capacity < 1) {
+                Debug.Log("Capacity must be greater than 0.");
+                Capacity = 1;
             }
         }
 
         /// <summary>
-        /// Clear out the control so it appears empty.
+        /// When the program first starts go out and find the pool, and
+        /// set up the queue. Make sure the pools Capacity matches up with
+        /// the list or else throw an error.
+        /// </summary>
+        private void Awake() {
+            labelPool    = GetComponent<IObjectPool<ILabel>>();
+            scrollRect   = GetComponent<ScrollRect>();
+            items        = new TQueue<string>(Capacity);
+            activeLabels = new List<ILabel>();
+
+            //Do the capacitys match?
+            if (labelPool.Capacity != Capacity) {
+                throw new Exception(string.Format("{0} pool capacity does not match capacity", gameObject.name));
+            }
+        }
+        #endregion
+
+        #region Publics
+        /// <summary>
+        /// Add a new item to the begining of the list.
+        /// </summary>
+        /// <param name="item">The item to add.</param>
+        public void AddItem(string item) {
+            items.Enqueue(item);
+            DataBind();
+        }
+
+        /// <summary>
+        /// Clear all items from the list and make it blank.
         /// </summary>
         public void Clear() {
-            foreach (Transform child in ContentPanel.transform) {
-                GameObject.Destroy(child);
+            items.Clear();
+            DataBind();
+        }
+
+        /// <summary>
+        /// Update the on screen representation to match
+        /// up with the current state of it's text queue.
+        /// </summary>
+        public void DataBind() {
+            //Find the difference
+            int diff = activeLabels.Count - items.Count;
+
+            //Sync up labels to items count
+            while(diff != 0) {
+                if(diff < 0) {
+                    activeLabels.Add(labelPool.GetInstance());
+                    diff++;
+                }
+                else if(diff > 0) {
+                    int lastIndex = activeLabels.Count - 1;
+                    ILabel label = activeLabels[lastIndex];
+                    activeLabels.RemoveAt(lastIndex);
+
+                    labelPool.ReturnInstance(label);
+                    diff--;
+                }
             }
+
+            string[] itemArray = items.ToArray();
+            //Set their values
+            for (int i = 0; i < itemArray.Length; i++) {
+                activeLabels[i].Text = itemArray[i];
+            }
+
+            ScrollToBottom();
+        }
+
+        /// <summary>
+        /// Scroll to the very top of the scroll view.
+        /// </summary>
+        public void ScrollToTop() {
+            scrollRect.normalizedPosition = new Vector2(0, 1);
+        }
+
+        /// <summary>
+        /// Scroll to the very bottom of the scroll view.
+        /// </summary>
+        public void ScrollToBottom() {
+            scrollRect.normalizedPosition = new Vector2(0, 0);
         }
         #endregion
     }

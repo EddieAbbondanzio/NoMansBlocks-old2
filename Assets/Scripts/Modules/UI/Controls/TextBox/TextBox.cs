@@ -13,6 +13,12 @@ namespace NoMansBlocks.Modules.UI.Controls {
     /// </summary>
     [RequireComponent(typeof(InputField))]
     public sealed class TextBox : MonoBehaviour, ITextBox {
+        #region Unity Fields
+        [SerializeField]
+        [Tooltip("If the contents of the textbox should be cleared when the user leaves it.")]
+        private bool clearOnExit;
+        #endregion
+
         #region Properties
         /// <summary>
         /// The unique name of the texbox
@@ -32,26 +38,37 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// The text inside of the textbox.
         /// </summary>
         public string Text {
-            get { return InputField.text; }
-            set { InputField.text = value; }
+            get { return inputField.text; }
+            set { inputField.text = value; }
         }
 
         /// <summary>
+        /// If the textbox should be cleared when the
+        /// user leaves it.
+        /// </summary>
+        public bool ClearOnExit {
+            get { return clearOnExit; }
+            set { clearOnExit = value; }
+        }
+        #endregion
+
+        #region Members
+        /// <summary>
         /// The underlying InputField.
         /// </summary>
-        private InputField InputField { get; set; }
+        private InputField inputField;
         #endregion
 
         #region Event Delegates
         /// <summary>
         /// Fired everytime the value of the textbox is changed.
         /// </summary>
-        public event EventHandler OnEdit;
+        public event EventHandler<TextBoxEventArgs> OnEdit;
 
         /// <summary>
         /// Fired when the user has finished performing an edit.
         /// </summary>
-        public event EventHandler OnEndEdit;
+        public event EventHandler<TextBoxEventArgs> OnEndEdit;
         #endregion
 
         #region Life Cycle Events
@@ -59,17 +76,17 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// Locate the input field for this behaviour.
         /// </summary>
         private void Awake() {
-            InputField = GetComponent<InputField>();
-            InputField.onValueChanged.AddListener(OnEditListener);
-            InputField.onEndEdit.AddListener(OnEndEditListener);
+            inputField = GetComponent<InputField>();
+            inputField.onValueChanged.AddListener(OnEditListener);
+            inputField.onEndEdit.AddListener(OnEndEditListener);
         }
 
         /// <summary>
         /// Release any listeners
         /// </summary>
         private void OnDestroy() {
-            InputField.onValueChanged.RemoveListener(OnEditListener);
-            InputField.onEndEdit.RemoveListener(OnEndEditListener);
+            inputField.onValueChanged.RemoveListener(OnEditListener);
+            inputField.onEndEdit.RemoveListener(OnEndEditListener);
         }
         #endregion
 
@@ -80,7 +97,7 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// <param name="value">The current value of the textbox</param>
         private void OnEditListener(string value) {
             if(OnEdit != null) {
-                OnEdit(this, null);
+                OnEdit(this, new TextBoxEventArgs(value));
             }
         }
 
@@ -90,7 +107,11 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// <param name="value">The current value of the textbox.</param>
         private void OnEndEditListener(string value) {
             if (OnEndEdit != null) {
-                OnEndEdit(this, null);
+                OnEndEdit(this, new TextBoxEventArgs(value));
+            }
+
+            if (ClearOnExit) {
+                inputField.text = string.Empty;
             }
         }
         #endregion

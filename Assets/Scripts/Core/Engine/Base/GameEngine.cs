@@ -154,8 +154,6 @@ namespace NoMansBlocks.Core.Engine {
 
             Context.EngineTicker.StartTicking();
             IsRunning = true;
-
-            ThreadPool.QueueUserWorkItem(delegate { Log.Debug("hi from  another thread!"); });
         }
 
         /// <summary>

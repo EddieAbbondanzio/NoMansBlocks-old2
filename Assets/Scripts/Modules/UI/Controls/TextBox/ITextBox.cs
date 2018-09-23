@@ -20,12 +20,12 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// <summary>
         /// Fired everytime the value of the textbox is changed.
         /// </summary>
-        event EventHandler OnEdit;
+        event EventHandler<TextBoxEventArgs> OnEdit;
 
         /// <summary>
         /// Fired when the user has finished performing an edit.
         /// </summary>
-        event EventHandler OnEndEdit;
+        event EventHandler<TextBoxEventArgs> OnEndEdit;
         #endregion
     }
 }
