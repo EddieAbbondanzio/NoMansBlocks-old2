@@ -8,7 +8,7 @@ namespace NoMansBlocks.Modules.UI.Controls {
     /// <summary>
     /// Interface for checkbox based controls to derive from.
     /// </summary>
-    public interface ICheckBox : IControl {
+    public interface ICheckBox : IControl, IFocusable {
         #region Properties
         /// <summary>
         /// If the checkbox is currently checked or not.

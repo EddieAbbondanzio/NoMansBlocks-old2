@@ -165,7 +165,7 @@
     <Compile Include="Assets\Scripts\Modules\Network\NetModule.cs" />
     <Compile Include="Assets\Scripts\Modules\Network\NetModule_NetMessageListener.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\Base\IControl.cs" />
-    <Compile Include="Assets\Scripts\Modules\UI\Controls\Base\IListControl.cs" />
+    <Compile Include="Assets\Scripts\Modules\UI\Controls\Base\IFocusable.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\Button\Toggle\IToggleButton.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\Button\Toggle\ToggleButton.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\Button\Trigger\ITriggerButton.cs" />
@@ -176,6 +176,7 @@
     <Compile Include="Assets\Scripts\Modules\UI\Controls\Label\Label.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\TextBox\ITextBox.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\TextBox\TextBox.cs" />
+    <Compile Include="Assets\Scripts\Modules\UI\Controls\TextBox\TextBoxAction.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\TextBox\TextBoxEventArgs.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\TextList\ITextList.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\TextList\LabelPool.cs" />

@@ -13,11 +13,6 @@ namespace NoMansBlocks.Modules.UI.Controls {
     /// </summary>
     [RequireComponent(typeof(InputField))]
     public sealed class TextBox : MonoBehaviour, ITextBox {
-        #region Unity Fields
-        [SerializeField]
-        [Tooltip("If the contents of the textbox should be cleared when the user leaves it.")]
-        private bool clearOnExit;
-        #endregion
 
         #region Properties
         /// <summary>
@@ -40,15 +35,6 @@ namespace NoMansBlocks.Modules.UI.Controls {
         public string Text {
             get { return inputField.text; }
             set { inputField.text = value; }
-        }
-
-        /// <summary>
-        /// If the textbox should be cleared when the
-        /// user leaves it.
-        /// </summary>
-        public bool ClearOnExit {
-            get { return clearOnExit; }
-            set { clearOnExit = value; }
         }
         #endregion
 
@@ -90,6 +76,29 @@ namespace NoMansBlocks.Modules.UI.Controls {
         }
         #endregion
 
+        #region Publics
+        /// <summary>
+        /// Clear out the contents of the textbox.
+        /// </summary>
+        public void Clear() {
+            Text = string.Empty;
+        }
+
+        /// <summary>
+        /// Focus on the textbox.
+        /// </summary>
+        public void Focus() {
+            inputField.ActivateInputField();
+        }
+
+        /// <summary>
+        /// Blur the textbox.
+        /// </summary>
+        public void Blur() {
+            inputField.DeactivateInputField();
+        }
+        #endregion
+
         #region Helpers
         /// <summary>
         /// Propogate the event for any listeners.
@@ -97,7 +106,7 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// <param name="value">The current value of the textbox</param>
         private void OnEditListener(string value) {
             if(OnEdit != null) {
-                OnEdit(this, new TextBoxEventArgs(value));
+                OnEdit(this, new TextBoxEventArgs(value, TextBoxAction.Edit));
             }
         }
 
@@ -106,12 +115,17 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// </summary>
         /// <param name="value">The current value of the textbox.</param>
         private void OnEndEditListener(string value) {
-            if (OnEndEdit != null) {
-                OnEndEdit(this, new TextBoxEventArgs(value));
+            TextBoxEventArgs args;
+
+            if(UnityEngine.Input.GetKey(KeyCode.Return)) {
+                args = new TextBoxEventArgs(value, TextBoxAction.Submit);
+            }
+            else {
+                args = new TextBoxEventArgs(value, TextBoxAction.Exit);
             }
 
-            if (ClearOnExit) {
-                inputField.text = string.Empty;
+            if (OnEndEdit != null) {
+                OnEndEdit(this, args);
             }
         }
         #endregion

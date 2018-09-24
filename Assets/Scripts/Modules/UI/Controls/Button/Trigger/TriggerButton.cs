@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace NoMansBlocks.Modules.UI.Controls {
@@ -66,6 +67,20 @@ namespace NoMansBlocks.Modules.UI.Controls {
         public void SetLabel(string label) {
             Text text = Button.GetComponentInChildren<Text>();
             text.text = label;
+        }
+
+        /// <summary>
+        /// Focus on the button.
+        /// </summary>
+        public void Focus() {
+            EventSystem.current.SetSelectedGameObject(gameObject);
+        }
+
+        /// <summary>
+        /// Release focus from the button.
+        /// </summary>
+        public void Blur() {
+            EventSystem.current.SetSelectedGameObject(null);
         }
         #endregion
 

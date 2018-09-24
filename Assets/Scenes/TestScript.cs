@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class TestScript : MonoBehaviour {
 
@@ -9,6 +11,9 @@ public class TestScript : MonoBehaviour {
 	void Start () {
         Label label = GetComponent<Label>();
         ILabel iLabel = GetComponent<ILabel>();
+
+        Button button = GetComponent<Button>();
+        EventSystem.current.SetSelectedGameObject(button.gameObject);
 
         int four = 4;
 	}

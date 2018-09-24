@@ -8,7 +8,7 @@ namespace NoMansBlocks.Modules.UI.Controls {
     /// <summary>
     /// Interface for textbox based controls to derive from.
     /// </summary>
-    public interface ITextBox : IControl {
+    public interface ITextBox : IControl, IFocusable {
         #region Properties
         /// <summary>
         /// The text inside of the textbox
@@ -26,6 +26,13 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// Fired when the user has finished performing an edit.
         /// </summary>
         event EventHandler<TextBoxEventArgs> OnEndEdit;
+        #endregion
+
+        #region Publics
+        /// <summary>
+        /// Clear out the contents of the textbox.
+        /// </summary>
+        void Clear();
         #endregion
     }
 }

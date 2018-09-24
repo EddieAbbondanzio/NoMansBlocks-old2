@@ -93,8 +93,10 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// <param name="sender">The textbox.</param>
         /// <param name="e">Nothing?.</param>
         private void CommandTextBox_OnEndEdit(object sender, TextBoxEventArgs e) {
-            if (!string.IsNullOrWhiteSpace(e.Text)) {
+            if(e.Action == TextBoxAction.Submit) {
                 ExecuteCommand(e.Text);
+                commandTextBox.Clear();
+                commandTextBox.Focus();
             }
         }
         #endregion

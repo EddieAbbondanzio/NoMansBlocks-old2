@@ -9,7 +9,7 @@ namespace NoMansBlocks.Modules.UI.Controls {
     /// Interface for a button that toggles it's states
     /// to derive from.
     /// </summary>
-    public interface IToggleButton : IControl {
+    public interface IToggleButton : IControl, IFocusable {
         #region Properties
         /// <summary>
         /// If the button is currently toggled on.
