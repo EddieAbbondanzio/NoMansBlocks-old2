@@ -14,28 +14,32 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
     public abstract class Command {
         #region Properties
         /// <summary>
-        /// The category the command belongs to.
+        /// The keyword that comes after the '/'.
         /// </summary>
-        public abstract CommandType CommandType { get; }
+        public abstract string Keyword { get; }
 
         /// <summary>
         /// The permissions required to call the command.
         /// </summary>
         public abstract PermissionLevel RequiredPermissions { get; }
 
-        public DateTime Time { get; }
-        #endregion
-
-        #region Constructor(s)
         /// <summary>
-        /// Create a new command with a time of now.
+        /// The help tip to display in the HelpCommand.
         /// </summary>
-        public Command() {
-            Time = DateTime.Now;
-        }
+        public abstract string HelpTip { get; }
         #endregion
 
         #region Publics
+        /// <summary>
+        /// Checks if the passed in permissions level is high enough
+        /// to execute the command.
+        /// </summary>
+        /// <param name="permissionLevel">True if the user has permissions.</param>
+        /// <returns>True if the passed in permissions are valid.</returns>
+        public bool HasPermissions(PermissionLevel permissionLevel) {
+            return (RequiredPermissions & permissionLevel) > 0;
+        }
+
         /// <summary>
         /// Execute the command on the current game
         /// engine.
@@ -44,11 +48,21 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
         public abstract void Execute(GameEngine executingContext);
 
         /// <summary>
+        /// Process the command parameters that were passed in when creating
+        /// the command.
+        /// </summary>
+        /// <param name="parameters">The parameters split by spaces</param>
+        public virtual void ParseParameters(string[] parameters) {
+        }
+
+        /// <summary>
         /// Summarize the command in a print
         /// friendly string.
         /// </summary>
         /// <returns>The command as a string.</returns>
-        public abstract string Summarize();
+        public override string ToString() {
+            return string.Format("/{0}", Keyword);
+        }
         #endregion
     }
 }

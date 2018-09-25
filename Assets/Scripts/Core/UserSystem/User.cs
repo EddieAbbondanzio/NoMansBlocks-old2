@@ -60,11 +60,22 @@ namespace NoMansBlocks.Core.UserSystem {
 
         #region Constructor(s)
         /// <summary>
-        /// Create a new player with just a 
+        /// Create a new player with just a username.
         /// </summary>
         /// <param name="username"></param>
         public User(string username) {
             Username = username;
+        }
+
+        /// <summary>
+        /// Create a new player with a username and custom
+        /// permission level.
+        /// </summary>
+        /// <param name="username">The username of the user.</param>
+        /// <param name="permissionLevel">The permissions of the user.</param>
+        public User(string username, PermissionLevel permissionLevel) {
+            Username = username;
+            PermissionLevel = permissionLevel;
         }
         #endregion
 

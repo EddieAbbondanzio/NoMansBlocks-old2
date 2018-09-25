@@ -3,16 +3,26 @@ using NoMansBlocks.Core;
 using NoMansBlocks.Core.Engine;
 using NoMansBlocks.Core.UserSystem;
 using NoMansBlocks.Modules.CommandConsole.Commands;
+using NoMansBlocks.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 namespace NoMansBlocks.Modules.CommandConsole {
     /// <summary>
     /// Module for handling and issue commands to the system.
     /// </summary>
-    public sealed class CommandConsoleModule : Module, ICommandConsole {
+    public sealed class CommandConsoleModule : Core.Engine.Module, ICommandConsole {
+        #region Members
+        /// <summary>
+        /// The collection of commands that can be used. The key is their
+        /// string keyword.
+        /// </summary>
+        private Dictionary<string, Type> commands;
+        #endregion
+
         #region Constructor(s)
         /// <summary>
         /// Create a new instance of the command
@@ -20,6 +30,29 @@ namespace NoMansBlocks.Modules.CommandConsole {
         /// <paramref name="engine">The engine that owns the module.</paramref>
         /// </summary>
         public CommandConsoleModule(GameEngine engine) : base(engine) {
+        }
+        #endregion
+
+        #region Life Cycle Events
+        /// <summary>
+        /// Load up the command dictionary for use. This will provide an easy way
+        /// to look up commands later on during game play.
+        /// </summary>
+        public override void OnInit() {
+            commands = new Dictionary<string, Type>();
+            List<Type> commandTypes = ReflectionUtils.FindDerivedTypes(Assembly.GetExecutingAssembly(), typeof(Command));
+
+            //Build the commands dictionary for easy lookup of commands.
+            for(int i = 0, commandCount = commandTypes.Count; i < commandCount; i++) {
+                Command command = Activator.CreateInstance(commandTypes[i]) as Command;
+
+                //Just double check the keyword hasn't already been defined.
+                if (commands.ContainsKey(command.Keyword)) {
+                    throw new Exception(string.Format("A command with the keyword {0} is already present.", command.Keyword));
+                }
+
+                commands.Add(command.Keyword, commandTypes[i]);
+            }
         }
         #endregion
 
@@ -31,7 +64,7 @@ namespace NoMansBlocks.Modules.CommandConsole {
         /// <param name="command">The text of the command to parse.</param>
         public void Execute(string command) {
             if(command == null || command[0] != '/') {
-                Log.Debug("No command found. Type /help for assistance.");
+                Log.Debug("Invalid command. Type /help for assistance.");
                 return;
             }
 
@@ -44,13 +77,17 @@ namespace NoMansBlocks.Modules.CommandConsole {
             if(command != null) {
                 Execute(cmd);
             }
+            else {
+                Log.Debug("No command found. Type /help for assistance.");
+            }
         }
 
         /// <summary>
         /// Execute a command.
         /// </summary>
         /// <param name="command">The command to execute.</param>
-        public void Execute(Command command) {
+        /// <param name="overridePermissions">If the permissions requirement should be ignored.</param>
+        public void Execute(Command command, bool overridePermissions = false) {
             if(command == null) {
                 return;
             }
@@ -59,14 +96,8 @@ namespace NoMansBlocks.Modules.CommandConsole {
                 throw new Exception("No executing context has been set!");
             }
 
-            Log.Debug(command.Summarize());
-
-            //Dont' care who's executing.
-            if(command.RequiredPermissions == PermissionLevel.All) {
-                command.Execute(Engine);
-            }
-            //Check we can execute it, and if we can. Do so.
-            else if ((User.Current.PermissionLevel & command.RequiredPermissions) != 0) {
+            if(overridePermissions || command.HasPermissions(User.Current.PermissionLevel)) {
+                Log.Debug(command.ToString());
                 command.Execute(Engine);
             }
         }
@@ -80,16 +111,28 @@ namespace NoMansBlocks.Modules.CommandConsole {
         /// <returns>The extracted command.</returns>
         public Command ParseCommand(string input) {
             string[] splitInput = input.Split(' ');
-            string commandKey = splitInput[0].TrimStart('/');
+            string keyword = splitInput[0].TrimStart('/');
 
-            switch (commandKey) {
-                case "connect":
-                    NetEndPoint connectEndPoint = Utils.NetUtils.ParseEndPointFromString(splitInput[1]);
-                    return new ConnectCommand(connectEndPoint);
-                case "disconnect":
-                    return new DisconnectCommand();
-                default:
-                    throw new FormatException("Invalid command. Unable to parse.");
+            //Is the keyword a valid command?
+            if (commands.ContainsKey(keyword)) {
+                Type commandType = commands[keyword];
+                Command command = Activator.CreateInstance(commandType) as Command;
+
+                //Is there some parameters we need to handle?
+                if(splitInput.Length > 1) {
+                    string[] parameters = new string[splitInput.Length - 1];
+
+                    for(int i = 0; i < parameters.Length; i++) {
+                        parameters[i] = splitInput[i + 1];
+                    }
+
+                    command.ParseParameters(parameters);
+                }
+
+                return command;
+            }
+            else {
+                return null;
             }
         }
         #endregion

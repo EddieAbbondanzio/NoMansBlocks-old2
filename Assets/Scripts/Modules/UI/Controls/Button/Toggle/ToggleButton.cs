@@ -11,7 +11,7 @@ namespace NoMansBlocks.Modules.UI.Controls {
     /// on and off with each click by the user.
     /// </summary>
     [RequireComponent(typeof(Button))]
-    public sealed class ToggleButton : MonoBehaviour, IToggleButton {
+    public sealed class ToggleButton : MonoBehaviour, IToggleButton, ISelectHandler, IDeselectHandler {
         #region Properties
         /// <summary>
         /// The unique name of the button.
@@ -33,9 +33,16 @@ namespace NoMansBlocks.Modules.UI.Controls {
         public bool IsToggled { get; set; }
 
         /// <summary>
+        /// If the button is currently focused.
+        /// </summary>
+        public bool IsFocused { get; private set; }
+        #endregion
+
+        #region Members
+        /// <summary>
         /// The cached reference to the button component.
         /// </summary>
-        private Button Button { get; set; }
+        private Button button;
         #endregion
 
         #region Event Delegates
@@ -44,6 +51,16 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// Enabled to Disabled, or vice versa.
         /// </summary>
         public event EventHandler OnToggle;
+
+        /// <summary>
+        /// Fired when the button is focused on.
+        /// </summary>
+        public event EventHandler OnFocus;
+
+        /// <summary>
+        /// Fired when the button loses focus.
+        /// </summary>
+        public event EventHandler OnBlur;
         #endregion
 
         #region Life Cycle Events
@@ -51,8 +68,8 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// Pull in the buttom component.
         /// </summary>
         private void Awake() {
-            Button = GetComponent<Button>();
-            Button.onClick.AddListener(OnClickListener);
+            button = GetComponent<Button>();
+            button.onClick.AddListener(OnClickListener);
         }
 
         /// <summary>
@@ -60,7 +77,31 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// leaks from occuring.
         /// </summary>
         private void OnDestroy() {
-            Button.onClick.RemoveListener(OnClickListener);
+            button.onClick.RemoveListener(OnClickListener);
+        }
+
+        /// <summary>
+        /// Button is gaining focus. Update the isFocused property
+        /// and fire off the event.
+        /// </summary>
+        void ISelectHandler.OnSelect(BaseEventData eventData) {
+            IsFocused = true;
+
+            if(OnFocus != null) {
+                OnFocus(this, null);
+            }
+        }
+
+        /// <summary>
+        /// Button is losing focus. Set the is focused property and
+        /// fire off the on blur event.
+        /// </summary>
+        void IDeselectHandler.OnDeselect(BaseEventData eventData) {
+            IsFocused = false;
+
+            if(OnBlur != null) {
+                OnBlur(this, null);
+            }
         }
         #endregion
 
@@ -71,7 +112,7 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// </summary>
         /// <param name="label">The label to put in it.</param>
         public void SetLabel(string label) {
-            Text text = Button.GetComponentInChildren<Text>();
+            Text text = button.GetComponentInChildren<Text>();
             text.text = label;
         }
 

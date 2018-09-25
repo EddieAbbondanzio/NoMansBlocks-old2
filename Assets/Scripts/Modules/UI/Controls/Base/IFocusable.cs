@@ -10,6 +10,25 @@ namespace NoMansBlocks.Modules.UI.Controls {
     /// attention to it or obtain input.
     /// </summary>
     public interface IFocusable {
+        #region Properties
+        /// <summary>
+        /// If the control is currently focused.
+        /// </summary>
+        bool IsFocused { get; }
+        #endregion
+
+        #region Event Delegates
+        /// <summary>
+        /// Called whenever the control recieves focus.
+        /// </summary>
+        event EventHandler OnFocus;
+
+        /// <summary>
+        /// Called whenever the control loses focus.
+        /// </summary>
+        event EventHandler OnBlur;
+        #endregion
+
         #region Publics
         /// <summary>
         /// Focus on the control.

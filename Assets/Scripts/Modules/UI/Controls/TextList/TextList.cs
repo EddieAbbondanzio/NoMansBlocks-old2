@@ -160,6 +160,7 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// Scroll to the very top of the scroll view.
         /// </summary>
         public void ScrollToTop() {
+            Canvas.ForceUpdateCanvases();
             scrollRect.normalizedPosition = new Vector2(0, 1);
         }
 
@@ -167,6 +168,7 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// Scroll to the very bottom of the scroll view.
         /// </summary>
         public void ScrollToBottom() {
+            Canvas.ForceUpdateCanvases();
             scrollRect.normalizedPosition = new Vector2(0, 0);
         }
         #endregion

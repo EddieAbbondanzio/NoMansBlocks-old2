@@ -22,7 +22,8 @@ namespace NoMansBlocks.Modules.CommandConsole {
         /// Execute a command.
         /// </summary>
         /// <param name="command">The command to execute.</param>
-        void Execute(Command command);
+        /// <param name="overridePermissions">If the permissions should be ignored.</param>
+        void Execute(Command command, bool overridePermissions = false);
         #endregion
     }
 }

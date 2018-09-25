@@ -12,8 +12,11 @@ public class TestScript : MonoBehaviour {
         Label label = GetComponent<Label>();
         ILabel iLabel = GetComponent<ILabel>();
 
-        Button button = GetComponent<Button>();
-        EventSystem.current.SetSelectedGameObject(button.gameObject);
+        ITriggerButton button = GetComponent<ITriggerButton>();
+
+        button.OnFocus += (sender, args) => { Debug.Log("Focused!"); };
+        button.OnBlur += (sender, args) => { Debug.Log("Blurred!"); };
+        button.OnClick += (sender, args) => { Debug.Log("Clicked!!"); };
 
         int four = 4;
 	}

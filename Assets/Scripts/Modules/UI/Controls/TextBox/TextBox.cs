@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace NoMansBlocks.Modules.UI.Controls {
@@ -12,7 +13,7 @@ namespace NoMansBlocks.Modules.UI.Controls {
     /// box on the screen
     /// </summary>
     [RequireComponent(typeof(InputField))]
-    public sealed class TextBox : MonoBehaviour, ITextBox {
+    public sealed class TextBox : MonoBehaviour, ITextBox, ISelectHandler {
 
         #region Properties
         /// <summary>
@@ -36,6 +37,11 @@ namespace NoMansBlocks.Modules.UI.Controls {
             get { return inputField.text; }
             set { inputField.text = value; }
         }
+
+        /// <summary>
+        /// If teh textbox is currently focused.
+        /// </summary>
+        public bool IsFocused { get { return inputField.isFocused; } }
         #endregion
 
         #region Members
@@ -47,14 +53,24 @@ namespace NoMansBlocks.Modules.UI.Controls {
 
         #region Event Delegates
         /// <summary>
+        /// Fired when the textbox gains focus.
+        /// </summary>
+        public event EventHandler OnFocus;
+
+        /// <summary>
+        /// Fired when the textbox loses focus.
+        /// </summary>
+        public event EventHandler OnBlur;
+
+        /// <summary>
         /// Fired everytime the value of the textbox is changed.
         /// </summary>
         public event EventHandler<TextBoxEventArgs> OnEdit;
 
         /// <summary>
-        /// Fired when the user has finished performing an edit.
+        /// Fired when the user hits the submit button.
         /// </summary>
-        public event EventHandler<TextBoxEventArgs> OnEndEdit;
+        public event EventHandler<TextBoxEventArgs> OnSubmit;
         #endregion
 
         #region Life Cycle Events
@@ -106,7 +122,7 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// <param name="value">The current value of the textbox</param>
         private void OnEditListener(string value) {
             if(OnEdit != null) {
-                OnEdit(this, new TextBoxEventArgs(value, TextBoxAction.Edit));
+                OnEdit(this, new TextBoxEventArgs(value));
             }
         }
 
@@ -118,14 +134,23 @@ namespace NoMansBlocks.Modules.UI.Controls {
             TextBoxEventArgs args;
 
             if(UnityEngine.Input.GetKey(KeyCode.Return)) {
-                args = new TextBoxEventArgs(value, TextBoxAction.Submit);
+                if(OnSubmit != null) {
+                    OnSubmit(this, new TextBoxEventArgs(value));
+                }
             }
-            else {
-                args = new TextBoxEventArgs(value, TextBoxAction.Exit);
+            
+            if (OnBlur != null) {
+                OnBlur(this, null);
             }
+        }
 
-            if (OnEndEdit != null) {
-                OnEndEdit(this, args);
+        /// <summary>
+        /// Propogates the on focus event for any listeners.
+        /// </summary>
+        /// <param name="eventData"></param>
+        void ISelectHandler.OnSelect(BaseEventData eventData) {
+            if(OnFocus != null) {
+                OnFocus(this, null);
             }
         }
         #endregion

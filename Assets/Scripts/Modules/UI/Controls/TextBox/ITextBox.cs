@@ -23,9 +23,10 @@ namespace NoMansBlocks.Modules.UI.Controls {
         event EventHandler<TextBoxEventArgs> OnEdit;
 
         /// <summary>
-        /// Fired when the user has finished performing an edit.
+        /// Fired when the user hit the submit button to pass
+        /// the textboxes content.
         /// </summary>
-        event EventHandler<TextBoxEventArgs> OnEndEdit;
+        event EventHandler<TextBoxEventArgs> OnSubmit;
         #endregion
 
         #region Publics

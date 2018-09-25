@@ -13,14 +13,19 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
     public sealed class StartCommand : Command {
         #region Properties
         /// <summary>
-        /// The type of command it is.
+        /// The keyword that comes after the '/'.
         /// </summary>
-        public override CommandType CommandType => CommandType.Start;
+        public override string Keyword => "start";
 
         /// <summary>
         /// Who can invoke the command.
         /// </summary>
-        public override PermissionLevel RequiredPermissions => PermissionLevel.All;
+        public override PermissionLevel RequiredPermissions => PermissionLevel.Admin;
+
+        /// <summary>
+        /// The help tip to show for the help command.
+        /// </summary>
+        public override string HelpTip => "Starts up the game engine.";
         #endregion
 
         #region Publics
@@ -30,14 +35,6 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
         /// <param name="executingContext">The currently running game engine instance.</param>
         public override void Execute(GameEngine executingContext) {
             executingContext.Run();
-        }
-
-        /// <summary>
-        /// Summarize the command in a print friendly format.
-        /// </summary>
-        /// <returns>The command in a string form.</returns>
-        public override string Summarize() {
-            return "/start";
         }
         #endregion
     }

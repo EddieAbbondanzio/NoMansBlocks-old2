@@ -16,9 +16,9 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
     public sealed class ConnectCommand : Command {
         #region Properties
         /// <summary>
-        /// The type of command it is.
+        /// The keyword that comes after the '/'.
         /// </summary>
-        public override CommandType CommandType => CommandType.Disconnect;
+        public override string Keyword => "connect";
 
         /// <summary>
         /// Who can invoke the command.
@@ -26,20 +26,14 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
         public override PermissionLevel RequiredPermissions => PermissionLevel.All;
 
         /// <summary>
+        /// The help tip to show for the help command.
+        /// </summary>
+        public override string HelpTip => "Connects to a server. Expects a single parameter of an IP address.";
+
+        /// <summary>
         /// The endpoint to connect to.
         /// </summary>
-        public NetEndPoint EndPoint { get; }
-        #endregion
-
-        #region Constructor(s)
-        /// <summary>
-        /// Create a new connect command to connect
-        /// to the end point passed in.
-        /// </summary>
-        /// <param name="endPoint">The endpoint to connect to.</param>
-        public ConnectCommand(NetEndPoint endPoint) {
-            EndPoint = endPoint;
-        }
+        public NetEndPoint EndPoint { get; set; }
         #endregion
 
         #region Publics
@@ -52,11 +46,19 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
         }
 
         /// <summary>
-        /// Summarize the command in a print friendly format.
+        /// Process the inputs with the command.
         /// </summary>
-        /// <returns>The command in a string form.</returns>
-        public override string Summarize() {
-            return string.Format("/connect {0}", EndPoint);
+        /// <param name="parameters">The list of parameters to process.</param>
+        public override void ParseParameters(string[] parameters) {
+            EndPoint = Utils.NetUtils.ParseEndPointFromString(parameters[0]);
+        }
+
+        /// <summary>
+        /// The command as a print friendly string.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() {
+            return string.Format("/{0} {1}", Keyword, EndPoint.ToString());
         }
         #endregion
     }

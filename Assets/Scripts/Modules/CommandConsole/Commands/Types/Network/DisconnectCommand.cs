@@ -15,14 +15,19 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
     public sealed class DisconnectCommand : Command {
         #region Properties
         /// <summary>
-        /// The type of command it is.
+        /// The keyword that comes after the '/'.
         /// </summary>
-        public override CommandType CommandType => CommandType.Disconnect;
+        public override string Keyword => "disconnect";
 
         /// <summary>
         /// Who can invoke the command.
         /// </summary>
         public override PermissionLevel RequiredPermissions => PermissionLevel.All;
+
+        /// <summary>
+        /// The help tip to show for the help command.
+        /// </summary>
+        public override string HelpTip => "Disconnect all currently active network connections.";
         #endregion
 
         #region Constructor(s)
@@ -40,14 +45,6 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
         /// <param name="executingContext">The currently running game engine.</param>
         public override void Execute(GameEngine executingContext) {
             executingContext.NetModule.Disconnect();
-        }
-
-        /// <summary>
-        /// Summarize the command in a print friendly format.
-        /// </summary>
-        /// <returns>The command in a string form.</returns>
-        public override string Summarize() {
-            return "/disconnect";
         }
         #endregion
     }

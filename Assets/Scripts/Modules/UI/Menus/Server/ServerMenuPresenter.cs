@@ -58,7 +58,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
             commandTextBox = GetControl<ITextBox>("CommandTextBox");
 
             Log.OnLog += Log_OnLog;
-            commandTextBox.OnEndEdit += CommandTextBox_OnEndEdit;
+            commandTextBox.OnSubmit += CommandTextBox_OnEndEdit;
         }
 
 
@@ -92,12 +92,10 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// </summary>
         /// <param name="sender">The textbox.</param>
         /// <param name="e">Nothing?.</param>
-        private void CommandTextBox_OnEndEdit(object sender, TextBoxEventArgs e) {
-            if(e.Action == TextBoxAction.Submit) {
-                ExecuteCommand(e.Text);
-                commandTextBox.Clear();
-                commandTextBox.Focus();
-            }
+        private void CommandTextBox_OnEndEdit(object sender, EventArgs e) {
+            ExecuteCommand(commandTextBox.Text);
+            commandTextBox.Clear();
+            commandTextBox.Focus();
         }
         #endregion
     }

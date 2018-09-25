@@ -1,6 +1,6 @@
 {
   "Network": {
-    "Port": 0,
-    "ConnectionCapacity": 1
+    "Port": 9550,
+    "ConnectionCapacity": 32
   }
 }

@@ -34,6 +34,13 @@ namespace NoMansBlocks.Core.Engine.Server {
 
         #region Life Cycle Events
         /// <summary>
+        /// Generate the default user for the server.
+        /// </summary>
+        protected override void OnInit() {
+            User.Current = new User("SERVER", PermissionLevel.Admin);
+        }
+
+        /// <summary>
         /// When the engine starts up, load the server menu so the
         /// user can see everything going on.
         /// </summary>

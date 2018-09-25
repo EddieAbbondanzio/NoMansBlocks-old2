@@ -13,7 +13,7 @@ namespace NoMansBlocks.Modules.UI.Controls {
     /// disagree with something.
     /// </summary>
     [RequireComponent(typeof(Toggle))]
-    public sealed class CheckBox : MonoBehaviour, ICheckBox {
+    public sealed class CheckBox : MonoBehaviour, ICheckBox, ISelectHandler, IDeselectHandler {
         #region Properties
         /// <summary>
         /// The unique name of the button.
@@ -35,22 +35,29 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// to only have one enabled at a time.
         /// </summary>
         public ToggleGroup Group {
-            get { return Toggle.group; }
-            set { Toggle.group = value; }
+            get { return toggle.group; }
+            set { toggle.group = value; }
         }
 
         /// <summary>
         /// If the checkbox is currently checked or not.
         /// </summary>
         public bool IsChecked {
-            get { return Toggle.isOn; }
-            set { Toggle.isOn = value; }
+            get { return toggle.isOn; }
+            set { toggle.isOn = value; }
         }
 
         /// <summary>
+        /// If the control is currently focused.
+        /// </summary>
+        public bool IsFocused { get; private set; }
+        #endregion
+
+        #region Members
+        /// <summary>
         /// The underlying Unity Toggle.
         /// </summary>
-        private Toggle Toggle { get; set; }
+        private Toggle toggle;
         #endregion
 
         #region Event Delegates
@@ -59,6 +66,16 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// is changed.
         /// </summary>
         public event EventHandler OnCheckChange;
+
+        /// <summary>
+        /// Fired when the control is recieving focus.
+        /// </summary>
+        public event EventHandler OnFocus;
+
+        /// <summary>
+        /// Fired when the control is losing focus.
+        /// </summary>
+        public event EventHandler OnBlur;
         #endregion
 
         #region Life Cycle Events
@@ -66,8 +83,8 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// Pull in the toggle component.
         /// </summary>
         private void Awake() {
-            Toggle = GetComponent<Toggle>();
-            Toggle.onValueChanged.AddListener(OnChangeListener);
+            toggle = GetComponent<Toggle>();
+            toggle.onValueChanged.AddListener(OnChangeListener);
         }
 
         /// <summary>
@@ -75,7 +92,31 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// leaks from occuring.
         /// </summary>
         private void OnDestroy() {
-            Toggle.onValueChanged.RemoveListener(OnChangeListener);
+            toggle.onValueChanged.RemoveListener(OnChangeListener);
+        }
+
+        /// <summary>
+        /// Checkbox is gaining focus. Update the isFocused property
+        /// and fire off the event.
+        /// </summary>
+        void ISelectHandler.OnSelect(BaseEventData eventData) {
+            IsFocused = true;
+
+            if (OnFocus != null) {
+                OnFocus(this, null);
+            }
+        }
+
+        /// <summary>
+        /// Checkbox is losing focus. Set the is focused property and
+        /// fire off the on blur event.
+        /// </summary>
+        void IDeselectHandler.OnDeselect(BaseEventData eventData) {
+            IsFocused = false;
+
+            if (OnBlur != null) {
+                OnBlur(this, null);
+            }
         }
         #endregion
 
@@ -86,7 +127,7 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// </summary>
         /// <param name="label">The text to set it as.</param>
         public void SetLabel(string label) {
-            Text text = Toggle.GetComponentInChildren<Text>();
+            Text text = toggle.GetComponentInChildren<Text>();
             text.text = label;
         }
 

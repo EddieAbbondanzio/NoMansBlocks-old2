@@ -11,11 +11,11 @@ namespace NoMansBlocks.Core.UserSystem {
     /// </summary>
     [Flags]
     public enum PermissionLevel {
-        None  = 0,
-        Guest = 1,
-        User  = 2,
-        Mod   = 4,
-        Admin = 8,
-        All   = 15,
+        None   = 0,
+        Guest  = 1,
+        User   = 2,
+        Mod    = 4,
+        Admin  = 8,
+        All    = 15,
     }
 }

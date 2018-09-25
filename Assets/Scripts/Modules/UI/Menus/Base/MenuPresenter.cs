@@ -175,7 +175,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// </summary>
         /// <param name="command">The command to execute.</param>
         protected void ExecuteCommand(Command command) {
-            commandConsole.Execute(command);
+            commandConsole.Execute(command, true);
         }
 
         /// <summary>

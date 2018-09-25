@@ -96,9 +96,9 @@
     <Compile Include="Assets\Scripts\Core\UserSystem\UserService.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\CommandConsoleModule.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Common\Command.cs" />
-    <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Common\CommandType.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\Application\StartCommand.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\Application\StopCommand.cs" />
+    <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\Help\HelpCommand.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\Network\ConnectCommand.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\Network\DisconnectCommand.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\ICommandConsole.cs" />
@@ -176,7 +176,6 @@
     <Compile Include="Assets\Scripts\Modules\UI\Controls\Label\Label.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\TextBox\ITextBox.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\TextBox\TextBox.cs" />
-    <Compile Include="Assets\Scripts\Modules\UI\Controls\TextBox\TextBoxAction.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\TextBox\TextBoxEventArgs.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\TextList\ITextList.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\TextList\LabelPool.cs" />
@@ -198,6 +197,7 @@
     <Compile Include="Assets\Scripts\Unity\Pooling\ObjectPool.cs" />
     <Compile Include="Assets\Scripts\Unity\ReadOnlyFieldAttribute.cs" />
     <Compile Include="Assets\Scripts\Utils\NetUtils.cs" />
+    <Compile Include="Assets\Scripts\Utils\ReflectionUtils.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Users/Eddie/Development/NoMansBlocks/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
