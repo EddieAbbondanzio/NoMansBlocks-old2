@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NoMansBlocks.Core.FileIO;
-using NoMansBlocks.Core.Serialization;
+using NoMansBlocks.FileIO;
+using NoMansBlocks.Serialization;
 
 namespace NoMansBlocks.Tests.Extensions {
     /// <summary>

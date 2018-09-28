@@ -59,6 +59,8 @@ namespace NoMansBlocks.Modules.UI.Menus {
 
             Log.OnLog += Log_OnLog;
             commandTextBox.OnSubmit += CommandTextBox_OnEndEdit;
+
+            commandTextBox.Focus();
         }
 
 

@@ -1,5 +1,5 @@
-﻿using NoMansBlocks.Core.FileIO;
-using NoMansBlocks.Core.Serialization;
+﻿using NoMansBlocks.FileIO;
+using NoMansBlocks.Serialization;
 using NoMansBlocks.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace NoMansBlocks.Modules.Logging {
     /// A log file contains a collection of logs, and more
     /// to help tracing down issues that may arise.
     /// </summary>
-    public class LogFile : JsonFile<LogReport> {
+    public sealed class LogFile : JsonFile<LogReport> {
         #region Constructor(s)
         /// <summary>
         /// Create a new empty log file.

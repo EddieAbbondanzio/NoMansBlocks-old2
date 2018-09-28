@@ -81,6 +81,8 @@ namespace NoMansBlocks.Modules.Network {
             //Set up the connection manager and start it.
             ConnectionManager = new NetConnectionManager(messageListener, config.ConnectionCapacity);
             netManager.Start(config.Port);
+
+            Log.Debug("Network Module started. Listening on port {0}", config.Port);
         }
         #endregion
 

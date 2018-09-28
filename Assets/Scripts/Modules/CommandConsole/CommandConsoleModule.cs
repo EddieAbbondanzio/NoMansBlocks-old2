@@ -1,7 +1,7 @@
 ﻿using LiteNetLib;
 using NoMansBlocks.Core;
 using NoMansBlocks.Core.Engine;
-using NoMansBlocks.Core.UserSystem;
+using NoMansBlocks.UserSystem;
 using NoMansBlocks.Modules.CommandConsole.Commands;
 using NoMansBlocks.Utils;
 using System;

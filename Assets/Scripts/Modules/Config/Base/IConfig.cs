@@ -1,6 +1,6 @@
 ﻿using NoMansBlocks.Core.Engine;
-using NoMansBlocks.Core.Serialization;
-using NoMansBlocks.Core.Serialization.Json;
+using NoMansBlocks.Serialization;
+using NoMansBlocks.Serialization.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;

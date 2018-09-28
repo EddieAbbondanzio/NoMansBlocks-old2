@@ -1,6 +1,6 @@
 ﻿using NoMansBlocks.Core.Engine;
-using NoMansBlocks.Core.Serialization;
-using NoMansBlocks.Core.UserSystem;
+using NoMansBlocks.Serialization;
+using NoMansBlocks.UserSystem;
 using NoMansBlocks.Modules.Network;
 using NoMansBlocks.Modules.UI.Menus;
 using System;

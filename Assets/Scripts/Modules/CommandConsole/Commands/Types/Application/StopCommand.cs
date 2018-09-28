@@ -1,5 +1,5 @@
 ﻿using NoMansBlocks.Core.Engine;
-using NoMansBlocks.Core.UserSystem;
+using NoMansBlocks.UserSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
