@@ -34,7 +34,7 @@ namespace NoMansBlocks.Core.Engine.Client {
         /// </summary>
         /// <param name="context">The engine's executing context.</param>
         /// <param name="serviceLocator">The dependency injector.</param>
-        public ClientEngine(IContext context, IServiceLocator serviceLocator) : base(context, serviceLocator) {
+        public ClientEngine(IContext context, ServiceLocator serviceLocator) : base(context, serviceLocator) {
         }
         #endregion
 

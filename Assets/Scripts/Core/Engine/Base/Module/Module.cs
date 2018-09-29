@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 
 namespace NoMansBlocks.Core.Engine {
+    //Move control of the modules to here. That way the engine class has to do less
+    //work. Also get rid of the engine parameter of the constructor and move it
+    //to a SetEngine() method. This is causing some confusion.
+
+
     /// <summary>
     /// Base class for Modules to derive from. Modules are components of
     /// the engine that require tracking their state, etc... 

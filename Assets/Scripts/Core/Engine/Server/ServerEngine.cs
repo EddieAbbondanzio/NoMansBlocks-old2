@@ -28,7 +28,7 @@ namespace NoMansBlocks.Core.Engine.Server {
         /// </summary>
         /// <param name="context">The engine's executing context.</param>
         /// <param name="serviceLocator">Dependency injector.</param>
-        public ServerEngine(IContext context, IServiceLocator serviceLocator) : base(context, serviceLocator) {
+        public ServerEngine(IContext context, ServiceLocator serviceLocator) : base(context, serviceLocator) {
         }
         #endregion
 

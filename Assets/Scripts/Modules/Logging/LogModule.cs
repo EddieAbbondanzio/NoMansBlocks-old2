@@ -38,8 +38,8 @@ namespace NoMansBlocks.Modules.Logging {
         /// <paramref name="engine">The engine that owns the module.</paramref>
         /// </summary>
         /// <param name="engine">The parent game engine.</param>
-        public LogModule(GameEngine engine, ILogger logger) : base(engine) {
-            Logger         = logger;
+        public LogModule(GameEngine engine) : base(engine) {
+            Logger = engine.GetService<ILogger>();
             SystemAnalyzer = new SystemAnalyzer();
             LogFileHandler = new LogFileHandler();
         }

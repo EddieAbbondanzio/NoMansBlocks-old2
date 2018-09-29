@@ -69,7 +69,8 @@
     <Compile Include="Assets\Scripts\Core\Engine\Base\GameEngineType.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Base\Module\Module.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Base\Module\ModuleExecutionAttribute.cs" />
-    <Compile Include="Assets\Scripts\Core\Engine\Base\Service\IServiceLocator.cs" />
+    <Compile Include="Assets\Scripts\Core\Engine\Base\Service\IService.cs" />
+    <Compile Include="Assets\Scripts\Core\Engine\Base\Service\ServiceLocator.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Base\Service\UnityServiceLocator.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Base\Ticker\IGameEngineTicker.cs" />
     <Compile Include="Assets\Scripts\Core\Engine\Base\Ticker\UnityEngineTicker.cs" />
@@ -94,6 +95,8 @@
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\Help\HelpCommand.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\Network\ConnectCommand.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\Network\DisconnectCommand.cs" />
+    <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\User\LoginCommand.cs" />
+    <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\User\LogoutCommand.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\ICommandConsole.cs" />
     <Compile Include="Assets\Scripts\Modules\Config\Base\ConfigType.cs" />
     <Compile Include="Assets\Scripts\Modules\Config\Base\IConfig.cs" />
@@ -192,12 +195,12 @@
     <Compile Include="Assets\Scripts\Unity\Pooling\IObjectPool.cs" />
     <Compile Include="Assets\Scripts\Unity\Pooling\ObjectPool.cs" />
     <Compile Include="Assets\Scripts\Unity\ReadOnlyFieldAttribute.cs" />
-    <Compile Include="Assets\Scripts\UserSystem\IAccountServer.cs" />
+    <Compile Include="Assets\Scripts\UserSystem\Service\IUserService.cs" />
+    <Compile Include="Assets\Scripts\UserSystem\Service\UserService.cs" />
     <Compile Include="Assets\Scripts\UserSystem\User\PermissionLevel.cs" />
     <Compile Include="Assets\Scripts\UserSystem\User\User.cs" />
     <Compile Include="Assets\Scripts\UserSystem\User\UserLogin.cs" />
     <Compile Include="Assets\Scripts\UserSystem\User\UserRegistration.cs" />
-    <Compile Include="Assets\Scripts\UserSystem\UserService.cs" />
     <Compile Include="Assets\Scripts\Utils\NetUtils.cs" />
     <Compile Include="Assets\Scripts\Utils\ReflectionUtils.cs" />
     <Reference Include="UnityEditor.StandardEvents">

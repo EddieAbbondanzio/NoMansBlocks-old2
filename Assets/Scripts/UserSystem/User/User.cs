@@ -14,21 +14,7 @@ namespace NoMansBlocks.UserSystem {
         /// <summary>
         /// The user running the game.
         /// </summary>
-        public static User Current {
-            get { return current; }
-            set {
-                if(current != null) {
-                    throw new Exception("The current user has already been set!");
-                }
-
-                current = value;
-            }
-        }
-
-        /// <summary>
-        /// Don't modify this directly.
-        /// </summary>
-        private static User current;
+        public static User Current { get; set; }
         #endregion
 
         #region Properties

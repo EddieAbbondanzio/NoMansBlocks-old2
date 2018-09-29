@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NoMansBlocks.Core.Engine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace NoMansBlocks.Modules.Input {
     /// if specific keys are changing state, or axises
     /// are being manipulated, etc..
     /// </summary>
-    public interface IInputPoller {
+    public interface IInputPoller : IService {
         #region Properties
         /// <summary>
         /// The cursor on screen.

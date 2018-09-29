@@ -87,7 +87,7 @@ namespace NoMansBlocks.Core.Engine {
         /// <summary>
         /// Dependency injection for the engine.
         /// </summary>
-        private IServiceLocator serviceLocator;
+        private ServiceLocator serviceLocator;
 
         /// <summary>
         /// The collection of modules that belong to the engine.
@@ -103,7 +103,7 @@ namespace NoMansBlocks.Core.Engine {
         /// </summary>
         /// <param name="context">The executing context of the engine.</param>
         /// <param name="serviceLocator">The dependency locator.</param>
-        protected GameEngine(IContext context, IServiceLocator serviceLocator) {
+        protected GameEngine(IContext context, ServiceLocator serviceLocator) {
             if(instance != null) {
                 throw new Exception("Two or more instances of the game engine exist!");
             }
@@ -111,12 +111,12 @@ namespace NoMansBlocks.Core.Engine {
             this.Context        = context;
             this.serviceLocator = serviceLocator;
 
-            LogModule     = new LogModule(this, serviceLocator.GetLogger());
+            LogModule     = new LogModule(this);
             ConfigModule  = new ConfigModule(this);
             CommandModule = new CommandConsoleModule(this);
             UIModule      = new UIModule(this);
             NetModule     = new NetModule(this);
-            InputModule   = new InputModule(this, serviceLocator.GetInputPoller());
+            InputModule   = new InputModule(this);
 
             this.Context.EngineTicker.OnInit   += OnTickerInit;
             this.Context.EngineTicker.OnStart  += OnTickerStart;
@@ -205,6 +205,15 @@ namespace NoMansBlocks.Core.Engine {
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Retrieve a service via it's type.
+        /// </summary>
+        /// <typeparam name="T">The type or base type of the service to look for.</typeparam>
+        /// <returns>The service found (if any).</returns>
+        public T GetService<T>() where T : class, IService {
+            return serviceLocator.GetService<T>();
         }
         #endregion
 

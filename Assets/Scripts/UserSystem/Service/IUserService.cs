@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NoMansBlocks.Core.Engine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace NoMansBlocks.UserSystem {
     /// Interface for the master server to implement. This is what the
     /// game expects from the account server.
     /// </summary>
-    public interface IAccountServer {
+    public interface IUserService : IService {
         #region Publics
         /// <summary>
         /// Login a user using the passed in credentials.
@@ -24,7 +25,7 @@ namespace NoMansBlocks.UserSystem {
         /// </summary>
         /// <param name="token">The JWT the server gave them last time.</param>
         /// <returns>The user if valid.</returns>
-        Task<User> RefreshLoginAsync(string token);
+        Task<User> LoginAsync(string token);
 
         /// <summary>
         /// Logout a user that is currently logged in.
@@ -48,7 +49,7 @@ namespace NoMansBlocks.UserSystem {
         /// <param name="username">The username to look for.</param>
         /// <param name="loginGuid">Their login guid.</param>
         /// <returns>Their unique user id, or -1 if invalid.</returns>
-        Task<long> ValidateLoginAsync(string username, string loginGuid);
+        Task<long> ValidateUserAsync(string username, string loginGuid);
         #endregion
     }
 }

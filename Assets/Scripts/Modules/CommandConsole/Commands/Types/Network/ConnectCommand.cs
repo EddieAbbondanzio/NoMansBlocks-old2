@@ -56,7 +56,7 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
         /// <summary>
         /// The command as a print friendly string.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The string of the command.</returns>
         public override string ToString() {
             return string.Format("/{0} {1}", Keyword, EndPoint.ToString());
         }

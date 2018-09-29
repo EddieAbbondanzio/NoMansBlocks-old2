@@ -1,34 +1,26 @@
 ﻿using NoMansBlocks.Modules.Input;
 using NoMansBlocks.Modules.Logging;
+using NoMansBlocks.UserSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NoMansBlocks.Core.Engine{
+namespace NoMansBlocks.Core.Engine {
     /// <summary>
     /// Locates all the unity specific services for the game
     /// engine. This allows us to inject all our dependencies.
     /// </summary>
-    public sealed class UnityServiceLocator : IServiceLocator {
-        #region Publics
+    public sealed class UnityServiceLocator : ServiceLocator {
+        #region Helpers
         /// <summary>
-        /// Returns an instance of a Unity logger to use to
-        /// generate log files with.
+        /// Initialize all the services for use.
         /// </summary>
-        /// <returns>The Unity logger to use.</returns>
-        public ILogger GetLogger() {
-            return new UnityLogger();
-        }
-
-        /// <summary>
-        /// Returns an instance of a Unity Input Poller to check
-        /// the current input state with.
-        /// </summary>
-        /// <returns>The Unity Input Poller to use.</returns>
-        public IInputPoller GetInputPoller() {
-            return new UnityInputPoller();
+        protected override void InitServices() {
+            Logger      = new UnityLogger();
+            InputPoller = new UnityInputPoller();
+            UserService = new UserService();
         }
         #endregion
     }

@@ -12,7 +12,7 @@ namespace NoMansBlocks.Modules.Logging {
     /// that can provide the ability to log messages, warnings,
     /// errors, and fatal errors.
     /// </summary>
-    public interface ILogger {
+    public interface ILogger : IService {
         #region Properties
         /// <summary>
         /// The collection of all logs made by the logger.
