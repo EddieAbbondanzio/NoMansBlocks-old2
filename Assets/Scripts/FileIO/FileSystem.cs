@@ -184,26 +184,24 @@ namespace NoMansBlocks.FileIO {
         /// <returns>The file's contents.</returns>
         private static async Task<byte[]> LoadFromFileAsync(FileInfo fileInfo, float timeOut = 0.5f) {
             float timeWaited = 0.0f;
-            while (IsFileLocked(fileInfo) && timeWaited < timeOut) {
-                timeWaited += 0.05f;
-                Thread.Sleep(50);
+            while (IsFileLocked(fileInfo)) {
+                Thread.Sleep(10);
+
+                if (timeWaited > timeOut) {
+                    throw new TimeoutException(string.Format("Load of file {0} time out due to excessive wait time.", fileInfo.ToString()));
+                }
             }
 
-            if(timeWaited > timeOut) {
-                throw new TimeoutException(string.Format("Load of file {0} time out due to excessive wait time.", fileInfo.ToString()));
-            }
-
-            using (FileStream fileStream = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read, BufferSize, true)) {
-                List<byte> content = new List<byte>();
-                byte[] byteBuffer = new byte[BufferSize];
-                int readCount;
-
-                while ((readCount = await fileStream.ReadAsync(byteBuffer, 0, byteBuffer.Length)) != 0) {
-                    content.AddRange(byteBuffer.Take(readCount));
+            //return await Task.Run(() => {
+                //.ReadASync isn't working. This is a temp fix.
+                byte[] result;
+                using (FileStream stream = fileInfo.OpenRead()) {
+                    result = new byte[stream.Length];
+                    stream.Read(result, 0, (int)stream.Length);
                 }
 
-                return content.ToArray();
-            }
+                return result;
+            //});
         }
         #endregion
     }

@@ -66,10 +66,10 @@ namespace NoMansBlocks.Modules.Network {
         /// <paramref name="engine">The engine that owns the module.</paramref>
         public NetModule(GameEngine engine) : base(engine) {
             messageListener = new NetMessageListener();
-            netManager = new NetManager(messageListener, "NoMansBlocks");
+            netManager      = new NetManager(messageListener, "NoMansBlocks");
         }
         #endregion
-
+         
         #region Module Events
         /// <summary>
         /// Prepare the netmodule for use.

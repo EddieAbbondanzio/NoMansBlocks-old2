@@ -47,9 +47,9 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
         public override void Execute(GameEngine executingContext) {
             if(HelpTips == null) {
                 HelpTips = new List<string>();
-                List<Type> commandTypes = ReflectionUtils.FindDerivedTypes(Assembly.GetExecutingAssembly(), typeof(Command));
+                Type[] commandTypes = ReflectionUtils.GetDerivedTypes(Assembly.GetExecutingAssembly(), typeof(Command)).ToArray();
 
-                for(int i = 0, commandCount = commandTypes.Count; i < commandCount; i++) {
+                for(int i = 0; i < commandTypes.Length; i++) {
                     Command command = Activator.CreateInstance(commandTypes[i]) as Command;
                     HelpTips.Add(string.Format("{0} {1}", command.Keyword, command.HelpTip));
                 }

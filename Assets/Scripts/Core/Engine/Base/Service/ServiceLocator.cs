@@ -1,6 +1,7 @@
 ﻿using NoMansBlocks.Modules.Input;
 using NoMansBlocks.Modules.Logging;
 using NoMansBlocks.UserSystem;
+using NoMansBlocks.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,7 +48,7 @@ namespace NoMansBlocks.Core.Engine {
         protected ServiceLocator() {
             InitServices();
 
-            PropertyInfo[] memberProperties = this.GetType().GetProperties().Where(p => typeof(IService).IsAssignableFrom(p.PropertyType) || p.PropertyType == typeof(IService)).ToArray();
+            PropertyInfo[] memberProperties = ReflectionUtils.GetPropertiesOfType(GetType(), typeof(IService)).ToArray();
             services = new IService[memberProperties.Length];
 
             for (int i = 0; i < memberProperties.Length; i++) {

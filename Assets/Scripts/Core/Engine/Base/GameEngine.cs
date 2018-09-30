@@ -14,6 +14,8 @@ using NoMansBlocks.Modules.Config;
 using UnityEngine;
 using NoMansBlocks.Modules.Input;
 using System.Threading;
+using NoMansBlocks.Utils;
+using NoMansBlocks.Modules.UserSystem;
 
 namespace NoMansBlocks.Core.Engine {
     /// <summary>
@@ -45,41 +47,47 @@ namespace NoMansBlocks.Core.Engine {
         public IContext Context { get; private set; }
 
         /// <summary>
-        /// The module that holds all of the config settings
-        /// </summary>
-        [ModuleExecution(ExecutionIndex = 0, DisableUpdate = true)]
-        public ConfigModule ConfigModule { get; private set; }
-
-        /// <summary>
         /// The module used to handle logging to console and
         /// building useful log files.
         /// </summary>
-        [ModuleExecution(ExecutionIndex = 1, DisableUpdate = true)]
+        [ModuleExecution(ExecutionIndex = 0, DisableUpdate = true)]
         public LogModule LogModule { get; private set; }
+
+        /// <summary>
+        /// The module that holds all of the config settings
+        /// </summary>
+        [ModuleExecution(ExecutionIndex = 1, DisableUpdate = true)]
+        public ConfigModule ConfigModule { get; private set; }
+
+        /// <summary>
+        /// The user module handles everything user related.
+        /// </summary>
+        [ModuleExecution(ExecutionIndex = 2, DisableUpdate = true)]
+        public UserModule UserModule { get; private set; }
 
         /// <summary>
         /// Processes inputs for commands from the user.
         /// </summary>
-        [ModuleExecution(ExecutionIndex = 2, DisableUpdate = true)]
+        [ModuleExecution(ExecutionIndex = 3, DisableUpdate = true)]
         public CommandConsoleModule CommandModule { get; private set; }
 
         /// <summary>
         /// The module that handles loading scenes.
         /// </summary>
-        [ModuleExecution(ExecutionIndex = 3, DisableUpdate = true)]
+        [ModuleExecution(ExecutionIndex = 4, DisableUpdate = true)]
         public UIModule UIModule { get; private set; }
 
         /// <summary>
         /// The module used to interface with the network.
         /// </summary>
-        [ModuleExecution(ExecutionIndex = 4)]
+        [ModuleExecution(ExecutionIndex = 5)]
         public NetModule NetModule { get; protected set; }
 
         /// <summary>
         /// Handles retrieving inputs from the user via various
         /// controllers such as the keyboard, and mouse.
         /// </summary>
-        [ModuleExecution(ExecutionIndex = 5)]
+        [ModuleExecution(ExecutionIndex = 6)]
         public InputModule InputModule { get; private set; }
         #endregion
 
@@ -113,6 +121,7 @@ namespace NoMansBlocks.Core.Engine {
 
             LogModule     = new LogModule(this);
             ConfigModule  = new ConfigModule(this);
+            UserModule    = new UserModule(this);
             CommandModule = new CommandConsoleModule(this);
             UIModule      = new UIModule(this);
             NetModule     = new NetModule(this);
@@ -271,7 +280,7 @@ namespace NoMansBlocks.Core.Engine {
         /// <param name="e">Always null.</param>
         private void OnTickerInit(object sender, EventArgs e) {
             //Find the modules
-            PropertyInfo[] memberProperties = this.GetType().GetProperties().Where(p => p.PropertyType.IsSubclassOf(typeof(Module)) || p.PropertyType == typeof(Module)).ToArray();
+            PropertyInfo[] memberProperties = ReflectionUtils.GetPropertiesOfType(GetType(), typeof(Module)).ToArray();
             modules = new Module[memberProperties.Length];
 
             for (int i = 0; i < memberProperties.Length; i++) {

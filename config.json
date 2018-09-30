@@ -1,1 +1,9 @@
-{}
+{
+  "Login": {
+    "RememberMe": false
+  },
+  "Network": {
+    "Port": 0,
+    "ConnectionCapacity": 1
+  }
+}

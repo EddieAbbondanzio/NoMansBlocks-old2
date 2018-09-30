@@ -20,11 +20,6 @@ namespace NoMansBlocks.Core.Engine.Client {
         /// Flag indicating what kind of engine it is.
         /// </summary>
         public override GameEngineType Type => GameEngineType.Client;
-
-        /// <summary>
-        /// The configuration settings loaded in.
-        /// </summary>
-        //public ClientConfig Config { get; private set; }
         #endregion
 
         #region Constructor(s)

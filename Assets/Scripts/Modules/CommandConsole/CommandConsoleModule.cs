@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using System.Linq;
 
 namespace NoMansBlocks.Modules.CommandConsole {
     /// <summary>
@@ -40,10 +41,10 @@ namespace NoMansBlocks.Modules.CommandConsole {
         /// </summary>
         public override void OnInit() {
             commands = new Dictionary<string, Type>();
-            List<Type> commandTypes = ReflectionUtils.FindDerivedTypes(Assembly.GetExecutingAssembly(), typeof(Command));
+            Type[] commandTypes = ReflectionUtils.GetDerivedTypes(Assembly.GetExecutingAssembly(), typeof(Command)).ToArray();
 
             //Build the commands dictionary for easy lookup of commands.
-            for(int i = 0, commandCount = commandTypes.Count; i < commandCount; i++) {
+            for(int i = 0; i < commandTypes.Length; i++) {
                 Command command = Activator.CreateInstance(commandTypes[i]) as Command;
 
                 //Just double check the keyword hasn't already been defined.

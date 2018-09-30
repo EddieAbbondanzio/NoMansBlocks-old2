@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 
 namespace NoMansBlocks.Core.Engine {
-    //Move control of the modules to here. That way the engine class has to do less
-    //work. Also get rid of the engine parameter of the constructor and move it
-    //to a SetEngine() method. This is causing some confusion.
-
-
     /// <summary>
     /// Base class for Modules to derive from. Modules are components of
     /// the engine that require tracking their state, etc... 
@@ -115,6 +110,16 @@ namespace NoMansBlocks.Core.Engine {
         /// <returns>The module found (if any).</returns>
         protected T GetModule<T>() where T : Module {
             return Engine.GetModule<T>();
+        }
+
+        /// <summary>
+        /// Search for a service from the game engine. This is simply
+        /// a shortcut to Engine.GetService().
+        /// </summary>
+        /// <typeparam name="T">The type of service to look for.</typeparam>
+        /// <returns>The service found.</returns>
+        protected T GetService<T>() where T : class, IService {
+            return Engine.GetService<T>();
         }
         #endregion
     }

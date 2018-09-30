@@ -80,7 +80,7 @@ namespace NoMansBlocks.Modules.Config {
                         ConfigType configType = (ConfigType)Enum.Parse(typeof(ConfigType), reader.Value.ToString());
                         reader.Read();
 
-                        Type type = ConfigUtils.GetType(configType);
+                        Type type = configType.GetObjectType();
                         IConfig config = Activator.CreateInstance(type, reader, serializer) as IConfig;
 
                         if (config != null) {
