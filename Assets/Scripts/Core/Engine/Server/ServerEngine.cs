@@ -1,6 +1,5 @@
 ﻿using NoMansBlocks.Core.Engine;
 using NoMansBlocks.Serialization;
-using NoMansBlocks.UserSystem;
 using NoMansBlocks.Modules.Network;
 using NoMansBlocks.Modules.UI.Menus;
 using System;
@@ -37,7 +36,6 @@ namespace NoMansBlocks.Core.Engine.Server {
         /// Generate the default user for the server.
         /// </summary>
         protected override void OnInit() {
-            User.Current = new User("SERVER", PermissionLevel.Admin);
         }
 
         /// <summary>

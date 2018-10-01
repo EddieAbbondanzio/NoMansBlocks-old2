@@ -1,5 +1,5 @@
 ﻿using NoMansBlocks.Core.Engine;
-using NoMansBlocks.UserSystem;
+using NoMansBlocks.Modules.UserSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,8 +48,13 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
         /// Execute the command.
         /// </summary>
         /// <param name="executingContext">The game engine instance.</param>
-        public override void Execute(GameEngine executingContext) {
-            throw new NotImplementedException();
+        public override async void Execute(GameEngine executingContext) {
+            if(LoginToken != null) {
+                await User.LoginUserAsync(LoginToken);
+            }
+            else {
+                await User.LoginUserAsync(Username, Password);
+            }
         }
 
         /// <summary>

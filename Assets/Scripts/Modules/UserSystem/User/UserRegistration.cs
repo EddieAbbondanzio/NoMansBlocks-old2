@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NoMansBlocks.UserSystem {
+namespace NoMansBlocks.Modules.UserSystem {
     /// <summary>
     /// Informaton of a user that wants to register a new
     /// account with the game.

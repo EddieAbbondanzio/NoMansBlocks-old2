@@ -1,6 +1,5 @@
 ﻿using NoMansBlocks.Core;
 using NoMansBlocks.Core.Engine;
-using NoMansBlocks.UserSystem;
 using NoMansBlocks.Modules.Input;
 using NoMansBlocks.Modules.Input.Devices;
 using NoMansBlocks.Modules.UI.Menus;

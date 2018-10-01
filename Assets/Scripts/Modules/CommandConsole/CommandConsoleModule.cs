@@ -1,7 +1,6 @@
 ﻿using LiteNetLib;
 using NoMansBlocks.Core;
 using NoMansBlocks.Core.Engine;
-using NoMansBlocks.UserSystem;
 using NoMansBlocks.Modules.CommandConsole.Commands;
 using NoMansBlocks.Utils;
 using System;
@@ -10,6 +9,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using System.Linq;
+using NoMansBlocks.Modules.UserSystem;
 
 namespace NoMansBlocks.Modules.CommandConsole {
     /// <summary>

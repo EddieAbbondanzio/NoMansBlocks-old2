@@ -1,6 +1,6 @@
 ﻿using NoMansBlocks.Modules.Input;
 using NoMansBlocks.Modules.Logging;
-using NoMansBlocks.UserSystem;
+using NoMansBlocks.Modules.UserSystem;
 using NoMansBlocks.Utils;
 using System;
 using System.Collections.Generic;

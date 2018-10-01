@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NoMansBlocks.UserSystem {
+namespace NoMansBlocks.Modules.UserSystem {
     /// <summary>
     /// The various permission levels supported by the
     /// game engine.

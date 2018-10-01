@@ -1,5 +1,4 @@
 ﻿using NoMansBlocks.Core.Engine;
-using NoMansBlocks.UserSystem;
 using NoMansBlocks.Modules.Config;
 using NoMansBlocks.Modules.Network;
 using NoMansBlocks.Modules.UI.Menus;

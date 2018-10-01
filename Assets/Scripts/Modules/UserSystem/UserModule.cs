@@ -1,6 +1,5 @@
 ﻿using NoMansBlocks.Core.Engine;
 using NoMansBlocks.Modules.Config;
-using NoMansBlocks.UserSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +20,14 @@ namespace NoMansBlocks.Modules.UserSystem {
         public LoginConfig LoginConfig { get; private set; }
         #endregion
 
+        #region Members
+        /// <summary>
+        /// The user service being used to interact with 
+        /// the master server.
+        /// </summary>
+        private IUserService userService;
+        #endregion
+
         #region Constructor(s)
         /// <summary>
         /// Create a new instance of a user module.
@@ -36,7 +43,9 @@ namespace NoMansBlocks.Modules.UserSystem {
         /// service so we have a reference back to it.
         /// </summary>
         public override void OnInit() {
-            IUserService userService = GetService<UserService>();
+            userService = GetService<UserService>();
+            userService.OnUserLogin += UserService_OnUserLogin;
+
             User.SetUserService(userService);
         }
 
@@ -48,6 +57,27 @@ namespace NoMansBlocks.Modules.UserSystem {
             if (Engine.Type == GameEngineType.Client) {
                 IConfigContainer configContainer = GetModule<ConfigModule>();
                 LoginConfig = configContainer.GetConfig<LoginConfig>();
+            }
+        }
+
+        /// <summary>
+        /// When shutting down desubscribe from the login event
+        /// to prevent any memory leaks.
+        /// </summary>
+        public override void OnEnd() {
+            userService.OnUserLogin -= UserService_OnUserLogin;
+        }
+
+        /// <summary>
+        /// A user was logged in.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void UserService_OnUserLogin(object sender, UserEventArgs e) {
+            //Does the user want us to save things?
+            if (LoginConfig.RememberMe) {
+                LoginConfig.Username = e.User.Username;
+                LoginConfig.Token = e.User.Login.Token;
             }
         }
         #endregion

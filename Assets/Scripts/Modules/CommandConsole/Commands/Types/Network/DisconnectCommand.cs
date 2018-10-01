@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NoMansBlocks.Core;
 using NoMansBlocks.Core.Engine;
-using NoMansBlocks.UserSystem;
+using NoMansBlocks.Modules.UserSystem;
 
 namespace NoMansBlocks.Modules.CommandConsole.Commands {
     /// <summary>

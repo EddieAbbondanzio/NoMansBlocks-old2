@@ -1,6 +1,6 @@
 ﻿using NoMansBlocks;
 using NoMansBlocks.Core.Engine;
-using NoMansBlocks.UserSystem;
+using NoMansBlocks.Modules.UserSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;

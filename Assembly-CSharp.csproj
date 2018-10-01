@@ -194,6 +194,7 @@
     <Compile Include="Assets\Scripts\Modules\UserSystem\Service\UserService.cs" />
     <Compile Include="Assets\Scripts\Modules\UserSystem\User\PermissionLevel.cs" />
     <Compile Include="Assets\Scripts\Modules\UserSystem\User\User.cs" />
+    <Compile Include="Assets\Scripts\Modules\UserSystem\User\UserEventArgs.cs" />
     <Compile Include="Assets\Scripts\Modules\UserSystem\User\UserLogin.cs" />
     <Compile Include="Assets\Scripts\Modules\UserSystem\User\UserRegistration.cs" />
     <Compile Include="Assets\Scripts\Modules\UserSystem\UserModule.cs" />
