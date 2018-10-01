@@ -10,7 +10,7 @@ namespace NoMansBlocks.UserSystem {
     /// as their username, real name, etc..
     /// </summary>
     public class User {
-        #region Statics
+        #region Statics Properties
         /// <summary>
         /// The user running the game.
         /// </summary>
@@ -49,6 +49,13 @@ namespace NoMansBlocks.UserSystem {
         public PermissionLevel PermissionLevel { get; private set; }
         #endregion
 
+        #region Events
+        /// <summary>
+        /// Fired off when a user logs in to their account.
+        /// </summary>
+        public static event EventHandler OnLogin;
+        #endregion
+
         #region Constructor(s)
         /// <summary>
         /// Create a new player with just a username.
@@ -67,6 +74,20 @@ namespace NoMansBlocks.UserSystem {
         public User(string username, PermissionLevel permissionLevel) {
             Username = username;
             PermissionLevel = permissionLevel;
+        }
+        #endregion
+
+        #region Statics
+        public static void SetUserService(IUserService userService) {
+            throw new NotImplementedException();
+        }
+
+        public static User LoginUser(string username, string password) {
+            throw new NotImplementedException();
+        }
+
+        public static User LoginUser(string token) {
+            throw new NotImplementedException();
         }
         #endregion
     }

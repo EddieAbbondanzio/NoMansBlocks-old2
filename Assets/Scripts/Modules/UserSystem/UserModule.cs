@@ -15,12 +15,6 @@ namespace NoMansBlocks.Modules.UserSystem {
     public sealed class UserModule : Module {
         #region Properties
         /// <summary>
-        /// The user service responsible for interfacing
-        /// with the user server directly.
-        /// </summary>
-        public IUserService UserService { get; private set; }
-
-        /// <summary>
         /// The login configuration of the user module. This
         /// will always be null on the server.
         /// </summary>
@@ -42,7 +36,8 @@ namespace NoMansBlocks.Modules.UserSystem {
         /// service so we have a reference back to it.
         /// </summary>
         public override void OnInit() {
-            UserService = GetService<UserService>();
+            IUserService userService = GetService<UserService>();
+            User.SetUserService(userService);
         }
 
         /// <summary>

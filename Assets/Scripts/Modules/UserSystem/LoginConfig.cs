@@ -13,6 +13,26 @@ namespace NoMansBlocks.Modules.UserSystem {
     /// Settings that pertain to the user module.
     /// </summary>
     public sealed class LoginConfig : IConfig {
+        #region Constants
+        /// <summary>
+        /// Property name to use in the JSON file for
+        /// the Username.
+        /// </summary>
+        private const string UsernameJsonName = "Username";
+
+        /// <summary>
+        /// Property name to use in the JSON file for
+        /// the Token.
+        /// </summary>
+        private const string TokenJsonName = "Token";
+
+        /// <summary>
+        /// Property name to use in the JSON file for
+        /// the Remember Me.
+        /// </summary>
+        private const string RememberMeJsonName = "RememberMe";
+        #endregion
+
         #region Properties
         /// <summary>
         /// The type of config object it is.
@@ -23,7 +43,7 @@ namespace NoMansBlocks.Modules.UserSystem {
         /// The type of engine this network config supports
         /// </summary>
         public GameEngineType EngineType => GameEngineType.Client;
-        
+
         /// <summary>
         /// The username to save.
         /// </summary>
@@ -49,17 +69,17 @@ namespace NoMansBlocks.Modules.UserSystem {
         public LoginConfig() {
         }
 
-        ///// <summary>
-        ///// Create a new instance of the login config that 
-        ///// saves credentials.
-        ///// </summary>
-        ///// <param name="username">The username to save.</param>
-        ///// <param name="loginToken">The (JWT) login token to save.</param>
-        //public LoginConfig(string username, string loginToken) {
-        //    Username   = username;
-        //    Token = loginToken;
-        //    RememberMe = true;
-        //}
+        /// <summary>
+        /// Create a new instance of the login config that 
+        /// saves credentials.
+        /// </summary>
+        /// <param name="username">The username to save.</param>
+        /// <param name="loginToken">The (JWT) login token to save.</param>
+        public LoginConfig(string username, string loginToken) {
+            Username   = username;
+            Token      = loginToken;
+            RememberMe = true;
+        }
 
         /// <summary>
         /// Deserialize a login config from it's json form.
@@ -69,19 +89,9 @@ namespace NoMansBlocks.Modules.UserSystem {
         public LoginConfig(JsonReader reader, JsonSerializer serializer) {
             JObject jObject = JObject.ReadFrom(reader) as JObject;
 
-            foreach(JProperty property in jObject.Properties()) {
-                switch (property.Name) {
-                    case "Username":
-                        Username = property.Value<string>();
-                        break;
-                    case "Token":
-                        Token = property.Value<string>();
-                        break;
-                    case "RememberMe":
-                        RememberMe = property.Value<bool>();
-                        break;
-                }
-            }
+            Username   = jObject[UsernameJsonName]?.Value<string>();
+            Token      = jObject[TokenJsonName]?.Value<string>();
+            RememberMe = jObject[RememberMeJsonName]?.Value<bool>() ?? false;
         }
         #endregion
 
@@ -113,15 +123,16 @@ namespace NoMansBlocks.Modules.UserSystem {
         public void Serialize(JsonWriter writer, JsonSerializer serializer) {
             writer.WriteStartObject();
 
+            //Don't put credentials if we shouldn't save them.
             if (RememberMe) {
-                writer.WritePropertyName("Username");
+                writer.WritePropertyName(UsernameJsonName);
                 serializer.Serialize(writer, Username);
 
-                writer.WritePropertyName("Token");
+                writer.WritePropertyName(TokenJsonName);
                 serializer.Serialize(writer, Token);
             }
 
-            writer.WritePropertyName("RememberMe");
+            writer.WritePropertyName(RememberMeJsonName);
             serializer.Serialize(writer, RememberMe);
 
             writer.WriteEndObject();

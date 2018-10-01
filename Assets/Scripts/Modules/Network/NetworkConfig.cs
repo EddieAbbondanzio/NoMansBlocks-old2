@@ -13,6 +13,18 @@ namespace NoMansBlocks.Modules.Network {
     /// Settings that pertain to the network module.
     /// </summary>
     public sealed class NetworkConfig : IConfig {
+        #region Constants
+        /// <summary>
+        /// The JSON property name for the connection port.
+        /// </summary>
+        private const string PortJsonName = "Port";
+
+        /// <summary>
+        /// The JSON property name for the connection capacity.
+        /// </summary>
+        private const string CapacityJsonName = "ConnectionCapacity";
+        #endregion
+
         #region Properties
         /// <summary>
         /// The type of config object it is.
@@ -61,8 +73,8 @@ namespace NoMansBlocks.Modules.Network {
         public NetworkConfig(JsonReader reader, JsonSerializer serializer) {
             JObject jObject = JObject.ReadFrom(reader) as JObject;
 
-            Port               = jObject["Port"].Value<int>();
-            ConnectionCapacity = jObject["ConnectionCapacity"].Value<int>();
+            Port               = jObject[PortJsonName]?.Value<int>() ?? 0;
+            ConnectionCapacity = jObject[CapacityJsonName]?.Value<int>() ?? 1;
         }
         #endregion
 
@@ -110,10 +122,10 @@ namespace NoMansBlocks.Modules.Network {
         public void Serialize(JsonWriter writer, JsonSerializer serializer) {
             writer.WriteStartObject();
 
-            writer.WritePropertyName("Port");
+            writer.WritePropertyName(PortJsonName);
             serializer.Serialize(writer, Port);
 
-            writer.WritePropertyName("ConnectionCapacity");
+            writer.WritePropertyName(CapacityJsonName);
             serializer.Serialize(writer, ConnectionCapacity);
 
             writer.WriteEndObject();

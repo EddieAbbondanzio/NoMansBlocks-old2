@@ -16,9 +16,9 @@ namespace NoMansBlocks.FileIO {
         #region Constants
         /// <summary>
         /// How many bytes to read / write from file at a time.
-        /// This can be overrided if desired.
+        /// This can be overrided if desired. 32 MB by default.
         /// </summary>
-        private const int BufferSize = 4096;
+        private const int BufferSize = 33554432;
         #endregion
 
         #region Properties
@@ -192,16 +192,14 @@ namespace NoMansBlocks.FileIO {
                 }
             }
 
-            //return await Task.Run(() => {
-                //.ReadASync isn't working. This is a temp fix.
-                byte[] result;
-                using (FileStream stream = fileInfo.OpenRead()) {
-                    result = new byte[stream.Length];
-                    stream.Read(result, 0, (int)stream.Length);
-                }
+            //Async was causing bugs. For now just work with this.
+            byte[] result;
+            using (FileStream stream = fileInfo.OpenRead()) {
+                result = new byte[stream.Length];
+                stream.Read(result, 0, (int)stream.Length);
+            }
 
-                return result;
-            //});
+            return result;
         }
         #endregion
     }

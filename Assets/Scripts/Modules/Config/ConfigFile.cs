@@ -73,10 +73,10 @@ namespace NoMansBlocks.Modules.Config {
         protected override List<IConfig> DeserializeContent(JsonReader reader, JsonSerializer serializer) {
             List<IConfig> configs = new List<IConfig>();
 
-            while (reader.Read()) {
-                if (reader.Value != null) {
-                    if (reader.TokenType == JsonToken.PropertyName) {
-
+            //We aren't sure if the file has been modified. Hence the try / catch.
+            try {
+                while (reader.Read()) {
+                    if (reader.Value != null && reader.TokenType == JsonToken.PropertyName) {
                         ConfigType configType = (ConfigType)Enum.Parse(typeof(ConfigType), reader.Value.ToString());
                         reader.Read();
 
@@ -86,8 +86,12 @@ namespace NoMansBlocks.Modules.Config {
                         if (config != null) {
                             configs.Add(config);
                         }
+
+                        reader.Skip();
                     }
                 }
+            }
+            catch {
             }
 
             return configs;

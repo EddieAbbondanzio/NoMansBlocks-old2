@@ -21,6 +21,7 @@ namespace NoMansBlocks {
         private static ILogger Logger { get; set; }
         #endregion
 
+        #region Events
         /// <summary>
         /// Fired off anytime a log statement is produced.
         /// </summary>
@@ -28,6 +29,7 @@ namespace NoMansBlocks {
             add { Logger.OnLog += value; }
             remove { Logger.OnLog -= value; }
         }
+        #endregion
 
         #region Publics
         /// <summary>
