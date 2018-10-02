@@ -166,16 +166,16 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// Parse and process a new command.
         /// </summary>
         /// <param name="command">The text of the command to parse.</param>
-        protected void ExecuteCommand(string command) {
-            commandConsole.Execute(command);
+        protected async Task ExecuteCommandAsync(string command) {
+            await commandConsole.ExecuteAsync(command);
         }
 
         /// <summary>
         /// Execute a command.
         /// </summary>
         /// <param name="command">The command to execute.</param>
-        protected void ExecuteCommand(Command command) {
-            commandConsole.Execute(command, true);
+        protected async Task ExecuteCommandAsync(Command command) {
+            await commandConsole.ExecuteAsync(command);
         }
 
         /// <summary>

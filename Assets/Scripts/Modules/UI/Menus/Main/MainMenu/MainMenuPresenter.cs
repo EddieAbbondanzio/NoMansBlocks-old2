@@ -101,7 +101,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// <param name="sender">The button itself.</param>
         /// <param name="e">Null</param>
         private void ExitButton_OnClick(object sender, EventArgs e) {
-            ExecuteCommand(new StopCommand());
+            ExecuteCommandAsync(new StopCommand());
         }
         #endregion
     }

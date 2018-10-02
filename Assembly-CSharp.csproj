@@ -92,7 +92,6 @@
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Common\Command.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\Application\StartCommand.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\Application\StopCommand.cs" />
-    <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\Help\HelpCommand.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\Network\ConnectCommand.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\Network\DisconnectCommand.cs" />
     <Compile Include="Assets\Scripts\Modules\CommandConsole\Commands\Types\User\LoginCommand.cs" />

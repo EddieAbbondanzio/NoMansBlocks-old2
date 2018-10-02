@@ -16,14 +16,13 @@ namespace NoMansBlocks.Modules.CommandConsole {
         /// Parse and process a new command.
         /// </summary>
         /// <param name="command">The text of the command to parse.</param>
-        void Execute(string command);
+        Task ExecuteAsync(string command);
 
         /// <summary>
         /// Execute a command.
         /// </summary>
         /// <param name="command">The command to execute.</param>
-        /// <param name="overridePermissions">If the permissions should be ignored.</param>
-        void Execute(Command command, bool overridePermissions = false);
+        Task ExecuteAsync(Command command);
         #endregion
     }
 }

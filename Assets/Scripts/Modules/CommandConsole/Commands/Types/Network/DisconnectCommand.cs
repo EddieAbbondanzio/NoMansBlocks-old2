@@ -18,16 +18,6 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
         /// The keyword that comes after the '/'.
         /// </summary>
         public override string Keyword => "disconnect";
-
-        /// <summary>
-        /// Who can invoke the command.
-        /// </summary>
-        public override PermissionLevel RequiredPermissions => PermissionLevel.All;
-
-        /// <summary>
-        /// The help tip to show for the help command.
-        /// </summary>
-        public override string HelpTip => "Disconnect all currently active network connections.";
         #endregion
 
         #region Constructor(s)
@@ -39,13 +29,15 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
         #endregion
 
         #region Publics
+#pragma warning disable 1998
         /// <summary>
         /// Execute the command.
         /// </summary>
         /// <param name="executingContext">The currently running game engine.</param>
-        public override void Execute(GameEngine executingContext) {
+        public override async Task ExecuteAsync(GameEngine executingContext) {
             executingContext.NetModule.Disconnect();
         }
+#pragma warning restore 1998
         #endregion
     }
 }

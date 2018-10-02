@@ -1,4 +1,5 @@
 ﻿using NoMansBlocks.Modules.CommandConsole;
+using NoMansBlocks.Modules.CommandConsole.Commands;
 using NoMansBlocks.Modules.UI.Controls;
 using System;
 using System.Collections.Generic;
@@ -63,7 +64,13 @@ namespace NoMansBlocks.Modules.UI.Menus {
             rememberMeCheckBox = GetControl<ICheckBox>("RememberToggle");
             loginButton        = GetControl<ITriggerButton>("LoginButton");
 
-            loginButton.OnClick += LoginButton_OnClick;
+            loginButton.OnClick              += LoginButton_OnClick;
+            rememberMeCheckBox.OnCheckChange += RememberMeCheckBox_OnCheckChange;
+            usernameTextBox.OnBlur           += UsernameTextBox_OnBlur;
+            passwordTextBox.OnBlur           += PasswordTextBox_OnBlur;
+
+            //TODO:
+            //Need to get the login config and see if we have a 
         }
 
         /// <summary>
@@ -71,7 +78,10 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// prevents memory leaks.
         /// </summary>
         protected override void OnUnload() {
-            loginButton.OnClick -= LoginButton_OnClick;
+            loginButton.OnClick              -= LoginButton_OnClick;
+            rememberMeCheckBox.OnCheckChange -= RememberMeCheckBox_OnCheckChange;
+            usernameTextBox.OnBlur           -= UsernameTextBox_OnBlur;
+            passwordTextBox.OnBlur           -= PasswordTextBox_OnBlur;
         }
 
         /// <summary>
@@ -89,8 +99,39 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// Fired when the user clicks the login button. They want to try to
         /// log in.
         /// </summary>
-        private void LoginButton_OnClick(object sender, EventArgs e) {
+        private async void LoginButton_OnClick(object sender, EventArgs e) {
+
             LoadMenu<MainMenu>();
+        }
+
+        /// <summary>
+        /// Fired off when the checkbox is either checked, or unchecked.
+        /// This takes the input from the presenter and updates the model.
+        /// </summary>
+        /// <param name="sender">The checkbox itself.</param>
+        /// <param name="e">Event args.</param>
+        private void RememberMeCheckBox_OnCheckChange(object sender, EventArgs e) {
+            DataSource.RememberMe = rememberMeCheckBox.IsChecked;
+        }
+
+        /// <summary>
+        /// Goes off when the username textbox is left. This ensures we keep the
+        /// username up to date at any time.
+        /// </summary>
+        /// <param name="sender">The textbox itself.</param>
+        /// <param name="e">Event args.</param>
+        private void UsernameTextBox_OnBlur(object sender, EventArgs e) {
+            DataSource.Username = usernameTextBox.Text;
+        }
+
+        /// <summary>
+        /// Goes off when the password textbox is left. This ensures we
+        /// keep an up to date version of the password on the model.
+        /// </summary>
+        /// <param name="sender">The textbox itself.</param>
+        /// <param name="e">Event args.</param>
+        private void PasswordTextBox_OnBlur(object sender, EventArgs e) {
+            DataSource.Password = passwordTextBox.Text;
         }
         #endregion
     }

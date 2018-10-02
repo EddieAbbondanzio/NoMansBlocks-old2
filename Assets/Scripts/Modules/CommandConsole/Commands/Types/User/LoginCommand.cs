@@ -18,16 +18,6 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
         public override string Keyword => "login";
 
         /// <summary>
-        /// Who can invoke the command.
-        /// </summary>
-        public override PermissionLevel RequiredPermissions => PermissionLevel.All;
-
-        /// <summary>
-        /// The help tip to show for the help command.
-        /// </summary>
-        public override string HelpTip => "Login to a user account. Expects a parameter of username followed by password, or a JWT";
-
-        /// <summary>
         /// The username passed in.
         /// </summary>
         public string Username { get; set; }
@@ -43,12 +33,34 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
         public string LoginToken { get; set; }
         #endregion
 
+        #region Constructor(s)
+        /// <summary>
+        /// Create a new instance of the login command that uses 
+        /// standard credentials to attempt to log a user in.
+        /// </summary>
+        /// <param name="username">The username to log in under.</param>
+        /// <param name="password">The password to authenticate.</param>
+        public LoginCommand(string username, string password) {
+            Username = username;
+            Password = password;
+        }
+
+        /// <summary>
+        /// Create a new login command that uses a login token
+        /// from a previous login to log in the user.
+        /// </summary>
+        /// <param name="loginToken">The JWT to use.</param>
+        public LoginCommand(string loginToken) {
+            LoginToken = loginToken;
+        }
+        #endregion
+
         #region Publics
         /// <summary>
         /// Execute the command.
         /// </summary>
         /// <param name="executingContext">The game engine instance.</param>
-        public override async void Execute(GameEngine executingContext) {
+        public override async Task ExecuteAsync(GameEngine executingContext) {
             if(LoginToken != null) {
                 await User.LoginUserAsync(LoginToken);
             }

@@ -10,6 +10,7 @@ using System.Reflection;
 using UnityEngine;
 using System.Linq;
 using NoMansBlocks.Modules.UserSystem;
+using System.Threading.Tasks;
 
 namespace NoMansBlocks.Modules.CommandConsole {
     /// <summary>
@@ -49,7 +50,7 @@ namespace NoMansBlocks.Modules.CommandConsole {
 
                 //Just double check the keyword hasn't already been defined.
                 if (commands.ContainsKey(command.Keyword)) {
-                    throw new Exception(string.Format("A command with the keyword {0} is already present.", command.Keyword));
+                    throw new Exception(string.Format("{0} uses keyword {1}. {2} cannot have the same keyword", commands[command.Keyword].GetType(), command.Keyword, command.GetType()));
                 }
 
                 commands.Add(command.Keyword, commandTypes[i]);
@@ -63,7 +64,7 @@ namespace NoMansBlocks.Modules.CommandConsole {
         /// so it will produce more log messages to send to the file.
         /// </summary>
         /// <param name="command">The text of the command to parse.</param>
-        public void Execute(string command) {
+        public async Task ExecuteAsync(string command) {
             if(command == null || command[0] != '/') {
                 Log.Debug("Invalid command. Type /help for assistance.");
                 return;
@@ -76,7 +77,7 @@ namespace NoMansBlocks.Modules.CommandConsole {
             Command cmd = ParseCommand(command);
 
             if(command != null) {
-                Execute(cmd);
+                await ExecuteAsync(cmd);
             }
             else {
                 Log.Debug("No command found. Type /help for assistance.");
@@ -87,8 +88,7 @@ namespace NoMansBlocks.Modules.CommandConsole {
         /// Execute a command.
         /// </summary>
         /// <param name="command">The command to execute.</param>
-        /// <param name="overridePermissions">If the permissions requirement should be ignored.</param>
-        public void Execute(Command command, bool overridePermissions = false) {
+        public async Task ExecuteAsync(Command command) {
             if(command == null) {
                 return;
             }
@@ -97,10 +97,8 @@ namespace NoMansBlocks.Modules.CommandConsole {
                 throw new Exception("No executing context has been set!");
             }
 
-            if(overridePermissions || command.HasPermissions(User.Current.PermissionLevel)) {
-                Log.Debug(command.ToString());
-                command.Execute(Engine);
-            }
+            Log.Debug(command.ToString());
+            await command.ExecuteAsync(Engine);
         }
         #endregion
 

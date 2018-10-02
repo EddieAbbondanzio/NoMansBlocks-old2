@@ -16,26 +16,18 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
         /// The keyword that comes after the '/'.
         /// </summary>
         public override string Keyword => "stop";
-
-        /// <summary>                                  
-        /// Who can invoke the command.
-        /// </summary>
-        public override PermissionLevel RequiredPermissions => PermissionLevel.Admin;
-
-        /// <summary>
-        /// The help tip to show for the help command.
-        /// </summary>
-        public override string HelpTip => "Shuts down the game engine.";
         #endregion
 
         #region Publics
+#pragma warning disable 1998
         /// <summary>
         /// Execute the command.
         /// </summary>
         /// <param name="executingContext">The currently running game engine instance.</param>
-        public override void Execute(GameEngine executingContext) {
+        public override async Task ExecuteAsync(GameEngine executingContext) {
             executingContext.Stop();
         }
+#pragma warning restore 1998
         #endregion
     }
 }

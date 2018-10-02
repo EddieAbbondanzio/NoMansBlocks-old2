@@ -95,7 +95,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// <param name="sender">The textbox.</param>
         /// <param name="e">Nothing?.</param>
         private void CommandTextBox_OnEndEdit(object sender, EventArgs e) {
-            ExecuteCommand(commandTextBox.Text);
+            ExecuteCommandAsync(commandTextBox.Text);
             commandTextBox.Clear();
             commandTextBox.Focus();
         }
