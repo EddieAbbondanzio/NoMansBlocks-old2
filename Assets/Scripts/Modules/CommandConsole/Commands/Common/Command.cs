@@ -26,7 +26,8 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
         /// async since a lot of the code base is also async.
         /// </summary>
         /// <param name="executingContext">The running game engine.</param>
-        public abstract Task ExecuteAsync(GameEngine executingContext);
+        /// <returns>True if no errors.</returns>
+        public abstract Task<bool> ExecuteAsync(GameEngine executingContext);
 
         /// <summary>
         /// Process the command parameters that were passed in when creating

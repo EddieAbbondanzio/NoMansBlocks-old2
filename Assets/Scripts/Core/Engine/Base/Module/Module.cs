@@ -35,6 +35,11 @@ namespace NoMansBlocks.Core.Engine {
         public bool Enabled { get; set; }
 
         /// <summary>
+        /// If the module is running in debug mode.
+        /// </summary>
+        public bool DebugMode { get; set; }
+
+        /// <summary>
         /// The mode we are currently executing in.
         /// </summary>
         public GameEngineType EngineType { get { return Engine.Type; } }
@@ -120,6 +125,21 @@ namespace NoMansBlocks.Core.Engine {
         /// <returns>The service found.</returns>
         protected T GetService<T>() where T : class, IService {
             return Engine.GetService<T>();
+        }
+        #endregion
+
+        #region Helpers
+        /// <summary>
+        /// Log a debug statement to the console if the module is running in
+        /// debug mode. Else skip over it. This accepts strings in the form
+        /// of string.format().
+        /// </summary>
+        /// <param name="message">The message to log.</param>
+        /// <param name="parameters">The parameters to add if any.</param>
+        protected void Debug(string message, params object[] parameters) {
+            if (DebugMode) {
+                Log.Debug(message, parameters);
+            }
         }
         #endregion
     }

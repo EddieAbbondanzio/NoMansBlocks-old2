@@ -1,5 +1,6 @@
 ﻿using NoMansBlocks.Modules.CommandConsole;
 using NoMansBlocks.Modules.CommandConsole.Commands;
+using NoMansBlocks.Modules.Config;
 using NoMansBlocks.Modules.UI.Controls;
 using System;
 using System.Collections.Generic;
@@ -24,13 +25,13 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// <summary>
         /// The menu model
         /// </summary>
-        public T DataSource { get; set; }
+        public T Model { get; set; }
 
         /// <summary>
         /// Underlying implementation to get the model
         /// when all that is available is an interface reference.
         /// </summary>
-        IMenu IMenuPresenter.Model { get { return DataSource as IMenu; } }
+        IMenu IMenuPresenter.Model { get { return Model as IMenu; } }
 
         /// <summary>
         /// The resource path of where the prefab representing
@@ -49,12 +50,17 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// The menu controller handling all menus in the game.
         /// This can be used to load other menus from this presenter.
         /// </summary>
-        private IMenuManager uiModule;
+        private IMenuManager menuManager;
 
         /// <summary>
         /// The command console module for submitting commands though.
         /// </summary>
         private ICommandConsole commandConsole;
+
+        /// <summary>
+        /// The config module that holds all of the config files.
+        /// </summary>
+        private IConfigContainer configContainer;
 
         /// <summary>
         /// The view instance of the menu.
@@ -66,11 +72,13 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// <summary>
         /// Create a new base instance of a menu presenter.
         /// </summary>
-        /// <param name="uiModule">The UI Module.</param>
+        /// <param name="menuManager">The UI Module.</param>
         /// <param name="commandConsole">The command console of the engine</param>
-        protected MenuPresenter(IMenuManager uiModule, ICommandConsole commandConsole) {
-            this.uiModule = uiModule;
-            this.commandConsole = commandConsole;
+        /// <param name="configContainer">The config container.</param>
+        protected MenuPresenter(IMenuManager menuManager, ICommandConsole commandConsole, IConfigContainer configContainer) {
+            this.menuManager     = menuManager;
+            this.commandConsole  = commandConsole;
+            this.configContainer = configContainer;
         }
         #endregion
 
@@ -93,7 +101,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
             menuTransform.offsetMax = new Vector2(0, 0);
 
             controls = view.GetComponentsInChildren<IControl>();
-            DataSource = menu;
+            Model = menu;
 
             OnLoad();
             DataBind();
@@ -124,7 +132,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
             OnUnload();
             GameObject.Destroy(view);
             controls = null;
-            DataSource    = null;
+            Model    = null;
         }
 
         /// <summary>
@@ -132,7 +140,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// info from the model to the view.
         /// </summary>
         public void DataBind() {
-            if(DataSource != null) {
+            if(Model != null) {
                 OnDataBind();
             }
         }
@@ -166,16 +174,18 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// Parse and process a new command.
         /// </summary>
         /// <param name="command">The text of the command to parse.</param>
-        protected async Task ExecuteCommandAsync(string command) {
-            await commandConsole.ExecuteAsync(command);
+        /// <returns>True if no errors.</returns>
+        protected async Task<bool> ExecuteCommandAsync(string command) {
+            return await commandConsole.ExecuteAsync(command);
         }
 
         /// <summary>
         /// Execute a command.
         /// </summary>
         /// <param name="command">The command to execute.</param>
-        protected async Task ExecuteCommandAsync(Command command) {
-            await commandConsole.ExecuteAsync(command);
+        /// <returns>True if no errors.</returns>
+        protected async Task<bool> ExecuteCommandAsync(Command command) {
+            return await commandConsole.ExecuteAsync(command);
         }
 
         /// <summary>
@@ -184,7 +194,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// </summary>
         /// <typeparam name="U">THe type of menu to load.</typeparam>
         protected void LoadMenu<U>() where U : class, IMenu {
-            uiModule.LoadMenu<U>();
+            menuManager.LoadMenu<U>();
         }
 
         /// <summary>
@@ -194,7 +204,7 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// <typeparam name="U">The type of menu to load.</typeparam>
         /// <param name="menu">The menu's model.</param>
         protected void LoadMenu<U>(U menu) where U : class, IMenu {
-            uiModule.LoadMenu<U>(menu);
+            menuManager.LoadMenu<U>(menu);
         }
 
         /// <summary>
@@ -228,6 +238,27 @@ namespace NoMansBlocks.Modules.UI.Menus {
             }
 
             return matchingControls;
+        }
+
+        /// <summary>
+        /// Get the specific config file for the type
+        /// passed in.
+        /// </summary>
+        /// <typeparam name="U">The type of config file to look for.</typeparam>
+        /// <returns>The found, or newly created config.</returns>
+        protected U GetConfig<U>() where U : class, IConfig {
+            return configContainer.GetConfig<U>();
+        }
+
+        /// <summary>
+        /// Add a config file to the config container. Don't use this
+        /// if you called GetConfig since it's already present in the
+        /// config container.
+        /// </summary>
+        /// <typeparam name="U">The type of config being added.</typeparam>
+        /// <param name="config">The config file to add.</param>
+        protected void SetConfig<U>(U config) where U : class, IConfig {
+            configContainer.SetConfig(config);
         }
         #endregion
     }

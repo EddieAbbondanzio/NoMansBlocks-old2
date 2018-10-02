@@ -97,6 +97,22 @@ namespace NoMansBlocks.Modules.UserSystem {
 
         #region Publics
         /// <summary>
+        /// Checks if the config has a login token from a 
+        /// previous login.
+        /// </summary>
+        /// <returns>True if it does.</returns>
+        public bool HasToken() {
+            return !string.IsNullOrWhiteSpace(Token);
+        }
+
+        /// <summary>
+        /// Reset the login config back to defaults.
+        /// </summary>
+        public void ResetToDefault() {
+            ResetToDefault(GameEngineType.Client);
+        }
+
+        /// <summary>
         /// Reset the login config back to defaults.
         /// </summary>
         /// <param name="engineType">The currently running game engine type.</param>

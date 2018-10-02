@@ -274,3 +274,5 @@ C:\Users\Eddie\Development\NoMansBlocks\obj\Debug\Assembly-CSharp-firstpass.cspr
 C:\Users\Eddie\Development\NoMansBlocks\obj\Debug\Assembly-CSharp-firstpass.csproj.CopyComplete
 C:\Users\Eddie\Development\NoMansBlocks\obj\Debug\Assembly-CSharp-firstpass.dll
 C:\Users\Eddie\Development\NoMansBlocks\obj\Debug\Assembly-CSharp-firstpass.pdb
+C:\Users\Eddie\Development\NoMansBlocks\Temp\bin\Debug\UnityEditor.UI.dll
+C:\Users\Eddie\Development\NoMansBlocks\Temp\bin\Debug\UnityEditor.UI.xml

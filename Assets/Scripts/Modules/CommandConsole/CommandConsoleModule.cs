@@ -64,10 +64,11 @@ namespace NoMansBlocks.Modules.CommandConsole {
         /// so it will produce more log messages to send to the file.
         /// </summary>
         /// <param name="command">The text of the command to parse.</param>
-        public async Task ExecuteAsync(string command) {
-            if(command == null || command[0] != '/') {
+        /// <returns>True if no errors.</returns>
+        public async Task<bool> ExecuteAsync(string command) {
+            if (command == null || command[0] != '/') {
                 Log.Debug("Invalid command. Type /help for assistance.");
-                return;
+                return false;
             }
 
             if(Engine == null) {
@@ -77,10 +78,11 @@ namespace NoMansBlocks.Modules.CommandConsole {
             Command cmd = ParseCommand(command);
 
             if(command != null) {
-                await ExecuteAsync(cmd);
+                return await ExecuteAsync(cmd);
             }
             else {
                 Log.Debug("No command found. Type /help for assistance.");
+                return false;
             }
         }
 
@@ -88,9 +90,10 @@ namespace NoMansBlocks.Modules.CommandConsole {
         /// Execute a command.
         /// </summary>
         /// <param name="command">The command to execute.</param>
-        public async Task ExecuteAsync(Command command) {
+        /// <returns>True if no errors.</returns>
+        public async Task<bool> ExecuteAsync(Command command) {
             if(command == null) {
-                return;
+                return false;
             }
 
             if (Engine == null) {
@@ -98,7 +101,7 @@ namespace NoMansBlocks.Modules.CommandConsole {
             }
 
             Log.Debug(command.ToString());
-            await command.ExecuteAsync(Engine);
+            return await command.ExecuteAsync(Engine);
         }
         #endregion
 

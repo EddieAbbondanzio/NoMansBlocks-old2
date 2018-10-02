@@ -16,13 +16,15 @@ namespace NoMansBlocks.Modules.CommandConsole {
         /// Parse and process a new command.
         /// </summary>
         /// <param name="command">The text of the command to parse.</param>
-        Task ExecuteAsync(string command);
+        /// <returns>True if no errors.</returns>
+        Task<bool> ExecuteAsync(string command);
 
         /// <summary>
         /// Execute a command.
         /// </summary>
         /// <param name="command">The command to execute.</param>
-        Task ExecuteAsync(Command command);
+        /// <returns>True if no errors.</returns>
+        Task<bool> ExecuteAsync(Command command);
         #endregion
     }
 }

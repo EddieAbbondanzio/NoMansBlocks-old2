@@ -32,8 +32,9 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
         /// Execute the command.
         /// </summary>
         /// <param name="executingContext">The currently running game engine instance.</param>
-        public override async Task ExecuteAsync(GameEngine executingContext) {
+        public override async Task<bool> ExecuteAsync(GameEngine executingContext) {
             executingContext.NetModule.Connect(EndPoint);
+            return true;
         }
 #pragma warning restore 1998
 

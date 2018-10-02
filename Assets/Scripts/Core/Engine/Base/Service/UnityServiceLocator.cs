@@ -20,7 +20,7 @@ namespace NoMansBlocks.Core.Engine {
         protected override void InitServices() {
             Logger      = new UnityLogger();
             InputPoller = new UnityInputPoller();
-            UserService = new UserService();
+            UserService = new TestUserService();
         }
         #endregion
     }

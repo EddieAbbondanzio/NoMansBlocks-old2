@@ -166,6 +166,7 @@
     <Compile Include="Assets\Scripts\Modules\UI\Controls\Button\Trigger\ITriggerButton.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\Button\Trigger\TriggerButton.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\CheckBox\CheckBox.cs" />
+    <Compile Include="Assets\Scripts\Modules\UI\Controls\CheckBox\CheckBoxEventArgs.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\CheckBox\ICheckBox.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\Label\ILabel.cs" />
     <Compile Include="Assets\Scripts\Modules\UI\Controls\Label\Label.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="Assets\Scripts\Modules\UI\UIModule.cs" />
     <Compile Include="Assets\Scripts\Modules\UserSystem\LoginConfig.cs" />
     <Compile Include="Assets\Scripts\Modules\UserSystem\Service\IUserService.cs" />
+    <Compile Include="Assets\Scripts\Modules\UserSystem\Service\TestUserService.cs" />
     <Compile Include="Assets\Scripts\Modules\UserSystem\Service\UserService.cs" />
     <Compile Include="Assets\Scripts\Modules\UserSystem\User\PermissionLevel.cs" />
     <Compile Include="Assets\Scripts\Modules\UserSystem\User\User.cs" />

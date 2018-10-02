@@ -1,6 +1,8 @@
 {
   "Login": {
-    "RememberMe": false
+    "Username": "bert",
+    "Token": "TOKEN",
+    "RememberMe": true
   },
   "Network": {
     "Port": 0,

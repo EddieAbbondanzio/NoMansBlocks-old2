@@ -68,7 +68,7 @@ namespace NoMansBlocks.Modules.UserSystem {
         /// <param name="username">The user's username.</param>
         /// <param name="currentPassword">Their current password.</param>
         /// <param name="newPassword">Their new password.</param>
-        /// <returns></returns>
+        /// <returns>True if no error.</returns>
         Task<bool> UpdatePasswordAsync(string username, string currentPassword, string newPassword);
 
         /// <summary>

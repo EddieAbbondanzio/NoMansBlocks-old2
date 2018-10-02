@@ -43,7 +43,7 @@ namespace NoMansBlocks.Modules.UserSystem {
         /// service so we have a reference back to it.
         /// </summary>
         public override void OnInit() {
-            userService = GetService<UserService>();
+            userService = GetService<IUserService>();
             userService.OnUserLogin += UserService_OnUserLogin;
 
             User.SetUserService(userService);

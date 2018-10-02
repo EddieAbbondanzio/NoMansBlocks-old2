@@ -94,7 +94,13 @@ namespace NoMansBlocks.Modules.UserSystem {
         /// </summary>
         /// <returns>True if it completed no issue.</returns>
         public async Task<bool> LogoutAsync() {
-            return await UserService.LogoutAsync(Username, Login.Guid);
+            bool success = await UserService.LogoutAsync(Username, Login.Guid);
+
+            if (success) {
+                User.Current = null;
+            }
+
+            return success;
         }
 
         /// <summary>

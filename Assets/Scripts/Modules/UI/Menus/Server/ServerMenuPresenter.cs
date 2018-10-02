@@ -1,4 +1,5 @@
 ﻿using NoMansBlocks.Modules.CommandConsole;
+using NoMansBlocks.Modules.Config;
 using NoMansBlocks.Modules.Logging;
 using NoMansBlocks.Modules.UI.Controls;
 using System;
@@ -44,7 +45,8 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// </summary>
         /// <param name="uIModule">The parent UI module.</param>
         /// <param name="commandConsole">The command console of the engine.</param>
-        public ServerMenuPresenter(IMenuManager uIModule, ICommandConsole commandConsole) : base(uIModule, commandConsole) {
+        /// <param name="configContainer">The config container.</param>
+        public ServerMenuPresenter(IMenuManager uIModule, ICommandConsole commandConsole, IConfigContainer configContainer) : base(uIModule, commandConsole, configContainer) {
         }
         #endregion
 

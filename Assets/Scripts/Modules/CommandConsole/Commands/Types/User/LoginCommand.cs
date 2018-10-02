@@ -35,6 +35,11 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
 
         #region Constructor(s)
         /// <summary>
+        /// Required by the command console module.
+        /// </summary>
+        public LoginCommand() { }
+
+        /// <summary>
         /// Create a new instance of the login command that uses 
         /// standard credentials to attempt to log a user in.
         /// </summary>
@@ -60,13 +65,16 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
         /// Execute the command.
         /// </summary>
         /// <param name="executingContext">The game engine instance.</param>
-        public override async Task ExecuteAsync(GameEngine executingContext) {
+        /// <returns>True if no errors.</returns>
+        public override async Task<bool> ExecuteAsync(GameEngine executingContext) {
             if(LoginToken != null) {
                 await User.LoginUserAsync(LoginToken);
             }
             else {
                 await User.LoginUserAsync(Username, Password);
             }
+
+            return User.Current != null;
         }
 
         /// <summary>

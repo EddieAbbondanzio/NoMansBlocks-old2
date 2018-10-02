@@ -64,10 +64,12 @@ namespace NoMansBlocks.Core.Engine {
         /// <typeparam name="T">The type of service to retrieve.</typeparam>
         /// <returns>The service found. If any.</returns>
         public T GetService<T>() where T : class, IService {
+            Type desiredType = typeof(T);
+
             for (int i = 0; i < services.Length; i++) {
                 Type serviceType = services[i].GetType();
 
-                if (serviceType == typeof(T) || typeof(T).IsAssignableFrom(serviceType)) {
+                if (serviceType == desiredType || ReflectionUtils.IsSubType(serviceType, desiredType)) {
                     return services[i] as T;
                 }
             }

@@ -293,6 +293,7 @@ namespace NoMansBlocks.Core.Engine {
                     modules[i].ExecutionIndex = executionAttribute.ExecutionIndex;
                     modules[i].Enabled = executionAttribute.Enabled;
                     modules[i].DisableUpdate = executionAttribute.DisableUpdate;
+                    modules[i].DebugMode = executionAttribute.Debug;
                 }
             }
 

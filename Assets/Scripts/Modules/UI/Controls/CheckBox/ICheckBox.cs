@@ -20,7 +20,7 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// <summary>
         /// Fired everytime the checked status of the box is changed.
         /// </summary>
-        event EventHandler OnCheckChange;
+        event EventHandler<CheckBoxEventArgs> OnCheckChange;
         #endregion
     }
 }

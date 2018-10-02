@@ -65,7 +65,7 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// Fired everytime the checked state of the checkbox
         /// is changed.
         /// </summary>
-        public event EventHandler OnCheckChange;
+        public event EventHandler<CheckBoxEventArgs> OnCheckChange;
 
         /// <summary>
         /// Fired when the control is recieving focus.
@@ -153,7 +153,7 @@ namespace NoMansBlocks.Modules.UI.Controls {
         /// <param name="value">The current value of the check box.</param>
         private void OnChangeListener(bool value) {
             if(OnCheckChange != null) {
-                OnCheckChange(this, null);
+                OnCheckChange(this, new CheckBoxEventArgs(IsChecked));
             }
         }
         #endregion

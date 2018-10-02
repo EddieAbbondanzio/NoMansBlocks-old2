@@ -23,6 +23,11 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// If the user wants to save their credentials.
         /// </summary>
         public bool RememberMe { get; set; }
+
+        /// <summary>
+        /// The JWT from a previous login.
+        /// </summary>
+        public string Token { get; set; }
         #endregion
     }
 }

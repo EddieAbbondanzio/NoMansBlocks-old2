@@ -23,10 +23,13 @@ namespace NoMansBlocks.Modules.CommandConsole.Commands {
         /// Execute the command.
         /// </summary>
         /// <param name="executingContext">The game engine instance.</param>
-        public override async Task ExecuteAsync(GameEngine executingContext) {
+        /// <returns>True if no errors.</returns>
+        public override async Task<bool> ExecuteAsync(GameEngine executingContext) {
             if(User.Current != null) {
-                await User.Current.LogoutAsync();
+                return await User.Current.LogoutAsync();
             }
+            
+            return false;
         }
         #endregion
     }

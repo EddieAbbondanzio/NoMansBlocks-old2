@@ -1,5 +1,6 @@
 ﻿using NoMansBlocks.Modules.CommandConsole;
 using NoMansBlocks.Modules.CommandConsole.Commands;
+using NoMansBlocks.Modules.Config;
 using NoMansBlocks.Modules.UI.Controls;
 using System;
 using System.Collections.Generic;
@@ -47,7 +48,8 @@ namespace NoMansBlocks.Modules.UI.Menus {
         /// </summary>
         /// <param name="uiModule">The parent UI module.</param>
         /// <param name="commandConsole">The command console of the engine</param>
-        public MainMenuPresenter(IMenuManager uiModule, ICommandConsole commandConsole) : base(uiModule, commandConsole) {
+        /// <param name="configContainer">The config container.</param>
+        public MainMenuPresenter(IMenuManager uiModule, ICommandConsole commandConsole, IConfigContainer configContainer) : base(uiModule, commandConsole, configContainer) {
         }
         #endregion
 

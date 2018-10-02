@@ -27,6 +27,11 @@ namespace NoMansBlocks.Core.Engine {
         /// If the module is enabled for use.
         /// </summary>
         public bool Enabled { get; set; } = true;
+
+        /// <summary>
+        /// If the module should be ran in debug mode.
+        /// </summary>
+        public bool Debug { get; set; } = false;
         #endregion
     }
 }

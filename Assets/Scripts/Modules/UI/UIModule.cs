@@ -1,5 +1,6 @@
 ﻿using NoMansBlocks.Core.Engine;
 using NoMansBlocks.Modules.CommandConsole;
+using NoMansBlocks.Modules.Config;
 using NoMansBlocks.Modules.UI.Menus;
 using System;
 using System.Collections.Generic;
@@ -49,6 +50,11 @@ namespace NoMansBlocks.Modules.UI {
         /// Reference back to the command console.
         /// </summary>
         private ICommandConsole commandConsole;
+
+        /// <summary>
+        /// The config module.
+        /// </summary>
+        private IConfigContainer configContainer;
         #endregion
 
         #region Constructor(s)
@@ -66,8 +72,9 @@ namespace NoMansBlocks.Modules.UI {
         /// we can find our menu container in the scene.
         /// </summary>
         public override void OnInit() {
-            menuContainer = GameObject.FindGameObjectWithTag(MenuContainerTag)?.transform;
-            commandConsole = GetModule<CommandConsoleModule>();
+            menuContainer   = GameObject.FindGameObjectWithTag(MenuContainerTag)?.transform;
+            commandConsole  = GetModule<CommandConsoleModule>();
+            configContainer = GetModule<ConfigModule>();
 
             if (menuContainer == null) {
                 throw new FormatException("Scene is poorly formatted. No menu container found.");
@@ -112,7 +119,7 @@ namespace NoMansBlocks.Modules.UI {
             if (presenterAttribute != null) {
                 //Is the current one what we need?
                 if((menuPresenter?.GetType() ?? null) != presenterAttribute.Type) {
-                    menuPresenter = Activator.CreateInstance(presenterAttribute.Type, this, commandConsole) as IMenuPresenter;
+                    menuPresenter = Activator.CreateInstance(presenterAttribute.Type, this, commandConsole, configContainer) as IMenuPresenter;
                 }
             }
             else {
